@@ -1,94 +1,103 @@
-# 10x Astro Starter
+# VibeTravel
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/your-org/your-repo) [![Build Status](https://img.shields.io/github/actions/workflow/status/your-org/your-repo/ci.yml?branch=master)](https://github.com/your-org/your-repo/actions) [![License](https://img.shields.io/badge/license-TBD-lightgrey.svg)]
+
+A modern web application that uses AI to transform high-level travel ideas into geographically optimized daily itineraries, saving solo and couple travelers time and effort when planning 1–5 day trips in 10 popular European cities.
+
+## Table of Contents
+
+1. [Tech Stack](#tech-stack)  
+2. [Getting Started](#getting-started)  
+3. [Available Scripts](#available-scripts)  
+4. [Project Scope](#project-scope)  
+5. [Project Status](#project-status)  
+6. [License](#license)  
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
-
-## Prerequisites
-
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+- **Frontend:** Astro 5, React 19, Tailwind CSS 4, Shadcn/ui  
+- **Backend & Database:** Supabase (PostgreSQL, authentication, auto-generated APIs)  
+- **AI Itinerary Generation:** Openrouter.ai  
+- **CI/CD & Hosting:** GitHub Actions, DigitalOcean  
 
 ## Getting Started
 
-1. Clone the repository:
+### Prerequisites
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+- Node.js v22.14.0 (see `.nvmrc`)  
+- npm (included with Node.js)  
 
-2. Install dependencies:
+### Installation
 
-```bash
-npm install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-```
-
-4. Build for production:
-
-```bash
-npm run build
-```
+1. Clone the repo  
+   ```bash
+   git clone https://github.com/your-org/your-repo.git
+   cd your-repo
+   ```
+2. Install dependencies  
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file (or set environment variables) with the following:
+   ```env
+   SUPABASE_URL=your-supabase-url
+   SUPABASE_KEY=your-supabase-key
+   OPENROUTER_API_KEY=your-openrouter-api-key
+   ```
+4. Start the development server  
+   ```bash
+   npm run dev
+   ```
+5. Open your browser and navigate to `http://localhost:3000`
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+In the project directory, you can run:
 
-## Project Structure
+- `npm run dev`  
+  Launches the Astro development server with hot-reload.  
+- `npm run build`  
+  Builds the application for production.  
+- `npm run preview`  
+  Serves the production build locally.  
+- `npm run astro`  
+  Exposes Astro CLI commands.  
+- `npm run lint`  
+  Runs ESLint across the codebase.  
+- `npm run lint:fix`  
+  Runs ESLint and automatically fixes problems.  
+- `npm run format`  
+  Formats code using Prettier.
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+## Project Scope
 
-## AI Development Support
+### In Scope (MVP)
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+- User account management (email/password sign-up & login)  
+- Travel Plan Wizard (select city from 10 options, trip duration 1–5 days, intensity “full day” or “half day”, free-text notes)  
+- AI-powered itinerary generation with:
+  - 4–5 activities for full-day plans, 2–3 for half-day  
+  - Google Maps links for each activity  
+  - Disclaimer to verify details (e.g., opening hours)  
+- Itinerary editing controls (move up/down, delete)  
+- Plan saving to user accounts  
+- User feedback (“Was this plan helpful?”)  
+- Basic error handling for AI generation failures  
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+### Out of Scope for MVP
 
-### Cursor IDE
+- Monetization & payment processing  
+- Password recovery (“Forgot Password”)  
+- Advanced editing (drag-and-drop UI)  
+- Social login providers (e.g., Google, Facebook)  
+- Real-time data (traffic, live schedules)  
+- Post-signup profile management  
+- Plan sharing with other users  
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
+## Project Status
 
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+This project is currently in MVP development. Core features are implemented according to the Product Requirements Document. Further enhancements, styling refinements, and production hardening are planned.
 
 ## License
 
-MIT
+This project does not currently include a license. Please add a `LICENSE` file to specify usage terms.
