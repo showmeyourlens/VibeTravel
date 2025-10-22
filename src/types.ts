@@ -4,6 +4,18 @@
  */
 
 // ===================================
+// City Types
+// ===================================
+
+/**
+ * Data Transfer Object representing a city
+ */
+export interface CityDto {
+  id: string;
+  name: string;
+}
+
+// ===================================
 // Plan Generation Types
 // ===================================
 
