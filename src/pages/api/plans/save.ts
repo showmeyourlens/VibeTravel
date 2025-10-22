@@ -94,7 +94,18 @@ export const POST: APIRoute = async (context) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    // Step 8: Handle unexpected errors
+    // Step 8: Handle specific errors
+    const errorMsg = error instanceof Error ? error.message : "An unexpected error occurred";
+
+    // Handle city not found error (404)
+    if (errorMsg.includes("Invalid city_id")) {
+      return new Response(JSON.stringify({ error: errorMsg } as ErrorResponseDTO), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 9: Handle unexpected errors
     const supabase = context.locals.supabase;
 
     // Log the error if we have a Supabase client
@@ -119,8 +130,7 @@ export const POST: APIRoute = async (context) => {
     }
 
     // Return generic error response
-    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
-    return new Response(JSON.stringify({ error: errorMessage } as ErrorResponseDTO), {
+    return new Response(JSON.stringify({ error: errorMsg } as ErrorResponseDTO), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });

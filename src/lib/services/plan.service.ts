@@ -1,5 +1,4 @@
 import type { SupabaseClient } from "../../db/supabase.client";
-import type { Database } from "../../db/database.types";
 import type { SavePlanCommand, SavePlanResponseDTO } from "../../types";
 import { logAppError, formatErrorMessage, getStackTrace } from "../utils/error-logger";
 
@@ -63,9 +62,7 @@ export class PlanService {
       }));
 
       // Step 3: Bulk insert activities
-      const { error: activitiesError } = await this.supabase
-        .from("plan_activities")
-        .insert(activitiesToInsert);
+      const { error: activitiesError } = await this.supabase.from("plan_activities").insert(activitiesToInsert);
 
       if (activitiesError) {
         // Log error with plan context
@@ -106,4 +103,3 @@ export class PlanService {
     }
   }
 }
-
