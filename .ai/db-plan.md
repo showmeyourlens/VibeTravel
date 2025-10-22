@@ -3,6 +3,7 @@
 ## 1. Tables
 
 ### Enum Types
+
 ```sql
 CREATE TYPE trip_intensity_enum AS ENUM ('full day', 'half day');
 CREATE TYPE plan_status_enum AS ENUM ('draft', 'active', 'archived');
@@ -10,10 +11,12 @@ CREATE TYPE log_severity_enum AS ENUM ('debug', 'info', 'warning', 'error', 'cri
 ```
 
 ### cities
+
 - id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - name TEXT NOT NULL UNIQUE
 
 ### plans
+
 - id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE
 - city_id UUID NOT NULL REFERENCES cities(id)
@@ -26,6 +29,7 @@ CREATE TYPE log_severity_enum AS ENUM ('debug', 'info', 'warning', 'error', 'cri
 - updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 
 ### plan_activities
+
 - id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - plan_id UUID NOT NULL REFERENCES plans(id) ON DELETE CASCADE
 - day_number INT NOT NULL CHECK (day_number >= 1)
@@ -39,14 +43,16 @@ CREATE TYPE log_severity_enum AS ENUM ('debug', 'info', 'warning', 'error', 'cri
 - [Enforce day_number <= duration_days via trigger]
 
 ### plan_feedback
+
 - id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - plan_id UUID NOT NULL REFERENCES plans(id) ON DELETE CASCADE
 - user_id UUID NOT NULL REFERENCES auth.users(id)
-- helpful BOOLEAN NOT NULL
+- helpful BOOLEAN
 - created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 - UNIQUE (plan_id, user_id)
 
 ### llm_error_logs
+
 - id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - occurred_at TIMESTAMPTZ NOT NULL DEFAULT now()
 - user_id UUID REFERENCES auth.users(id)
@@ -56,6 +62,7 @@ CREATE TYPE log_severity_enum AS ENUM ('debug', 'info', 'warning', 'error', 'cri
 - response_payload JSONB
 
 ### app_error_logs
+
 - id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - occurred_at TIMESTAMPTZ NOT NULL DEFAULT now()
 - user_id UUID REFERENCES auth.users(id)
@@ -76,6 +83,7 @@ CREATE TYPE log_severity_enum AS ENUM ('debug', 'info', 'warning', 'error', 'cri
 - auth.users (1) — (N) llm_error_logs, app_error_logs
 
 ## 3. Indexes
+
 ```sql
 CREATE INDEX idx_plans_user_created ON plans(user_id, created_at DESC);
 CREATE INDEX idx_activities_plan_day_pos ON plan_activities(plan_id, day_number, position);
@@ -85,6 +93,7 @@ CREATE INDEX idx_app_logs_severity_time ON app_error_logs(severity, occurred_at 
 ```
 
 ## 4. PostgreSQL Policies (Row-Level Security)
+
 ```sql
 -- plans
 ALTER TABLE plans ENABLE ROW LEVEL SECURITY;

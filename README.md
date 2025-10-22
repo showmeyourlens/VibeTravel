@@ -6,35 +6,35 @@ A modern web application that uses AI to transform high-level travel ideas into 
 
 ## Table of Contents
 
-1. [Tech Stack](#tech-stack)  
-2. [Getting Started](#getting-started)  
-3. [Available Scripts](#available-scripts)  
-4. [Project Scope](#project-scope)  
-5. [Project Status](#project-status)  
-6. [License](#license)  
+1. [Tech Stack](#tech-stack)
+2. [Getting Started](#getting-started)
+3. [Available Scripts](#available-scripts)
+4. [Project Scope](#project-scope)
+5. [Project Status](#project-status)
+6. [License](#license)
 
 ## Tech Stack
 
-- **Frontend:** Astro 5, React 19, Tailwind CSS 4, Shadcn/ui  
-- **Backend & Database:** Supabase (PostgreSQL, authentication, auto-generated APIs)  
-- **AI Itinerary Generation:** Openrouter.ai  
-- **CI/CD & Hosting:** GitHub Actions, DigitalOcean  
+- **Frontend:** Astro 5, React 19, Tailwind CSS 4, Shadcn/ui
+- **Backend & Database:** Supabase (PostgreSQL, authentication, auto-generated APIs)
+- **AI Itinerary Generation:** Openrouter.ai
+- **CI/CD & Hosting:** GitHub Actions, DigitalOcean
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js v22.14.0 (see `.nvmrc`)  
-- npm (included with Node.js)  
+- Node.js v22.14.0 (see `.nvmrc`)
+- npm (included with Node.js)
 
 ### Installation
 
-1. Clone the repo  
+1. Clone the repo
    ```bash
    git clone https://github.com/your-org/your-repo.git
    cd your-repo
    ```
-2. Install dependencies  
+2. Install dependencies
    ```bash
    npm install
    ```
@@ -44,7 +44,7 @@ A modern web application that uses AI to transform high-level travel ideas into 
    SUPABASE_KEY=your-supabase-key
    OPENROUTER_API_KEY=your-openrouter-api-key
    ```
-4. Start the development server  
+4. Start the development server
    ```bash
    npm run dev
    ```
@@ -55,17 +55,17 @@ A modern web application that uses AI to transform high-level travel ideas into 
 In the project directory, you can run:
 
 - `npm run dev`  
-  Launches the Astro development server with hot-reload.  
+  Launches the Astro development server with hot-reload.
 - `npm run build`  
-  Builds the application for production.  
+  Builds the application for production.
 - `npm run preview`  
-  Serves the production build locally.  
+  Serves the production build locally.
 - `npm run astro`  
-  Exposes Astro CLI commands.  
+  Exposes Astro CLI commands.
 - `npm run lint`  
-  Runs ESLint across the codebase.  
+  Runs ESLint across the codebase.
 - `npm run lint:fix`  
-  Runs ESLint and automatically fixes problems.  
+  Runs ESLint and automatically fixes problems.
 - `npm run format`  
   Formats code using Prettier.
 
@@ -73,26 +73,26 @@ In the project directory, you can run:
 
 ### In Scope (MVP)
 
-- User account management (email/password sign-up & login)  
-- Travel Plan Wizard (select city from 10 options, trip duration 1–5 days, intensity “full day” or “half day”, free-text notes)  
+- User account management (email/password sign-up & login)
+- Travel Plan Wizard (select city from 10 options, trip duration 1–5 days, intensity “full day” or “half day”, free-text notes)
 - AI-powered itinerary generation with:
-  - 4–5 activities for full-day plans, 2–3 for half-day  
-  - Google Maps links for each activity  
-  - Disclaimer to verify details (e.g., opening hours)  
-- Itinerary editing controls (move up/down, delete)  
-- Plan saving to user accounts  
-- User feedback (“Was this plan helpful?”)  
-- Basic error handling for AI generation failures  
+  - 4–5 activities for full-day plans, 2–3 for half-day
+  - Google Maps links for each activity
+  - Disclaimer to verify details (e.g., opening hours)
+- Itinerary editing controls (move up/down, delete)
+- Plan saving to user accounts
+- User feedback (“Was this plan helpful?”)
+- Basic error handling for AI generation failures
 
 ### Out of Scope for MVP
 
-- Monetization & payment processing  
-- Password recovery (“Forgot Password”)  
-- Advanced editing (drag-and-drop UI)  
-- Social login providers (e.g., Google, Facebook)  
-- Real-time data (traffic, live schedules)  
-- Post-signup profile management  
-- Plan sharing with other users  
+- Monetization & payment processing
+- Password recovery (“Forgot Password”)
+- Advanced editing (drag-and-drop UI)
+- Social login providers (e.g., Google, Facebook)
+- Real-time data (traffic, live schedules)
+- Post-signup profile management
+- Plan sharing with other users
 
 ## Project Status
 
