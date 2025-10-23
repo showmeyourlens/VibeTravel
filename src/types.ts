@@ -114,6 +114,40 @@ export interface SavePlanResponseDTO {
 }
 
 // ===================================
+// Plan List Types
+// ===================================
+
+/**
+ * Data Transfer Object representing a plan summary
+ */
+export interface PlanDto {
+  id: string;
+  city_id: string;
+  duration_days: number;
+  trip_intensity: "full day" | "half day";
+  status: "draft" | "active" | "archived";
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Pagination metadata for list responses
+ */
+export interface PaginationDto {
+  page: number;
+  page_size: number;
+  total: number;
+}
+
+/**
+ * Response DTO for listing plans
+ */
+export interface ListPlansResponseDto {
+  data: PlanDto[];
+  pagination: PaginationDto;
+}
+
+// ===================================
 // Error Response Types
 // ===================================
 

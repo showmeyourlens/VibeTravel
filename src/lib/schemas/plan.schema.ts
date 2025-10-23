@@ -87,3 +87,36 @@ export const saveRequestSchema = z
 
 export type SavePlanRequestDTO = z.infer<typeof saveRequestSchema>;
 export type SavePlanActivityDTO = z.infer<typeof savePlanActivitySchema>;
+
+/**
+ * Schema for validating GET /api/plans query parameters
+ * Validates pagination and sorting options
+ */
+export const listPlansQuerySchema = z.object({
+  page: z
+    .string()
+    .optional()
+    .default("1")
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().int().min(1, { message: "page must be at least 1" })),
+  page_size: z
+    .string()
+    .optional()
+    .default("20")
+    .transform((val) => parseInt(val, 10))
+    .pipe(
+      z
+        .number()
+        .int()
+        .min(1, { message: "page_size must be at least 1" })
+        .max(100, { message: "page_size must be at most 100" })
+    ),
+  sort: z
+    .enum(["created_at", "updated_at", "duration_days"], {
+      errorMap: () => ({ message: "sort must be one of: created_at, updated_at, duration_days" }),
+    })
+    .optional()
+    .default("created_at"),
+});
+
+export type ListPlansQueryParams = z.infer<typeof listPlansQuerySchema>;

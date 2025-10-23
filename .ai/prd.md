@@ -86,12 +86,12 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-004
 - Title: Use Travel Wizard for Input
-- Description: As a user, I want to use a simple wizard to provide my besic travel requirements and add a free text notes so that the AI can generate a relevant plan.
+- Description: As a user, I want to use a simple wizard to provide my basic travel requirements and add a free text notes so that the AI can generate a relevant plan.
 - Acceptance Criteria:
   - 1. The wizard first prompts for a Destination City from a dropdown list of 10 options.
-  - 2. The wizard then prompts for the number of days (an input accepting integers from 1 to 5).
-  - 3. The wizard then prompts for Trip Intensity ("full day" or "half day") via radio buttons or a dropdown.
-  - 4. User is prompted to fill in details not covered by wizard.
+  - 2. The wizard then prompts for the number of days (a carousel with numbers from 1 to 5).
+  - 3. The wizard then prompts for Trip Intensity ("full day" or "half day") via two buttons next to each other (horizontally).
+  - 4. User is prompted to fill in details not covered by wizard (in a free text field).
   - 4. A "Generate" button is present to submit the inputs.
 
 - ID: US-005
@@ -105,7 +105,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-006
 - Title: Reorder an Activity
-- Description: As a user, I want to be able to move an activity up or down in the daily itinerary to customize the plan to my liking.
+- Description: As a user, after clicking edit button, I want to be able to move an activity up or down in the daily itinerary to customize the plan to my liking.
 - Acceptance Criteria:
   - 1. Each activity item has a "Move Up" and "Move Down" button.
   - 2. Clicking "Move Up" swaps the activity with the one directly above it.
@@ -114,7 +114,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-007
 - Title: Delete an Activity
-- Description: As a user, I want to remove an activity from the itinerary that I am not interested in.
+- Description: As a user, after clicking edit button, I want to remove an activity from the itinerary that I am not interested in.
 - Acceptance Criteria:
   - 1. Each activity item has a "Delete" button.
   - 2. Clicking the "Delete" button permanently removes the activity from the displayed plan.
@@ -143,6 +143,7 @@ The VibeTravels MVP will include the following core functionalities:
   - 1. A question "Was this plan helpful?" is displayed with "Yes" and "No" buttons.
   - 2. A user can click either "Yes" or "No" once per generated plan.
   - 3. The response is recorded in the system for analysis.
+  - 4. Quesion "Was this plan helpful?" does not appear in plans that already have feedback from user.
 
 - ID: US-011
 - Title: Handle AI Generation Failure

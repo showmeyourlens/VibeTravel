@@ -173,7 +173,6 @@ Request (any subset of fields):
 
 ```json
 {
-  "wizard_notes": "updated notes",
   "activities": [
     { "id": "UUID", "day_number": 1, "position": 2 },
     { "id": "UUID", "day_number": 1, "position": 1 },
