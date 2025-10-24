@@ -1,9 +1,9 @@
 import type { APIContext } from "astro";
 
 import { generateRequestSchema } from "../../../lib/schemas/plan.schema";
-import { createItineraryService } from "../services/itinerary.service";
 import { logAppError } from "../../../lib/utils/error-logger";
 import type { ErrorResponseDTO, GenerateDraftPlanCommand } from "../../../types";
+import { ItineraryService } from "../services/itinerary.service";
 
 export const prerender = false;
 
@@ -53,7 +53,7 @@ export async function POST(context: APIContext): Promise<Response> {
     };
 
     // 5. Call itinerary service to generate plan
-    const itineraryService = createItineraryService(context.locals.supabase);
+    const itineraryService = new ItineraryService(context.locals.supabase);
 
     let result;
     try {

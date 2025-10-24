@@ -49,16 +49,6 @@ export class ItineraryService {
       throw new Error("Unable to generate plan");
     }
 
-    // 3. Validate and return response
-    if (!aiResponse.activities || aiResponse.activities.length === 0) {
-      await this.logLLMError(command.userId, new Error("AI returned empty activities"), {
-        cityId: command.cityId,
-        response: aiResponse,
-      });
-
-      throw new Error("Unable to generate plan");
-    }
-
     return {
       plan: {
         duration_days: command.durationDays,
@@ -100,13 +90,4 @@ export class ItineraryService {
       user_id: userId,
     });
   }
-}
-
-/**
- * Factory function to create an ItineraryService instance
- * @param supabase - Supabase client instance
- * @returns ItineraryService instance
- */
-export function createItineraryService(supabase: SupabaseClient): ItineraryService {
-  return new ItineraryService(supabase);
 }
