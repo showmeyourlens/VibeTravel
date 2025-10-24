@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
 import { ZodError } from "zod";
-import { saveRequestSchema } from "../../../lib/schemas/plan.schema";
-import { PlanService } from "../../../lib/services/plan.service";
-import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
+import { saveRequestSchema } from "../../schemas/plan.schema";
+import { PlanService } from "../../services/plan.service";
+import { logAppError, formatErrorMessage, getStackTrace } from "../../utils/error-logger";
 import type { SavePlanCommand, SavePlanResponseDTO, ErrorResponseDTO } from "../../../types";
 
 export const prerender = false;

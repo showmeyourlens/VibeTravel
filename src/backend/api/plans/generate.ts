@@ -1,8 +1,8 @@
 import type { APIContext } from "astro";
 
-import { generateRequestSchema } from "../../../lib/schemas/plan.schema";
-import { createItineraryService } from "../../../lib/services/itinerary.service";
-import { logAppError } from "../../../lib/utils/error-logger";
+import { generateRequestSchema } from "../../schemas/plan.schema";
+import { createItineraryService } from "../../services/itinerary.service";
+import { logAppError } from "../../utils/error-logger";
 import type { ErrorResponseDTO, GenerateDraftPlanCommand } from "../../../types";
 
 export const prerender = false;

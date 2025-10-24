@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
-import { listPlansQuerySchema } from "../../../lib/schemas/plan.schema";
-import { PlanService } from "../../../lib/services/plan.service";
+import { listPlansQuerySchema } from "../../schemas/plan.schema";
+import { PlanService } from "../../services/plan.service";
 import type { ListPlansResponseDto, ErrorResponseDTO } from "../../../types";
-import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
+import { logAppError, formatErrorMessage, getStackTrace } from "../../utils/error-logger";
 
 /**
  * GET /api/plans

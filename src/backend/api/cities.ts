@@ -1,7 +1,7 @@
 import type { APIContext } from "astro";
 
 import { CitiesService } from "../../lib/services/cities.service";
-import { logAppError } from "../../lib/utils/error-logger";
+import { logAppError } from "../utils/error-logger";
 import type { ErrorResponseDTO } from "../../types";
 
 export const prerender = false;
