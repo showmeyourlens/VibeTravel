@@ -1,4 +1,4 @@
-import type { PlanActivityDTO } from "../../types";
+import type { PlanActivityDTO } from "../../../types";
 
 /**
  * Request payload for AI itinerary generation

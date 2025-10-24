@@ -1,7 +1,7 @@
-import type { APIContext } from "astro";
+import type { APIContext, APIRoute } from "astro";
 
-import { CitiesService } from "../../lib/services/cities.service";
-import { logAppError } from "../utils/error-logger";
+import { CitiesService } from "./services/cities.service";
+import { logAppError } from "../../lib/utils/error-logger";
 import type { ErrorResponseDTO } from "../../types";
 
 export const prerender = false;
@@ -10,7 +10,7 @@ export const prerender = false;
  * GET /api/cities
  * Retrieves the list of available destination cities
  */
-export async function GET(context: APIContext): Promise<Response> {
+export const GET: APIRoute = async (context: APIContext) => {
   try {
     // 1. Create cities service instance
     const citiesService = new CitiesService(context.locals.supabase);
@@ -51,4 +51,4 @@ export async function GET(context: APIContext): Promise<Response> {
       headers: { "Content-Type": "application/json" },
     });
   }
-}
+};

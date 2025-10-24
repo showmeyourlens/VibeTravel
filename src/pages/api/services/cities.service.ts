@@ -1,6 +1,6 @@
-import type { SupabaseClient } from "../../db/supabase.client";
-import type { CityDto } from "../../types";
-import { logAppError, formatErrorMessage, getStackTrace } from "../utils/error-logger";
+import type { SupabaseClient } from "../../../db/supabase.client";
+import type { CityDto } from "../../../types";
+import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
 
 /**
  * Service for managing cities

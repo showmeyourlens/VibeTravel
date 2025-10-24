@@ -1,8 +1,8 @@
 import type { APIContext } from "astro";
 
-import { generateRequestSchema } from "../../schemas/plan.schema";
-import { createItineraryService } from "../../services/itinerary.service";
-import { logAppError } from "../../utils/error-logger";
+import { generateRequestSchema } from "../../../lib/schemas/plan.schema";
+import { createItineraryService } from "../services/itinerary.service";
+import { logAppError } from "../../../lib/utils/error-logger";
 import type { ErrorResponseDTO, GenerateDraftPlanCommand } from "../../../types";
 
 export const prerender = false;
@@ -14,7 +14,7 @@ export const prerender = false;
 export async function POST(context: APIContext): Promise<Response> {
   try {
     // 1. TODO: Authentication - Extract user from Supabase session
-    const user = { id: "123e4567-e89b-12d3-a456-426614174000" };
+    const user = { id: "59dabb40-b4c1-4745-9bac-e067c3a3b49a" };
 
     // 2. Parse and validate request body
     let requestBody;

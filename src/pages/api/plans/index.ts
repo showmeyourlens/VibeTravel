@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
-import { listPlansQuerySchema } from "../../schemas/plan.schema";
-import { PlanService } from "../../services/plan.service";
+import { listPlansQuerySchema } from "../../../lib/schemas/plan.schema";
+import { PlanService } from "../services/plan.service";
 import type { ListPlansResponseDto, ErrorResponseDTO } from "../../../types";
-import { logAppError, formatErrorMessage, getStackTrace } from "../../utils/error-logger";
+import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
 
 /**
  * GET /api/plans
@@ -12,19 +12,23 @@ export const GET: APIRoute = async ({ request, locals }) => {
   try {
     // Step 1: Verify authentication
     const supabase = locals.supabase;
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
 
-    if (sessionError || !session) {
-      return new Response(JSON.stringify({ error: "Unauthorized" } as ErrorResponseDTO), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    // TODO: Uncomment this when we have authentication
+    // const {
+    //   data: { session },
+    //   error: sessionError,
+    // } = await supabase.auth.getSession();
 
-    const userId = session.user.id;
+    // if (sessionError || !session) {
+    //   return new Response(JSON.stringify({ error: "Unauthorized" } as ErrorResponseDTO), {
+    //     status: 401,
+    //     headers: { "Content-Type": "application/json" },
+    //   });
+    // }
+
+    // TODO: Uncomment this when we have authentication
+    //const userId = session.user.id;
+    const userId = "59dabb40-b4c1-4745-9bac-e067c3a3b49a";
 
     // Step 2: Parse and validate query parameters
     const url = new URL(request.url);

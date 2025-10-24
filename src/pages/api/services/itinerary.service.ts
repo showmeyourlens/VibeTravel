@@ -1,5 +1,5 @@
-import type { SupabaseClient } from "../../db/supabase.client";
-import type { GenerateDraftPlanCommand, GenerateDraftPlanResponseDTO } from "../../types";
+import type { SupabaseClient } from "../../../db/supabase.client";
+import type { GenerateDraftPlanCommand, GenerateDraftPlanResponseDTO } from "../../../types";
 import { aiClient } from "./ai-client";
 
 /**

@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
 import { ZodError } from "zod";
-import { saveRequestSchema } from "../../schemas/plan.schema";
-import { PlanService } from "../../services/plan.service";
-import { logAppError, formatErrorMessage, getStackTrace } from "../../utils/error-logger";
+import { saveRequestSchema } from "../../../lib/schemas/plan.schema";
+import { PlanService } from "../services/plan.service";
+import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
 import type { SavePlanCommand, SavePlanResponseDTO, ErrorResponseDTO } from "../../../types";
 
 export const prerender = false;
@@ -31,8 +31,10 @@ export const POST: APIRoute = async (context) => {
     }
 
     // Step 2: Authenticate user
-    const user = { id: "123e4567-e89b-12d3-a456-426614174000" };
+    // TODO: Uncomment this when we have authentication
+    const user = { id: "59dabb40-b4c1-4745-9bac-e067c3a3b49a" };
 
+    // TODO: Uncomment this when we have authentication
     // const {
     //   data: { user },
     //   error: authError,
