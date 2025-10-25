@@ -32,7 +32,7 @@ export const POST: APIRoute = async (context) => {
 
     // Step 2: Authenticate user
     // TODO: Uncomment this when we have authentication
-    const user = { id: "59dabb40-b4c1-4745-9bac-e067c3a3b49a" };
+    const user = { id: "e0000000-0000-0000-0000-00000000000e" };
 
     // TODO: Uncomment this when we have authentication
     // const {

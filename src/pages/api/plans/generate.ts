@@ -14,7 +14,7 @@ export const prerender = false;
 export async function POST(context: APIContext): Promise<Response> {
   try {
     // 1. TODO: Authentication - Extract user from Supabase session
-    const user = { id: "59dabb40-b4c1-4745-9bac-e067c3a3b49a" };
+    const user = { id: "e0000000-0000-0000-0000-00000000000e" };
 
     // 2. Parse and validate request body
     let requestBody;

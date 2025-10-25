@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
     // TODO: Uncomment this when we have authentication
     //const userId = session.user.id;
-    const userId = "59dabb40-b4c1-4745-9bac-e067c3a3b49a";
+    const userId = "e0000000-0000-0000-0000-00000000000e";
 
     // Step 2: Parse and validate query parameters
     const url = new URL(request.url);
