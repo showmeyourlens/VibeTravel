@@ -17,7 +17,7 @@ export default function DashboardView() {
   const handleCreateNewPlan = () => {
     setNavigatingToCreate(true);
     // Navigate to plan creation wizard
-    window.location.href = "/create-plan";
+    window.location.href = "/plans/new";
   };
 
   // Show skeleton loader while initial data is loading
