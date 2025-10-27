@@ -10,19 +10,8 @@ import LoadingOverlay from "./LoadingOverlay.tsx";
 const TOTAL_STEPS = 4;
 
 export default function PlanWizard() {
-  const {
-    currentStep,
-    formData,
-    cities,
-    isLoading,
-    isFetching,
-    error,
-    handleNext,
-    handlePrev,
-    updateFormData,
-    generatePlan,
-    isStepValid,
-  } = usePlanWizard();
+  const { currentStep, formData, cities, isLoading, isFetching, error, handlePrev, updateFormData, generatePlan } =
+    usePlanWizard();
 
   // Show loading state while fetching cities
   if (isFetching) {

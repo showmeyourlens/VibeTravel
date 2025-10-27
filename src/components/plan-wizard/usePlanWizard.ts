@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchCities } from "@/lib/api-client";
-import type { CityDto, GenerateDraftPlanRequestDTO, GenerateDraftPlanResponseDTO } from "@/types";
+import type { CityDto, GenerateDraftPlanRequestDTO, PlanWithActivitiesDto } from "@/types";
 
 export interface PlanWizardViewModel {
   cityId: string | null;
@@ -16,11 +16,9 @@ interface UsePlanWizardReturn {
   isLoading: boolean;
   isFetching: boolean;
   error: string | null;
-  handleNext: () => void;
   handlePrev: () => void;
   updateFormData: (updates: Partial<PlanWizardViewModel>, autoAdvance?: boolean) => void;
   generatePlan: () => Promise<void>;
-  isStepValid: () => boolean;
 }
 
 const TOTAL_STEPS = 4;
@@ -56,29 +54,6 @@ export function usePlanWizard(): UsePlanWizardReturn {
 
     loadCities();
   }, []);
-
-  // Validate current step based on form data
-  const isStepValid = useCallback(() => {
-    switch (currentStep) {
-      case 1:
-        return formData.cityId !== null;
-      case 2:
-        return formData.durationDays !== null;
-      case 3:
-        return formData.tripIntensity !== null;
-      case 4:
-        // Notes are optional, so always valid
-        return true;
-      default:
-        return false;
-    }
-  }, [currentStep, formData]);
-
-  const handleNext = useCallback(() => {
-    if (currentStep < TOTAL_STEPS && isStepValid()) {
-      setCurrentStep(currentStep + 1);
-    }
-  }, [currentStep, isStepValid]);
 
   const handlePrev = useCallback(() => {
     if (currentStep > 1) {
@@ -145,7 +120,7 @@ export function usePlanWizard(): UsePlanWizardReturn {
         return;
       }
 
-      const result = (await response.json()) as GenerateDraftPlanResponseDTO;
+      const result = (await response.json()) as PlanWithActivitiesDto;
 
       // Store the generated plan in sessionStorage for the next page
       sessionStorage.setItem("generatedPlan", JSON.stringify(result));
@@ -167,10 +142,8 @@ export function usePlanWizard(): UsePlanWizardReturn {
     isLoading,
     isFetching,
     error,
-    handleNext,
     handlePrev,
     updateFormData,
     generatePlan,
-    isStepValid,
   };
 }

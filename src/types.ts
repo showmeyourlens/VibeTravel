@@ -61,7 +61,6 @@ export interface GenerateDraftPlanResponseDTO {
     duration_days: number;
     trip_intensity: "full day" | "half day";
     activities: PlanActivityDTO[];
-    disclaimer: string;
   };
 }
 

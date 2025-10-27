@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "../../../db/supabase.client";
-import type { GenerateDraftPlanCommand, GenerateDraftPlanResponseDTO } from "../../../types";
+import type { GenerateDraftPlanCommand, PlanWithActivitiesDto } from "../../../types";
 import { aiClient } from "./ai-client";
 
 /**
@@ -15,7 +15,7 @@ export class ItineraryService {
    * @returns Promise resolving to the generated plan
    * @throws Error if city not found or AI service fails
    */
-  async generateDraftPlan(command: GenerateDraftPlanCommand): Promise<GenerateDraftPlanResponseDTO> {
+  async generateDraftPlan(command: GenerateDraftPlanCommand): Promise<PlanWithActivitiesDto> {
     // 1. Verify city exists
     const { data: city, error: cityError } = await this.supabase
       .from("cities")
@@ -28,9 +28,9 @@ export class ItineraryService {
     }
 
     // 2. Generate itinerary using AI service
-    let aiResponse;
+    let aiGeneratedActivities;
     try {
-      aiResponse = await aiClient.generateItinerary({
+      aiGeneratedActivities = await aiClient.generateItinerary({
         cityId: command.cityId,
         cityName: city.name,
         durationDays: command.durationDays,
@@ -38,6 +38,7 @@ export class ItineraryService {
         userNotes: command.userNotes,
       });
     } catch (error) {
+      console.error("Error generating itinerary", error);
       // Log to LLM error logs
       await this.logLLMError(command.userId, error, {
         cityId: command.cityId,
@@ -51,11 +52,15 @@ export class ItineraryService {
 
     return {
       plan: {
+        id: "draft",
+        city: city,
+        status: "draft",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         duration_days: command.durationDays,
         trip_intensity: command.tripIntensity,
-        activities: aiResponse.activities,
-        disclaimer: aiResponse.disclaimer,
       },
+      activities: aiGeneratedActivities,
     };
   }
 

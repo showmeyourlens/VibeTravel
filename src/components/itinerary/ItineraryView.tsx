@@ -87,7 +87,7 @@ export function ItineraryView() {
     }));
 
     return {
-      city_id: planData.plan.city_id,
+      city_id: planData.plan.city.id,
       duration_days: planData.plan.duration_days,
       trip_intensity: planData.plan.trip_intensity,
       user_notes: userNotes,
@@ -98,66 +98,74 @@ export function ItineraryView() {
   /**
    * Handle saving the plan
    */
-  const handleSave = useCallback(async () => {
-    const request = transformToSavePlanRequest();
-    if (!request) {
-      setError("Could not prepare plan for saving");
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch("/api/plans/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
-
-      if (!response.ok) {
-        const errorData = (await response.json()) as { error?: string };
-
-        if (response.status === 401) {
-          setError("You must be logged in to save plans");
-          // TODO: Redirect to login
-          return;
-        }
-
-        if (response.status === 400) {
-          setError(`Invalid plan data: ${errorData.error || "Please check your plan and try again"}`);
-          return;
-        }
-
-        if (response.status === 500) {
-          setError("An unexpected error occurred while saving. Please try again.");
-          return;
-        }
-
-        setError(errorData.error || "Failed to save plan");
+  const handleSave = useCallback(
+    async (isDraft: boolean) => {
+      const request = transformToSavePlanRequest();
+      if (!request) {
+        setError("Could not prepare plan for saving");
         return;
       }
 
-      setSaveSuccess(true);
-      handleSetEditing(false);
+      try {
+        setIsLoading(true);
+        setError(null);
 
-      // Reset success message after 3 seconds
-      setTimeout(() => {
-        setSaveSuccess(false);
-      }, 3000);
+        const response = await fetch("/api/plans/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(request),
+        });
 
-      // Clear session storage after successful save
-      sessionStorage.removeItem("generatedPlan");
-      sessionStorage.removeItem("planMetadata");
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Network error while saving";
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [transformToSavePlanRequest, handleSetEditing]);
+        if (!response.ok) {
+          const errorData = (await response.json()) as { error?: string };
+
+          if (response.status === 401) {
+            setError("You must be logged in to save plans");
+            // TODO: Redirect to login
+            return;
+          }
+
+          if (response.status === 400) {
+            setError(`Invalid plan data: ${errorData.error || "Please check your plan and try again"}`);
+            return;
+          }
+
+          if (response.status === 500) {
+            setError("An unexpected error occurred while saving. Please try again.");
+            return;
+          }
+
+          setError(errorData.error || "Failed to save plan");
+          return;
+        }
+
+        setSaveSuccess(true);
+        handleSetEditing(false);
+
+        // Reset success message after 3 seconds
+        setTimeout(() => {
+          setSaveSuccess(false);
+        }, 3000);
+
+        // Clear session storage after successful save
+        if (!isDraft) {
+          sessionStorage.removeItem("generatedPlan");
+          sessionStorage.removeItem("planMetadata");
+          window.location.href = "/";
+        } else {
+          setIsDraft(false);
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "Network error while saving";
+        setError(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [transformToSavePlanRequest, handleSetEditing]
+  );
 
   // Render loading state
   if (!planData) {

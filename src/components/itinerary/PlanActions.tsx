@@ -11,7 +11,7 @@ interface PlanActionsProps {
   isDraft: boolean;
   isLoading: boolean;
   onEdit: () => void;
-  onSave: () => void;
+  onSave: (onDraft: boolean) => void;
   onCancel: () => void;
 }
 
@@ -26,15 +26,15 @@ export default function PlanActions({
 }: PlanActionsProps) {
   return (
     <div className="flex gap-3 mb-8">
-      {!isEditing ? (
+      {!isEditing && (
         <Button onClick={onEdit} size="lg" variant="default">
           ✏️ Edit Plan
         </Button>
-      ) : (
+      )}
+      {(isDraft || isEditing) && (
         <>
-          {/* Save button - enabled if isDraft or isDirty */}
           <Button
-            onClick={onSave}
+            onClick={() => onSave(isDraft)}
             size="lg"
             variant="default"
             disabled={(!isDraft && !isDirty) || isLoading}
@@ -43,7 +43,6 @@ export default function PlanActions({
             {isLoading ? "💾 Saving..." : "💾 Save Plan"}
           </Button>
 
-          {/* Cancel button */}
           <Button onClick={onCancel} size="lg" variant="outline" disabled={isLoading}>
             ✕ Cancel
           </Button>
