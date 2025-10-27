@@ -33,7 +33,10 @@ export default function StepDuration({ selectedDuration, onSelect }: StepDuratio
       {selectedDuration !== null && (
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-900">
-            <span className="font-semibold">{selectedDuration} {selectedDuration === 1 ? "day" : "days"}</span> selected for your trip
+            <span className="font-semibold">
+              {selectedDuration} {selectedDuration === 1 ? "day" : "days"}
+            </span>{" "}
+            selected for your trip
           </p>
         </div>
       )}

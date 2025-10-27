@@ -61,12 +61,7 @@ export default function FeedbackWidget() {
                 </button>
               </div>
               <div className="flex gap-2">
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!feedback.trim()}
-                  size="sm"
-                  variant="default"
-                >
+                <Button onClick={handleSubmit} disabled={!feedback.trim()} size="sm" variant="default">
                   Send
                 </Button>
                 <Button onClick={() => setIsOpen(false)} size="sm" variant="outline">

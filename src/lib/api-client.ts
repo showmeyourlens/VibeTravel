@@ -126,4 +126,3 @@ export async function fetchPlanById(planId: string): Promise<PlanWithActivitiesD
     throw error;
   }
 }
-

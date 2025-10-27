@@ -24,9 +24,18 @@ export default function LoadingOverlay({ isVisible }: LoadingOverlayProps) {
 
         {/* Animated Dots */}
         <div className="flex justify-center gap-1 mt-6">
-          <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0s" }}></span>
-          <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></span>
-          <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+          <span
+            className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0s" }}
+          ></span>
+          <span
+            className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.2s" }}
+          ></span>
+          <span
+            className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.4s" }}
+          ></span>
         </div>
       </div>
     </div>

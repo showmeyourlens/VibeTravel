@@ -19,13 +19,7 @@ interface ActivityListProps {
   onDelete: (activityId: string) => void;
 }
 
-export default function ActivityList({
-  days,
-  isEditing,
-  onMoveUp,
-  onMoveDown,
-  onDelete,
-}: ActivityListProps) {
+export default function ActivityList({ days, isEditing, onMoveUp, onMoveDown, onDelete }: ActivityListProps) {
   // Handle empty state
   if (days.length === 0 || days.every((day) => day.activities.length === 0)) {
     return (
@@ -40,9 +34,7 @@ export default function ActivityList({
       {days.map((day) => (
         <div key={day.dayNumber}>
           {/* Day Header */}
-          <h3 className="text-lg font-bold text-slate-900 mb-4 pb-2 border-b-2 border-blue-500">
-            Day {day.dayNumber}
-          </h3>
+          <h3 className="text-lg font-bold text-slate-900 mb-4 pb-2 border-b-2 border-blue-500">Day {day.dayNumber}</h3>
 
           {/* Activities for this day */}
           <div className="space-y-3">

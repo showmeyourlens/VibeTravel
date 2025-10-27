@@ -57,7 +57,7 @@ export function ItineraryView() {
 
   // Initialize hook only after planData is loaded
   const shouldInitializeState = planData !== null;
-  
+
   const {
     currentActivities,
     days,
@@ -244,4 +244,3 @@ export function ItineraryView() {
     </div>
   );
 }
-

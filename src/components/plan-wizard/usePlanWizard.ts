@@ -86,17 +86,20 @@ export function usePlanWizard(): UsePlanWizardReturn {
     }
   }, [currentStep]);
 
-  const updateFormData = useCallback((updates: Partial<PlanWizardViewModel>, autoAdvance = false) => {
-    setFormData((prev) => ({ ...prev, ...updates }));
-    
-    // Auto-advance to next step if requested and not on final step
-    if (autoAdvance && currentStep < TOTAL_STEPS) {
-      // Use setTimeout to ensure state update completes before advancing
-      setTimeout(() => {
-        setCurrentStep((step) => step + 1);
-      }, 0);
-    }
-  }, [currentStep]);
+  const updateFormData = useCallback(
+    (updates: Partial<PlanWizardViewModel>, autoAdvance = false) => {
+      setFormData((prev) => ({ ...prev, ...updates }));
+
+      // Auto-advance to next step if requested and not on final step
+      if (autoAdvance && currentStep < TOTAL_STEPS) {
+        // Use setTimeout to ensure state update completes before advancing
+        setTimeout(() => {
+          setCurrentStep((step) => step + 1);
+        }, 0);
+      }
+    },
+    [currentStep]
+  );
 
   const generatePlan = useCallback(async () => {
     // Validate all required fields

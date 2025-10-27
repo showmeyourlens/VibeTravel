@@ -37,7 +37,7 @@ export default function PlanActions({
             onClick={onSave}
             size="lg"
             variant="default"
-            disabled={!isDraft && !isDirty || isLoading}
+            disabled={(!isDraft && !isDirty) || isLoading}
             className={isLoading ? "opacity-75" : ""}
           >
             {isLoading ? "💾 Saving..." : "💾 Save Plan"}

@@ -10,7 +10,19 @@ import LoadingOverlay from "./LoadingOverlay.tsx";
 const TOTAL_STEPS = 4;
 
 export default function PlanWizard() {
-  const { currentStep, formData, cities, isLoading, isFetching, error, handleNext, handlePrev, updateFormData, generatePlan, isStepValid } = usePlanWizard();
+  const {
+    currentStep,
+    formData,
+    cities,
+    isLoading,
+    isFetching,
+    error,
+    handleNext,
+    handlePrev,
+    updateFormData,
+    generatePlan,
+    isStepValid,
+  } = usePlanWizard();
 
   // Show loading state while fetching cities
   if (isFetching) {
@@ -71,13 +83,36 @@ export default function PlanWizard() {
 
             {/* Step Content */}
             <div className="min-h-[300px]">
-              {currentStep === 1 && <StepDestination cities={cities} selectedCityId={formData.cityId} onSelect={(cityId: string) => updateFormData({ cityId }, true)} />}
+              {currentStep === 1 && (
+                <StepDestination
+                  cities={cities}
+                  selectedCityId={formData.cityId}
+                  onSelect={(cityId: string) => updateFormData({ cityId }, true)}
+                />
+              )}
 
-              {currentStep === 2 && <StepDuration selectedDuration={formData.durationDays} onSelect={(durationDays: number) => updateFormData({ durationDays }, true)} />}
+              {currentStep === 2 && (
+                <StepDuration
+                  selectedDuration={formData.durationDays}
+                  onSelect={(durationDays: number) => updateFormData({ durationDays }, true)}
+                />
+              )}
 
-              {currentStep === 3 && <StepIntensity selectedIntensity={formData.tripIntensity} onSelect={(tripIntensity: "full day" | "half day") => updateFormData({ tripIntensity }, true)} />}
+              {currentStep === 3 && (
+                <StepIntensity
+                  selectedIntensity={formData.tripIntensity}
+                  onSelect={(tripIntensity: "full day" | "half day") => updateFormData({ tripIntensity }, true)}
+                />
+              )}
 
-              {currentStep === 4 && <StepNotes notes={formData.userNotes} onChange={(userNotes: string) => updateFormData({ userNotes })} onGenerate={generatePlan} isGenerating={isLoading} />}
+              {currentStep === 4 && (
+                <StepNotes
+                  notes={formData.userNotes}
+                  onChange={(userNotes: string) => updateFormData({ userNotes })}
+                  onGenerate={generatePlan}
+                  isGenerating={isLoading}
+                />
+              )}
             </div>
           </div>
 

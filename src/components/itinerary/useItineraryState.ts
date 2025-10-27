@@ -84,9 +84,7 @@ function recalculatePositions(activities: PlanActivityDTO[]): PlanActivityDTO[] 
 }
 
 export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItineraryStateReturn {
-  const [currentActivities, setCurrentActivities] = useState<PlanActivityDTO[]>(
-    initialActivities
-  );
+  const [currentActivities, setCurrentActivities] = useState<PlanActivityDTO[]>(initialActivities);
   const [isEditing, setIsEditing] = useState(false);
 
   // Update currentActivities when initialActivities changes

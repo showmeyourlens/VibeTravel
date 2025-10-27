@@ -40,7 +40,10 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
       {selectedIntensity !== null && (
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-900">
-            <span className="font-semibold capitalize">{selectedIntensity}</span> intensity selected - {selectedIntensity === "half day" ? "You'll have time to explore at your own pace" : "Your days will be filled with exciting activities"}
+            <span className="font-semibold capitalize">{selectedIntensity}</span> intensity selected -{" "}
+            {selectedIntensity === "half day"
+              ? "You'll have time to explore at your own pace"
+              : "Your days will be filled with exciting activities"}
           </p>
         </div>
       )}
