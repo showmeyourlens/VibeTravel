@@ -129,7 +129,7 @@ export class PlanService {
       // Fetch plans with pagination and sorting
       const { data: plansData, error: plansError } = await this.supabase
         .from("plans")
-        .select("id, city_id, duration_days, trip_intensity, status, created_at, updated_at")
+        .select("id, duration_days, trip_intensity, status, created_at, updated_at, city:cities (id, name)")
         .eq("user_id", query.userId)
         .order(query.sort, { ascending: false })
         .range(from, to);
@@ -165,7 +165,7 @@ export class PlanService {
       // Map database rows to DTOs
       const plans: PlanDto[] = (plansData || []).map((row) => ({
         id: row.id,
-        city_id: row.city_id,
+        city: row.city,
         duration_days: row.duration_days,
         trip_intensity: row.trip_intensity as "full day" | "half day",
         status: row.status as "draft" | "active" | "archived",
@@ -203,7 +203,9 @@ export class PlanService {
       // Fetch plan with activities
       const { data: planWithActivitiesData, error: planWithActivitiesError } = await this.supabase
         .from("plans")
-        .select("id, city_id, duration_days, trip_intensity, status, created_at, updated_at, plan_activities(*)")
+        .select(
+          "id, duration_days, trip_intensity, status, created_at, updated_at, plan_activities(*), city:cities (id, name)"
+        )
         .eq("id", planId)
         .single();
 
@@ -222,7 +224,7 @@ export class PlanService {
       const planWithActivities: PlanWithActivitiesDto = {
         plan: {
           id: planWithActivitiesData.id,
-          city_id: planWithActivitiesData.city_id,
+          city: planWithActivitiesData.city,
           duration_days: planWithActivitiesData.duration_days,
           trip_intensity: planWithActivitiesData.trip_intensity as "full day" | "half day",
           status: planWithActivitiesData.status as "draft" | "active" | "archived",
@@ -241,7 +243,6 @@ export class PlanService {
       };
 
       return planWithActivities;
-
     } catch (error) {
       // Log unexpected errors
       await logAppError(this.supabase, {

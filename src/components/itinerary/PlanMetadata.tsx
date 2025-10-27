@@ -17,7 +17,7 @@ export default function PlanMetadata({ plan, userNotes }: PlanMetadataProps) {
         {/* Destination - use city_id as fallback */}
         <div>
           <p className="text-sm font-semibold text-slate-600 uppercase tracking-wide">Destination</p>
-          <h2 className="text-2xl font-bold text-slate-900 mt-1">{plan.city_id}</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mt-1">{plan.city.name}</h2>
         </div>
 
         {/* Duration */}

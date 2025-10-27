@@ -124,7 +124,7 @@ export interface SavePlanResponseDTO {
  */
 export interface PlanDto {
   id: string;
-  city_id: string;
+  city: CityDto;
   duration_days: number;
   trip_intensity: "full day" | "half day";
   status: "draft" | "active" | "archived";
