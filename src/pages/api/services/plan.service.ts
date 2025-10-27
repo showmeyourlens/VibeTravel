@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "../../../db/supabase.client";
-import type { SavePlanCommand, SavePlanResponseDTO, PlanDto } from "../../../types";
+import type { SavePlanCommand, SavePlanResponseDTO, PlanDto, PlanWithActivitiesDto } from "../../../types";
 import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
 
 /**
@@ -69,6 +69,7 @@ export class PlanService {
         latitude: activity.latitude ?? null,
         longitude: activity.longitude ?? null,
         notes: activity.notes || null,
+        google_maps_url: activity.google_maps_url || null,
       }));
 
       // Step 3: Bulk insert activities
@@ -184,6 +185,70 @@ export class PlanService {
         severity: "error",
         stackTrace: getStackTrace(error),
         payload: { query },
+      });
+
+      // Re-throw for endpoint to handle
+      throw error;
+    }
+  }
+
+  /**
+   * Retrieves a paginated list of plans for a specific user
+   * @param query - Query parameters for pagination and sorting
+   * @returns Object containing plans array and total count
+   * @throws Error if plans cannot be fetched
+   */
+  async getPlanWithActivitiesById(planId: string, userId: string): Promise<PlanWithActivitiesDto> {
+    try {
+      // Fetch plan with activities
+      const { data: planWithActivitiesData, error: planWithActivitiesError } = await this.supabase
+        .from("plans")
+        .select("id, city_id, duration_days, trip_intensity, status, created_at, updated_at, plan_activities(*)")
+        .eq("id", planId)
+        .single();
+
+      if (planWithActivitiesError) {
+        await logAppError(this.supabase, {
+          userId: userId,
+          message: `Failed to fetch plans: ${planWithActivitiesError.message}`,
+          severity: "error",
+          stackTrace: planWithActivitiesError.stack,
+          payload: { error: planWithActivitiesError },
+        });
+        throw new Error(`Failed to fetch plan ${planId} with activities: ${planWithActivitiesError.message}`);
+      }
+
+      // Map database rows to DTOs
+      const planWithActivities: PlanWithActivitiesDto = {
+        plan: {
+          id: planWithActivitiesData.id,
+          city_id: planWithActivitiesData.city_id,
+          duration_days: planWithActivitiesData.duration_days,
+          trip_intensity: planWithActivitiesData.trip_intensity as "full day" | "half day",
+          status: planWithActivitiesData.status as "draft" | "active" | "archived",
+          created_at: planWithActivitiesData.created_at,
+          updated_at: planWithActivitiesData.updated_at,
+        },
+        activities: planWithActivitiesData.plan_activities.map((activity) => ({
+          id: activity.id,
+          day_number: activity.day_number,
+          position: activity.position,
+          name: activity.name,
+          latitude: activity.latitude ?? 0,
+          longitude: activity.longitude ?? 0,
+          google_maps_url: activity.google_maps_url as string,
+        })),
+      };
+
+      return planWithActivities;
+
+    } catch (error) {
+      // Log unexpected errors
+      await logAppError(this.supabase, {
+        userId: userId,
+        message: `Unexpected error in getPlanWithActivitiesById: ${formatErrorMessage(error)}`,
+        severity: "error",
+        stackTrace: getStackTrace(error),
       });
 
       // Re-throw for endpoint to handle

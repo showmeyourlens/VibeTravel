@@ -3,16 +3,24 @@
  * Displays a summary of a single travel plan as a clickable card
  */
 
+import { fetchPlanById } from "@/lib/api-client";
 import type { PlanViewModel } from "./types";
 
 interface PlanCardProps {
   plan: PlanViewModel;
 }
 
+const planClicked = async (plan: PlanViewModel) => {
+  const planWithActivities = await fetchPlanById(plan.id);
+  console.log("planWithActivities", planWithActivities);
+  sessionStorage.setItem("generatedPlan", JSON.stringify(planWithActivities));
+  window.location.href = `/plans/view?planId=${plan.id}`;
+};
+
 export default function PlanCard({ plan }: PlanCardProps) {
   return (
     <a
-      href={`/plans/${plan.id}`}
+      onClick={() => planClicked(plan)}
       className="group block rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md hover:border-blue-300"
     >
       <div className="p-6">

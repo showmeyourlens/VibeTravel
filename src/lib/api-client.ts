@@ -3,7 +3,7 @@
  * Handles API calls with error handling and type safety
  */
 
-import type { CityDto, ListPlansResponseDto } from "../types";
+import type { CityDto, ListPlansResponseDto, PlanWithActivitiesDto } from "../types";
 
 /**
  * Configuration for API calls
@@ -87,3 +87,43 @@ export async function fetchPlans(page = 1, pageSize: number = DEFAULT_PAGE_SIZE)
     throw error;
   }
 }
+
+/**
+ * Fetch a single plan with activities by ID
+ * @param planId - The ID of the plan to fetch
+ * @returns Promise<PlanWithActivitiesDto> - Plan with associated activities
+ * @throws Error if the API call fails or plan is not found
+ */
+export async function fetchPlanById(planId: string): Promise<PlanWithActivitiesDto> {
+  if (!planId || typeof planId !== "string") {
+    throw new Error("Invalid plan ID");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/${planId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error("Plan not found");
+      }
+      if (response.status === 403) {
+        throw new Error("Access denied");
+      }
+      handleAuthError(response.status);
+      throw new Error(`Failed to fetch plan: ${response.status} ${response.statusText}`);
+    }
+
+    const planWithActivities: PlanWithActivitiesDto = await response.json();
+    return planWithActivities;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error fetching plan:", error);
+    throw error;
+  }
+}
+

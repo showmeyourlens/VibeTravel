@@ -44,6 +44,7 @@ export interface GenerateDraftPlanCommand {
  * Activity within a plan
  */
 export interface PlanActivityDTO {
+  id: string;
   day_number: number;
   position: number;
   name: string;
@@ -78,6 +79,7 @@ export interface SavePlanActivityDTO {
   latitude?: number | null;
   longitude?: number | null;
   notes?: string;
+  google_maps_url?: string | null;
 }
 
 /**
@@ -128,6 +130,11 @@ export interface PlanDto {
   status: "draft" | "active" | "archived";
   created_at: string;
   updated_at: string;
+}
+
+export interface PlanWithActivitiesDto {
+  plan: PlanDto;
+  activities: PlanActivityDTO[];
 }
 
 /**

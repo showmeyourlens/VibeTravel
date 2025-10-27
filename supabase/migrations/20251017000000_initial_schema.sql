@@ -61,6 +61,7 @@ create table plan_activities (
   notes text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
+  google_maps_url text,
   unique (plan_id, day_number, position)
 );
 
