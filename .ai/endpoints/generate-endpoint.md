@@ -16,7 +16,7 @@ The `POST /plans/generate` endpoint allows authenticated users to generate a dra
   interface GenerateDraftPlanRequestDTO {
     city_id: string; // UUID, required
     duration_days: number; // integer [1,5], required
-    trip_intensity: 'full day' | 'half day'; // required
+    trip_intensity: "full day" | "half day"; // required
     user_notes?: string; // optional, max 500 chars
   }
   ```
@@ -33,7 +33,7 @@ interface GenerateDraftPlanCommand {
   userId: string;
   cityId: string;
   durationDays: number;
-  tripIntensity: 'full day' | 'half day';
+  tripIntensity: "full day" | "half day";
   userNotes?: string;
 }
 
@@ -50,7 +50,7 @@ interface PlanActivityDTO {
 interface GenerateDraftPlanResponseDTO {
   plan: {
     duration_days: number;
-    trip_intensity: 'full day' | 'half day';
+    trip_intensity: "full day" | "half day";
     activities: PlanActivityDTO[];
     disclaimer: string;
   };

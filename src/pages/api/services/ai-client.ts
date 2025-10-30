@@ -144,7 +144,6 @@ ${userNotesSection}
         throw new Error("Empty response from AI service");
       }
 
-      console.log("Response from OpenRouter API\n\n", content);
       return content;
     } finally {
       clearTimeout(timeoutId);

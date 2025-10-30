@@ -37,7 +37,7 @@ The VibeTravels MVP will include the following core functionalities:
 ### In-Scope
 
 - Web application targeting desktop and mobile browsers.
-- User authentication via a custom email and password system.
+- User authentication via a custom email and password system, with password recovery.
 - Support for 10 pre-defined European cities.
 - Trips lasting from 1 to 5 days.
 - Focus on solo and couple travelers.
@@ -46,7 +46,6 @@ The VibeTravels MVP will include the following core functionalities:
 ### Out-of-Scope for MVP
 
 - Monetization: All features included in MVP will be free.
-- Password Recovery: "Forgot password" functionality is not included.
 - Advanced Editing: Drag-and-drop editing interfaces will not be implemented.
 - Social Logins: Third-party authentication (e.g., Google, Facebook) is not included.
 - Expanded Audience: Plans are not optimized for families, large groups or disabled people.
@@ -86,7 +85,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-004
 - Title: Use Travel Wizard for Input
-- Description: As a user, I want to use a simple wizard to provide my basic travel requirements and add a free text notes so that the AI can generate a relevant plan.
+- Description: As a logged-in user, I want to use a simple wizard to provide my basic travel requirements and add a free text notes so that the AI can generate a relevant plan.
 - Acceptance Criteria:
   - 1. The wizard first prompts for a Destination City from a dropdown list of 10 options.
   - 2. The wizard then prompts for the number of days (a carousel with numbers from 1 to 5).
@@ -96,7 +95,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-005
 - Title: View Generated Itinerary
-- Description: As a user, I want to see the generated travel plan clearly displayed after submitting my preferences.
+- Description: As a logged-in user, I want to see the generated travel plan clearly displayed after submitting my preferences.
 - Acceptance Criteria:
   - 1. The plan is displayed day-by-day.
   - 2. Each day lists the suggested activities in a sequential order.
@@ -105,7 +104,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-006
 - Title: Reorder an Activity
-- Description: As a user, after clicking edit button, I want to be able to move an activity up or down in the daily itinerary to customize the plan to my liking.
+- Description: As a logged-in user, after clicking edit button, I want to be able to move an activity up or down in the daily itinerary to customize the plan to my liking.
 - Acceptance Criteria:
   - 1. Each activity item has a "Move Up" and "Move Down" button.
   - 2. Clicking "Move Up" swaps the activity with the one directly above it.
@@ -114,14 +113,14 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-007
 - Title: Delete an Activity
-- Description: As a user, after clicking edit button, I want to remove an activity from the itinerary that I am not interested in.
+- Description: As a logged-in user, after clicking edit button, I want to remove an activity from the itinerary that I am not interested in.
 - Acceptance Criteria:
   - 1. Each activity item has a "Delete" button.
   - 2. Clicking the "Delete" button permanently removes the activity from the displayed plan.
 
 - ID: US-008
 - Title: Save a Travel Plan
-- Description: As a user with a finalized plan, I want to save it to my account so I can access it later.
+- Description: As a logged-in user with a finalized plan, I want to save it to my account so I can access it later.
 - Acceptance Criteria:
   - 1. A "Save Plan" button is available on the itinerary page.
   - 2. Clicking the button saves the current state of the plan (including all reorders and deletions) to the user's account.
@@ -138,7 +137,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-010
 - Title: Provide Plan Feedback
-- Description: As a user, I want to give simple feedback on the quality of the generated plan.
+- Description: As a logged-in user, I want to give simple feedback on the quality of the generated plan.
 - Acceptance Criteria:
   - 1. A question "Was this plan helpful?" is displayed with "Yes" and "No" buttons.
   - 2. A user can click either "Yes" or "No" once per generated plan.
@@ -147,7 +146,7 @@ The VibeTravels MVP will include the following core functionalities:
 
 - ID: US-011
 - Title: Handle AI Generation Failure
-- Description: As a user, I want to see a clear message if the system cannot generate a plan based on my input.
+- Description: As a logged-in user, I want to see a clear message if the system cannot generate a plan based on my input.
 - Acceptance Criteria:
   - 1. If the AI backend fails to return a valid plan, a user-friendly error message is displayed instead of a blank page or technical error.
   - 2. The message should inform the user that a plan could not be created and suggest trying again.

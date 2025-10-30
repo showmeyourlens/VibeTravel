@@ -11,71 +11,77 @@ All UI elements will be built using the `shadcn/ui` component library to ensure 
 ## 2. View List
 
 ### View: Dashboard ("My Plans")
+
 - **View Path**: `/dashboard`
 - **Main Purpose**: To serve as the primary landing page for authenticated users, allowing them to view their saved travel plans and start creating new ones.
 - **Key Information to Display**:
-    - A list of the user's saved plans, summarized in cards.
-    - An "empty state" for new users, guiding them to create their first plan.
-    - A prominent "Create New Plan" call-to-action.
+  - A list of the user's saved plans, summarized in cards.
+  - An "empty state" for new users, guiding them to create their first plan.
+  - A prominent "Create New Plan" call-to-action.
 - **Key View Components**: `Header`, `PlanCard`, `Button` (for creating a new plan), `EmptyStateGraphic`.
 - **UX, Accessibility, and Security Considerations**:
-    - **UX**: Implements infinite scroll for plan pagination by interacting with the `GET /plans` endpoint. Uses skeleton loaders during the initial data fetch to improve perceived performance.
-    - **Accessibility**: The "Create New Plan" button will be clearly labeled and focusable. Plan cards will have accessible names.
-    - **Security**: This view requires user authentication. API calls will include an auth token. A `401 Unauthorized` response will trigger a redirect to the login page.
+  - **UX**: Implements infinite scroll for plan pagination by interacting with the `GET /plans` endpoint. Uses skeleton loaders during the initial data fetch to improve perceived performance.
+  - **Accessibility**: The "Create New Plan" button will be clearly labeled and focusable. Plan cards will have accessible names.
+  - **Security**: This view requires user authentication. API calls will include an auth token. A `401 Unauthorized` response will trigger a redirect to the login page.
 
 ### View: Plan Wizard
+
 - **View Path**: `/plans/new`
 - **Main Purpose**: To collect the necessary information from the user to generate a new travel plan via the AI service.
 - **Key Information to Display**:
-    - A multi-step form to input:
-        - Destination City (from a predefined list fetched via `GET /cities`).
-        - Trip Duration (1-5 days).
-        - Trip Intensity ("full day" or "half day").
-        - User Notes (free-form text).
+  - A multi-step form to input:
+    - Destination City (from a predefined list fetched via `GET /cities`).
+    - Trip Duration (1-5 days).
+    - Trip Intensity ("full day" or "half day").
+    - User Notes (free-form text).
 - **Key View Components**: `Wizard` (as a stateful React component), `Stepper`, `Select`, `Input`, `RadioGroup`, `Button` (for navigation and submission).
 - **UX, Accessibility, and Security Considerations**:
-    - **UX**: The wizard breaks down the form into logical steps. Displays a full-screen loading overlay after the user submits their preferences to the `POST /plans/generate` endpoint. Provides clear validation feedback for invalid fields (`400 Bad Request`).
-    - **Accessibility**: All form fields will have associated labels. Stepper provides a clear indication of progress.
-    - **Security**: Requires user authentication.
+  - **UX**: The wizard breaks down the form into logical steps. Displays a full-screen loading overlay after the user submits their preferences to the `POST /plans/generate` endpoint. Provides clear validation feedback for invalid fields (`400 Bad Request`).
+  - **Accessibility**: All form fields will have associated labels. Stepper provides a clear indication of progress.
+  - **Security**: Requires user authentication.
 
 ### View: Itinerary View
+
 - **View Path**: `/plans/draft` (a conceptual client-side state for a new plan) and `/plans/:planId` (for a saved plan).
 - **Main Purpose**: To display the details of a generated or saved travel plan and allow for modifications.
 - **Key Information to Display**:
-    - Plan metadata (City, Duration, etc.).
-    - A day-by-day breakdown of activities.
-    - Each activity's name and a link to Google Maps.
-    - A persistent disclaimer banner.
-    - A user feedback component ("Was this plan helpful?").
+  - Plan metadata (City, Duration, etc.).
+  - A day-by-day breakdown of activities.
+  - Each activity's name and a link to Google Maps.
+  - A persistent disclaimer banner.
+  - A user feedback component ("Was this plan helpful?").
 - **Key View Components**: `ItineraryView` (a unified component), `ActivityItem`, `Button` (Save, Edit, Move Up/Down, Delete), `Banner`, `FeedbackWidget`, `ConfirmationModal`.
 - **UX, Accessibility, and Security Considerations**:
-    - **UX**: Opens in a read-only "view mode" by default for saved plans. An "Edit Plan" button toggles "edit mode." Implements updates for reordering (`PATCH /plans/:planId`) and deleting activities. Deleting a plan requires confirmation via a modal.
-    - **Accessibility**: "Move Up/Down" buttons provide an accessible alternative to drag-and-drop. All interactive controls will have clear focus states and ARIA attributes.
-    - **Security**: Requires user authentication. Handles `403 Forbidden` errors by redirecting to a "Not Found" page to prevent information leakage. `404 Not Found` for invalid plan IDs is handled similarly.
+  - **UX**: Opens in a read-only "view mode" by default for saved plans. An "Edit Plan" button toggles "edit mode." Implements updates for reordering (`PATCH /plans/:planId`) and deleting activities. Deleting a plan requires confirmation via a modal.
+  - **Accessibility**: "Move Up/Down" buttons provide an accessible alternative to drag-and-drop. All interactive controls will have clear focus states and ARIA attributes.
+  - **Security**: Requires user authentication. Handles `403 Forbidden` errors by redirecting to a "Not Found" page to prevent information leakage. `404 Not Found` for invalid plan IDs is handled similarly.
 
 ### View: Not Found
+
 - **View Path**: `/404` (handled by Astro's file-based routing).
 - **Main Purpose**: To inform the user that the requested page does not exist or they do not have permission to view it.
 - **Key Information to Display**:
-    - A user-friendly error message.
-    - A link to navigate back to the Dashboard.
+  - A user-friendly error message.
+  - A link to navigate back to the Dashboard.
 - **Key View Components**: `Header`, `MessageCard`.
 - **UX, Accessibility, and Security Considerations**:
-    - **UX**: Provides a clear and helpful path for users who land on an invalid URL.
-    - **Accessibility**: The content is simple and easily readable by screen readers.
-    - **Security**: Serves as the redirect target for `403 Forbidden` API responses, obscuring the existence of a resource the user cannot access.
+  - **UX**: Provides a clear and helpful path for users who land on an invalid URL.
+  - **Accessibility**: The content is simple and easily readable by screen readers.
+  - **Security**: Serves as the redirect target for `403 Forbidden` API responses, obscuring the existence of a resource the user cannot access.
 
 ### View: Login
+
 - **View Path**: `/login`
 - **Main Purpose**: To authenticate users. (Note: UI/UX for this view is deferred per planning session).
 - **Key Information to Display**: N/A
 - **Key View Components**: N/A
 - **UX, Accessibility, and Security Considerations**:
-    - **Security**: This page will be the redirect target for any API call that results in a `401 Unauthorized` error.
+  - **Security**: This page will be the redirect target for any API call that results in a `401 Unauthorized` error.
 
 ## 3. User Journey Map
 
 ### Primary Journey: Creating a New Travel Plan
+
 This journey maps to user stories **US-003, US-004, US-005, US-006, US-007, and US-008**.
 
 1.  **Start**: The authenticated user lands on the **Dashboard** (`/dashboard`).
@@ -88,6 +94,7 @@ This journey maps to user stories **US-003, US-004, US-005, US-006, US-007, and 
 8.  **Confirm & End**: A success notification is displayed. The application redirects the user back to the **Dashboard**, where the new plan now appears at the top of the list.
 
 ### Secondary Journey: Viewing and Editing a Saved Plan
+
 This journey maps to user story **US-009**.
 
 1.  **Start**: The authenticated user is on the **Dashboard** (`/dashboard`).
@@ -102,11 +109,11 @@ This journey maps to user story **US-009**.
 
 - **Global Layout**: A primary Astro layout component will wrap all views. It will include a persistent `Header` and a main content area for view-specific content.
 - **Header Navigation**: The `Header` component will contain the application logo and primary navigation links.
-    - **Authenticated Users**: The header will display links to "My Plans" (`/dashboard`) and a "Logout" button.
-    - **Unauthenticated Users**: The header will display links to "Login" (`/login`) and "Sign Up" (`/signup`).
+  - **Authenticated Users**: The header will display links to "My Plans" (`/dashboard`) and a "Logout" button.
+  - **Unauthenticated Users**: The header will display links to "Login" (`/login`) and "Sign Up" (`/signup`).
 - **Routing**:
-    - **Page-Level**: Astro's file-based routing will manage navigation between distinct pages (e.g., `src/pages/dashboard.astro`, `src/pages/plans/[planId].astro`).
-    - **Component-Level**: For complex components like the `Plan Wizard`, navigation between steps will be managed by client-side state within the React component itself, without changing the URL.
+  - **Page-Level**: Astro's file-based routing will manage navigation between distinct pages (e.g., `src/pages/dashboard.astro`, `src/pages/plans/[planId].astro`).
+  - **Component-Level**: For complex components like the `Plan Wizard`, navigation between steps will be managed by client-side state within the React component itself, without changing the URL.
 
 ## 5. Key Components
 
