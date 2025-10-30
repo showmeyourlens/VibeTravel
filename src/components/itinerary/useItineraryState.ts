@@ -35,7 +35,7 @@ function groupActivitiesByDay(activities: PlanActivityDTO[]): DayViewModel[] {
     if (!grouped.has(activity.day_number)) {
       grouped.set(activity.day_number, []);
     }
-    grouped.get(activity.day_number)!.push(activity);
+    grouped.get(activity.day_number)?.push(activity);
   });
 
   // Sort activities within each day by position
@@ -63,7 +63,7 @@ function recalculatePositions(activities: PlanActivityDTO[]): PlanActivityDTO[] 
     if (!grouped.has(activity.day_number)) {
       grouped.set(activity.day_number, []);
     }
-    grouped.get(activity.day_number)!.push(activity);
+    grouped.get(activity.day_number)?.push(activity);
   });
 
   // Recalculate positions within each day
@@ -128,17 +128,17 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
 
       // Find the activity before it in the same day
       const sameDay = prev.filter((a) => a.day_number === activity.day_number);
-      const currentIndex = sameDay.findIndex((a) => a.id === activityId);
+      const currentIndex = sameDay.find((a) => a.id === activityId)?.position ?? 0;
 
       if (currentIndex <= 0) return prev; // Already first
 
       // Swap positions with previous activity
-      const previousActivity = sameDay[currentIndex - 1];
+      const previousActivity = sameDay.find((a) => a.position === currentIndex - 1);
       const updated = prev.map((a) => {
         if (a.id === activityId) {
-          return { ...a, position: previousActivity.position };
+          return { ...a, position: previousActivity?.position ?? 0 };
         }
-        if (a.id === previousActivity.id) {
+        if (a.id === previousActivity?.id) {
           return { ...a, position: activity.position };
         }
         return a;
@@ -158,17 +158,17 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
 
       // Find the activity after it in the same day
       const sameDay = prev.filter((a) => a.day_number === activity.day_number);
-      const currentIndex = sameDay.findIndex((a) => a.id === activityId);
+      const currentIndex = sameDay.find((a) => a.id === activityId)?.position ?? 0;
 
-      if (currentIndex >= sameDay.length - 1) return prev; // Already last
+      if (currentIndex >= sameDay.length) return prev; // Already last
 
       // Swap positions with next activity
-      const nextActivity = sameDay[currentIndex + 1];
+      const nextActivity = sameDay.find((a) => a.position === currentIndex + 1);
       const updated = prev.map((a) => {
         if (a.id === activityId) {
-          return { ...a, position: nextActivity.position };
+          return { ...a, position: nextActivity?.position ?? 0 };
         }
-        if (a.id === nextActivity.id) {
+        if (a.id === nextActivity?.id) {
           return { ...a, position: activity.position };
         }
         return a;
