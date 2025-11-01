@@ -1,8 +1,9 @@
-import type { APIContext, APIRoute } from "astro";
+import type { APIRoute } from "astro";
 
 import { CitiesService } from "./services/cities.service";
 import { logAppError } from "../../lib/utils/error-logger";
 import type { ErrorResponseDTO } from "../../types";
+import { createSupabaseServerInstance } from "../../db/supabase.client";
 
 export const prerender = false;
 
@@ -10,21 +11,26 @@ export const prerender = false;
  * GET /api/cities
  * Retrieves the list of available destination cities
  */
-export const GET: APIRoute = async (context: APIContext) => {
+export const GET: APIRoute = async ({ request, cookies, locals }) => {
+  const supabase = createSupabaseServerInstance({ headers: request.headers, cookies });
   try {
-    // 1. Create cities service instance
-    const citiesService = new CitiesService(context.locals.supabase);
+    // 1. User is already authenticated by middleware, available in `locals.user`
+    const user = locals.user;
 
-    // 2. Fetch cities from the database
+    // 2. Create cities service instance
+    const citiesService = new CitiesService(supabase);
+
+    // 3. Fetch cities from the database
     let cities;
     try {
       cities = await citiesService.getCities();
     } catch (error) {
       // Log unexpected errors
-      await logAppError(context.locals.supabase, {
+      await logAppError(supabase, {
         message: error instanceof Error ? error.message : "Unknown error fetching cities",
         severity: "error",
         stackTrace: error instanceof Error ? error.stack : undefined,
+        userId: user?.id,
       });
 
       return new Response(JSON.stringify({ error: "Internal server error" } as ErrorResponseDTO), {

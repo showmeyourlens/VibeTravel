@@ -41,13 +41,23 @@ export const LoginForm: React.FC = () => {
     setErrors({});
 
     try {
-      // API call will be implemented in the next step
-      // const response = await fetch("/api/auth/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email, password }),
-      // });
-      // Handle response and redirect
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle API error - map to user-friendly message
+        const errorMessage = data.error || "An error occurred during login. Please try again.";
+        setErrors({ submit: errorMessage });
+        return;
+      }
+
+      // Successful login - redirect to dashboard
+      window.location.href = "/";
     } catch {
       setErrors({ submit: "An error occurred during login. Please try again." });
     } finally {

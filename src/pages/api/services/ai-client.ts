@@ -11,6 +11,16 @@ export interface AIItineraryRequest {
   userNotes?: string;
 }
 
+export interface AIItineraryResponse {
+  title: string;
+  day_number: number;
+  position: number;
+  place_name: string;
+  latitude: number;
+  longitude: number;
+  description: string;
+}
+
 /**
  * AI Client Service for OpenRouter integration
  * Generates travel itineraries using AI models
@@ -63,23 +73,26 @@ Create exactly ${request.durationDays * activitiesPerDay} activities total, dist
 For each activity, provide:
 - Day number (1 to ${request.durationDays})
 - Position within that day (1 to ${activitiesPerDay})
-- Activity name
+- Activity title
+- Place name
 - Approximate latitude and longitude coordinates
 - A brief description
 - link to Google Maps for the activity, if possible.
 
 Format your response as a JSON array of activities. Each activity must be a valid JSON object with these exact fields:
 {
+  "title": string,
   "day_number": number,
   "position": number,
-  "name": string,
+  "place_name": string,
   "latitude": number,
   "longitude": number,
   "description": string
-  "google_maps_url": string
 }
 
 Important:
+- Activity title must be a shortsingle sentence.
+- Place name must be a name of concrete place where the activity is located, not a generic term like "city center" or "main street".
 - Latitude must be between -90 and 90
 - Longitude must be between -180 and 180
 - Activities should flow logically through the day (morning, afternoon, evening)
@@ -256,8 +269,7 @@ ${userNotesSection}
         throw new Error("No JSON array found in AI response");
       }
 
-      const activities = JSON.parse(jsonMatch[0]) as PlanActivityDTO[];
-      this.validate(activities);
+      const activities = JSON.parse(jsonMatch[0]) as AIItineraryResponse[];
 
       if (!Array.isArray(activities)) {
         throw new Error("Response is not an array");
@@ -267,18 +279,31 @@ ${userNotesSection}
         throw new Error("Response array is empty");
       }
 
-      return activities;
+      this.validate(activities);
+
+      const planActivities: PlanActivityDTO[] = activities.map((activity) => ({
+        id: "",
+        day_number: activity.day_number,
+        position: activity.position,
+        name: activity.title,
+        latitude: activity.latitude,
+        longitude: activity.longitude,
+        google_maps_url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.place_name)}`,
+      }));
+
+      return planActivities;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown parsing error";
       throw new Error(`Failed to parse AI response: ${errorMessage}`);
     }
   }
 
-  private validate(activities: PlanActivityDTO[]): void {
+  private validate(activities: AIItineraryResponse[]): void {
     activities.forEach((activity) => {
       this.validateDay(activity.day_number);
       this.validatePosition(activity.position);
-      this.validateName(activity.name);
+      this.validateName(activity.title);
+      this.validatePlace(activity.place_name);
       this.validateLatitude(activity.latitude);
       this.validateLongitude(activity.longitude);
     });
@@ -312,6 +337,16 @@ ${userNotesSection}
       throw new Error("Activity name must be a non-empty string");
     }
     return name.trim();
+  }
+
+  /**
+   * Validates and returns an activity name
+   */
+  private validatePlace(place: unknown): string {
+    if (typeof place !== "string" || place.trim().length === 0) {
+      throw new Error("Activity place must be a non-empty string");
+    }
+    return place.trim();
   }
 
   /**

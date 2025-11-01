@@ -4,6 +4,7 @@ import { saveRequestSchema } from "../../../lib/schemas/plan.schema";
 import { PlanService } from "../services/plan.service";
 import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
 import type { SavePlanCommand, SavePlanResponseDTO, ErrorResponseDTO } from "../../../types";
+import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -18,42 +19,16 @@ export const prerender = false;
  * @returns 401 - Unauthorized
  * @returns 500 - Server error
  */
-export const POST: APIRoute = async (context) => {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
+  const supabase = createSupabaseServerInstance({ headers: request.headers, cookies });
   try {
-    // Step 1: Extract Supabase client from context
-    const supabase = context.locals.supabase;
+    // Step 1: Get authenticated user from middleware
+    const user = locals.user;
 
-    if (!supabase) {
-      return new Response(JSON.stringify({ error: "Supabase client not available" } as ErrorResponseDTO), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Step 2: Authenticate user
-    // TODO: Uncomment this when we have authentication
-    const user = { id: "e0000000-0000-0000-0000-00000000000e" };
-
-    // TODO: Uncomment this when we have authentication
-    // const {
-    //   data: { user },
-    //   error: authError,
-    // } = await supabase.auth.getUser();
-
-    // if (authError || !user) {
-    //   return new Response(
-    //     JSON.stringify({ error: "Unauthorized: Invalid or missing authentication token" } as ErrorResponseDTO),
-    //     {
-    //       status: 401,
-    //       headers: { "Content-Type": "application/json" },
-    //     }
-    //   );
-    // }
-
-    // Step 3: Parse and validate request body
+    // Step 2: Parse and validate request body
     let requestBody: unknown;
     try {
-      requestBody = await context.request.json();
+      requestBody = await request.json();
     } catch (error) {
       return new Response(JSON.stringify({ error: `Invalid JSON in request body: ${error}` } as ErrorResponseDTO), {
         status: 400,
@@ -108,14 +83,11 @@ export const POST: APIRoute = async (context) => {
     }
 
     // Step 9: Handle unexpected errors
-    const supabase = context.locals.supabase;
 
     // Log the error if we have a Supabase client
     if (supabase) {
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
+        const user = locals.user;
 
         await logAppError(supabase, {
           userId: user?.id,

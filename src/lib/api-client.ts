@@ -12,19 +12,6 @@ const API_BASE = "";
 const DEFAULT_PAGE_SIZE = 12;
 
 /**
- * Error handler for API responses
- * Redirects to login on 401 Unauthorized
- */
-function handleAuthError(status: number): void {
-  if (status === 401) {
-    // TODO: Implement auth redirect
-    //window.location.href = "/login";
-    console.log("Unauthorized");
-    return;
-  }
-}
-
-/**
  * Fetch all available cities
  * @returns Promise<CityDto[]> - Array of cities
  * @throws Error if the API call fails
@@ -39,7 +26,6 @@ export async function fetchCities(): Promise<CityDto[]> {
     });
 
     if (!response.ok) {
-      handleAuthError(response.status);
       throw new Error(`Failed to fetch cities: ${response.status} ${response.statusText}`);
     }
 
@@ -75,7 +61,6 @@ export async function fetchPlans(page = 1, pageSize: number = DEFAULT_PAGE_SIZE)
     });
 
     if (!response.ok) {
-      handleAuthError(response.status);
       throw new Error(`Failed to fetch plans: ${response.status} ${response.statusText}`);
     }
 
@@ -114,7 +99,6 @@ export async function fetchPlanById(planId: string): Promise<PlanWithActivitiesD
       if (response.status === 403) {
         throw new Error("Access denied");
       }
-      handleAuthError(response.status);
       throw new Error(`Failed to fetch plan: ${response.status} ${response.statusText}`);
     }
 

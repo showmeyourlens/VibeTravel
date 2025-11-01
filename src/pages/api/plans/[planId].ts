@@ -1,18 +1,23 @@
 import { logAppError, formatErrorMessage, getStackTrace } from "@/lib/utils/error-logger";
 import type { ErrorResponseDTO } from "@/types";
-import type { APIContext } from "astro";
+import type { APIRoute } from "astro";
 import { PlanService } from "../services/plan.service";
+import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 /**
  * GET /api/plans/{planId}
  * Retrieves a single plan with activities by ID
  */
-export async function GET(context: APIContext): Promise<Response> {
+export const GET: APIRoute = async ({ params, request, cookies, locals }) => {
+  const supabase = createSupabaseServerInstance({ headers: request.headers, cookies });
   try {
-    // Step 1: Extract plan ID from URL parameters
-    const planId = context.params.planId;
+    // Step 1: Get authenticated user from middleware
+    const user = locals.user;
 
-    // Step 1: Validate plan ID
+    // Step 2: Extract plan ID from URL parameters
+    const planId = params.planId;
+
+    // Step 3: Validate plan ID
     if (!planId || typeof planId !== "string") {
       return new Response(
         JSON.stringify({
@@ -25,14 +30,11 @@ export async function GET(context: APIContext): Promise<Response> {
       );
     }
 
-    //   const userId = session.user.id;
-    const userId = "e0000000-0000-0000-0000-00000000000e";
+    // Step 4: Call the service to fetch plan with activities
+    const planService = new PlanService(supabase);
+    const planWithActivities = await planService.getPlanWithActivitiesById(planId, user.id);
 
-    // Step 3: Call the service to fetch plan with activities
-    const planService = new PlanService(context.locals.supabase);
-    const planWithActivities = await planService.getPlanWithActivitiesById(planId, userId);
-
-    // Step 4: Return the response
+    // Step 5: Return the response
     return new Response(JSON.stringify(planWithActivities), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -66,9 +68,8 @@ export async function GET(context: APIContext): Promise<Response> {
     }
 
     // Log unexpected error
-    const supabase = context.locals.supabase;
-    const session = (await supabase.auth.getSession()).data.session;
-    const userId = session?.user?.id || "unknown";
+    const user = locals.user;
+    const userId = user?.id || "unknown";
 
     await logAppError(supabase, {
       userId,
@@ -88,4 +89,4 @@ export async function GET(context: APIContext): Promise<Response> {
       }
     );
   }
-}
+};

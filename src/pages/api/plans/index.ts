@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { createSupabaseServerInstance } from "../../../db/supabase.client";
 import { listPlansQuerySchema } from "../../../lib/schemas/plan.schema";
 import { PlanService } from "../services/plan.service";
 import type { ListPlansResponseDto, ErrorResponseDTO } from "../../../types";
@@ -8,27 +9,12 @@ import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/uti
  * GET /api/plans
  * Retrieves a paginated list of plans for the authenticated user
  */
-export const GET: APIRoute = async ({ request, locals }) => {
+export const GET: APIRoute = async ({ request, cookies, locals }) => {
+  const supabase = createSupabaseServerInstance({ headers: request.headers, cookies });
+
   try {
-    // Step 1: Verify authentication
-    const supabase = locals.supabase;
-
-    // TODO: Uncomment this when we have authentication
-    // const {
-    //   data: { session },
-    //   error: sessionError,
-    // } = await supabase.auth.getSession();
-
-    // if (sessionError || !session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" } as ErrorResponseDTO), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-
-    // TODO: Uncomment this when we have authentication
-    //const userId = session.user.id;
-    const userId = "e0000000-0000-0000-0000-00000000000e";
+    // Step 1: Get authenticated user from middleware
+    const user = locals.user;
 
     // Step 2: Parse and validate query parameters
     const url = new URL(request.url);
@@ -43,7 +29,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
     if (!validationResult.success) {
       // Log validation error
       await logAppError(supabase, {
-        userId,
+        userId: user.id,
         message: "Invalid query parameters for GET /api/plans",
         severity: "warning",
         payload: { queryParams, errors: validationResult.error.errors },
@@ -69,7 +55,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       page,
       pageSize: page_size,
       sort,
-      userId,
+      userId: user.id,
     });
 
     // Step 4: Format and return the response
@@ -88,9 +74,9 @@ export const GET: APIRoute = async ({ request, locals }) => {
     });
   } catch (error) {
     // Log unexpected error
-    const supabase = locals.supabase;
-    const session = (await supabase.auth.getSession()).data.session;
-    const userId = session?.user?.id || "unknown";
+    const supabase = createSupabaseServerInstance({ headers: request.headers, cookies });
+    const user = locals.user;
+    const userId = user?.id || "unknown";
 
     await logAppError(supabase, {
       userId,

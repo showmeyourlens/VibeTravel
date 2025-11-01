@@ -318,26 +318,3 @@ insert into cities (name) values
   ('Prague'),
   ('Lisbon'),
   ('Warsaw');
-
-insert into auth.users (instance_id, id, aud, role, email, encrypted_password, raw_app_meta_data, raw_user_meta_data, email_confirmed_at, created_at)
-  values (
-    '00000000-0000-0000-0000-000000000000',
-    'e0000000-0000-0000-0000-00000000000e',
-    'authenticated',
-    'authenticated',
-    'e@e.e',
-    '$2a$10$wY14Ghv96nFpHvBfO2i9H.SBcMOM34g6x/8zPpS0KqMc4V/3kXZk6', -- bcrypt for "e"
-    '{"provider":"email","providers":["email"]}',
-    '{}',
-    now(),
-    now()
-  );
-
-insert into auth.identities (provider_id, user_id, identity_data, provider, created_at)
-  values (
-    'e0000000-0000-0000-0000-00000000000e',
-    'e0000000-0000-0000-0000-00000000000e',
-    '{"sub": "e0000000-0000-0000-0000-00000000000e"}',
-    'email',
-    now()
-  );

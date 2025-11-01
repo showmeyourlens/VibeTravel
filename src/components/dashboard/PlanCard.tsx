@@ -12,9 +12,8 @@ interface PlanCardProps {
 
 const planClicked = async (plan: PlanViewModel) => {
   const planWithActivities = await fetchPlanById(plan.id);
-  console.log("planWithActivities", planWithActivities);
   sessionStorage.setItem("generatedPlan", JSON.stringify(planWithActivities));
-  window.location.href = `/plans/view?planId=${plan.id}`;
+  window.location.href = `/plans/view`;
 };
 
 export default function PlanCard({ plan }: PlanCardProps) {

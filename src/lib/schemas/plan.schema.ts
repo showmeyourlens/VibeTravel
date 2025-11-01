@@ -54,6 +54,7 @@ export const savePlanActivitySchema = z.object({
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   notes: z.string().max(500).optional(),
+  google_maps_url: z.string().url().nullable().optional(),
 });
 
 /**

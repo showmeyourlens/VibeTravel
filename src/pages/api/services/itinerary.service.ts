@@ -38,7 +38,6 @@ export class ItineraryService {
         userNotes: command.userNotes,
       });
     } catch (error) {
-      console.error("Error generating itinerary", error);
       // Log to LLM error logs
       await this.logLLMError(command.userId, error, {
         cityId: command.cityId,

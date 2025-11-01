@@ -1,9 +1,10 @@
-import type { APIContext } from "astro";
+import type { APIRoute } from "astro";
 
 import { generateRequestSchema } from "../../../lib/schemas/plan.schema";
 import { logAppError } from "../../../lib/utils/error-logger";
 import type { ErrorResponseDTO, GenerateDraftPlanCommand } from "../../../types";
 import { ItineraryService } from "../services/itinerary.service";
+import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -11,15 +12,16 @@ export const prerender = false;
  * POST /api/plans/generate
  * Generates a draft travel itinerary using AI
  */
-export async function POST(context: APIContext): Promise<Response> {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
+  const supabase = createSupabaseServerInstance({ headers: request.headers, cookies });
   try {
-    // 1. TODO: Authentication - Extract user from Supabase session
-    const user = { id: "e0000000-0000-0000-0000-00000000000e" };
+    // 1. Get authenticated user from middleware
+    const user = locals.user;
 
     // 2. Parse and validate request body
     let requestBody;
     try {
-      requestBody = await context.request.json();
+      requestBody = await request.json();
     } catch {
       return new Response(JSON.stringify({ error: "Invalid JSON in request body" } as ErrorResponseDTO), {
         status: 400,
@@ -53,7 +55,7 @@ export async function POST(context: APIContext): Promise<Response> {
     };
 
     // 5. Call itinerary service to generate plan
-    const itineraryService = new ItineraryService(context.locals.supabase);
+    const itineraryService = new ItineraryService(supabase);
 
     let result;
     try {
@@ -77,7 +79,7 @@ export async function POST(context: APIContext): Promise<Response> {
       }
 
       // Log unexpected errors
-      await logAppError(context.locals.supabase, {
+      await logAppError(supabase, {
         userId: user.id,
         message: error instanceof Error ? error.message : "Unknown error during plan generation",
         severity: "error",
@@ -106,4 +108,4 @@ export async function POST(context: APIContext): Promise<Response> {
       headers: { "Content-Type": "application/json" },
     });
   }
-}
+};
