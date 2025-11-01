@@ -256,4 +256,51 @@ export class PlanService {
       throw error;
     }
   }
+
+  /**
+   * Checks if user has already provided feedback for a plan
+   * @param planId - Plan ID to check
+   * @param userId - User ID checking feedback status
+   * @returns true if feedback exists, false otherwise
+   * @throws Error if check fails
+   */
+  async hasFeedback(planId: string, userId: string): Promise<boolean> {
+    try {
+      const { data: feedback, error: feedbackError } = await this.supabase
+        .from("plan_feedback")
+        .select("id")
+        .eq("plan_id", planId)
+        .eq("user_id", userId)
+        .single();
+
+      // PGRST116 error means no row found, which is expected
+      if (feedbackError?.code === "PGRST116") {
+        return false;
+      }
+
+      if (feedbackError) {
+        await logAppError(this.supabase, {
+          userId: userId,
+          planId,
+          message: `Failed to check feedback status: ${feedbackError.message}`,
+          severity: "error",
+          stackTrace: feedbackError.stack,
+          payload: { feedbackError },
+        });
+        throw new Error(`Failed to check feedback: ${feedbackError.message}`);
+      }
+
+      return !!feedback;
+    } catch (error) {
+      await logAppError(this.supabase, {
+        userId: userId,
+        planId,
+        message: `Unexpected error in hasFeedback: ${formatErrorMessage(error)}`,
+        severity: "error",
+        stackTrace: getStackTrace(error),
+      });
+
+      throw error;
+    }
+  }
 }

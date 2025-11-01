@@ -121,3 +121,22 @@ export const listPlansQuerySchema = z.object({
 });
 
 export type ListPlansQueryParams = z.infer<typeof listPlansQuerySchema>;
+
+/**
+ * Schema for validating plan feedback submission
+ */
+export const submitFeedbackRequestSchema = z.object({
+  helpful: z.boolean({ errorMap: () => ({ message: "helpful must be a boolean" }) }),
+});
+
+export type SubmitFeedbackRequestDTO = z.infer<typeof submitFeedbackRequestSchema>;
+
+/**
+ * Response schema for feedback submission
+ */
+export const submitFeedbackResponseSchema = z.object({
+  id: z.string().uuid(),
+  created_at: z.string().datetime(),
+});
+
+export type SubmitFeedbackResponseDTO = z.infer<typeof submitFeedbackResponseSchema>;

@@ -160,3 +160,22 @@ export interface ListPlansResponseDto {
 export interface ErrorResponseDTO {
   error: string;
 }
+
+// ===================================
+// Plan Feedback Types
+// ===================================
+
+/**
+ * Request DTO for submitting feedback on a plan
+ */
+export interface SubmitFeedbackRequestDTO {
+  helpful: boolean;
+}
+
+/**
+ * Response DTO for feedback submission
+ */
+export interface SubmitFeedbackResponseDTO {
+  id: string;
+  created_at: string;
+}

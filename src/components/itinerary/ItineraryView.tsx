@@ -19,6 +19,7 @@ export function ItineraryView() {
   const [error, setError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [userNotes, setUserNotes] = useState<string | undefined>();
+  const [hasFeedback, setHasFeedback] = useState(false);
 
   // Load plan data from session storage on mount
   useEffect(() => {
@@ -49,9 +50,35 @@ export function ItineraryView() {
       }
 
       setPlanData(parsedPlan);
+
+      // Fetch feedback status if plan is not a draft
+      if (!isDraftPlan && parsedPlan.plan.id) {
+        fetchFeedbackStatus(parsedPlan.plan.id);
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to load plan data";
       setError(`Error loading plan: ${errorMessage}`);
+    }
+  }, []);
+
+  /**
+   * Fetch feedback status for the plan
+   */
+  const fetchFeedbackStatus = useCallback(async (planId: string) => {
+    try {
+      const response = await fetch(`/api/plans/${planId}/feedback`);
+
+      if (!response.ok) {
+        // Log error but don't fail the whole component
+        console.error("Failed to fetch feedback status");
+        return;
+      }
+
+      const data = (await response.json()) as { hasFeedback: boolean };
+      setHasFeedback(data.hasFeedback);
+    } catch (err) {
+      // Log error but don't fail the whole component
+      console.error("Error fetching feedback status:", err);
     }
   }, []);
 
@@ -247,7 +274,7 @@ export function ItineraryView() {
         </div>
 
         {/* Feedback Widget */}
-        <FeedbackWidget />
+        <FeedbackWidget hasFeedback={hasFeedback} />
       </div>
     </div>
   );
