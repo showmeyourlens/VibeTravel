@@ -110,3 +110,38 @@ export async function fetchPlanById(planId: string): Promise<PlanWithActivitiesD
     throw error;
   }
 }
+
+/**
+ * Delete a plan by archiving it (soft delete)
+ * @param planId - The ID of the plan to archive
+ * @returns Promise<void>
+ * @throws Error if the API call fails
+ */
+export async function deletePlan(planId: string): Promise<void> {
+  if (!planId || typeof planId !== "string") {
+    throw new Error("Invalid plan ID");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/${planId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error("Plan not found");
+      }
+      if (response.status === 403) {
+        throw new Error("Access denied");
+      }
+      throw new Error(`Failed to delete plan: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error deleting plan:", error);
+    throw error;
+  }
+}

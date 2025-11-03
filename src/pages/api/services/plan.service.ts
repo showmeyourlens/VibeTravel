@@ -131,6 +131,7 @@ export class PlanService {
         .from("plans")
         .select("id, duration_days, trip_intensity, status, created_at, updated_at, city:cities (id, name)")
         .eq("user_id", query.userId)
+        .eq("is_archived", false)
         .order(query.sort, { ascending: false })
         .range(from, to);
 
@@ -207,6 +208,7 @@ export class PlanService {
           "id, duration_days, trip_intensity, status, created_at, updated_at, plan_activities(*), city:cities (id, name)"
         )
         .eq("id", planId)
+        .eq("is_archived", false)
         .single();
 
       if (planWithActivitiesError) {
@@ -296,6 +298,39 @@ export class PlanService {
         userId: userId,
         planId,
         message: `Unexpected error in hasFeedback: ${formatErrorMessage(error)}`,
+        severity: "error",
+        stackTrace: getStackTrace(error),
+      });
+
+      throw error;
+    }
+  }
+
+  /**
+   * Archives a plan by setting is_archived to true
+   * @param planId - Plan ID to archive
+   * @returns void
+   * @throws Error if plan cannot be archived
+   */
+  async archivePlan(planId: string): Promise<void> {
+    try {
+      const { error: updateError } = await this.supabase.from("plans").update({ is_archived: true }).eq("id", planId);
+
+      if (updateError) {
+        await logAppError(this.supabase, {
+          planId,
+          message: `Failed to archive plan: ${updateError.message}`,
+          severity: "error",
+          stackTrace: updateError.stack,
+          payload: { error: updateError },
+        });
+        throw new Error(`Failed to archive plan: ${updateError.message}`);
+      }
+    } catch (error) {
+      // Log unexpected errors
+      await logAppError(this.supabase, {
+        planId,
+        message: `Unexpected error in archivePlan: ${formatErrorMessage(error)}`,
         severity: "error",
         stackTrace: getStackTrace(error),
       });

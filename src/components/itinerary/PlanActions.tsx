@@ -1,6 +1,6 @@
 /**
  * Plan Actions Component
- * Displays action buttons for the plan (Edit, Save, Cancel)
+ * Displays action buttons for the plan (Edit, Save, Cancel, Delete)
  */
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ interface PlanActionsProps {
   onEdit: () => void;
   onSave: (onDraft: boolean) => void;
   onCancel: () => void;
+  onDelete: () => void;
 }
 
 export default function PlanActions({
@@ -23,13 +24,24 @@ export default function PlanActions({
   onEdit,
   onSave,
   onCancel,
+  onDelete,
 }: PlanActionsProps) {
   return (
     <div className="flex gap-3 mb-8">
-      {!isEditing && (
-        <Button onClick={onEdit} size="lg" variant="default">
-          ✏️ Edit Plan
-        </Button>
+      {!isEditing && !isDraft && (
+        <>
+          <Button onClick={onEdit} size="lg" variant="default">
+            ✏️ Edit Plan
+          </Button>
+          <Button
+            onClick={onDelete}
+            size="lg"
+            variant="outline"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+          >
+            🗑️ Delete Plan
+          </Button>
+        </>
       )}
       {(isDraft || isEditing) && (
         <>

@@ -5,6 +5,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { PlanWithActivitiesDto, SavePlanRequestDTO, SavePlanActivityDTO } from "@/types";
+import { deletePlan } from "@/lib/api-client";
 import PlanMetadata from "./PlanMetadata";
 import DisclaimerBanner from "./DisclaimerBanner";
 import ActivityList from "./ActivityList";
@@ -20,6 +21,29 @@ export function ItineraryView() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [userNotes, setUserNotes] = useState<string | undefined>();
   const [hasFeedback, setHasFeedback] = useState(false);
+
+  /**
+   * Fetch feedback status for the plan
+   */
+  const fetchFeedbackStatus = useCallback(async (planId: string) => {
+    try {
+      const response = await fetch(`/api/plans/${planId}/feedback`);
+
+      if (!response.ok) {
+        // Log error but don't fail the whole component
+        // eslint-disable-next-line no-console
+        console.error("Failed to fetch feedback status");
+        return;
+      }
+
+      const data = (await response.json()) as { hasFeedback: boolean };
+      setHasFeedback(data.hasFeedback);
+    } catch (err) {
+      // Log error but don't fail the whole component
+      // eslint-disable-next-line no-console
+      console.error("Error fetching feedback status:", err);
+    }
+  }, []);
 
   // Load plan data from session storage on mount
   useEffect(() => {
@@ -59,28 +83,7 @@ export function ItineraryView() {
       const errorMessage = err instanceof Error ? err.message : "Failed to load plan data";
       setError(`Error loading plan: ${errorMessage}`);
     }
-  }, []);
-
-  /**
-   * Fetch feedback status for the plan
-   */
-  const fetchFeedbackStatus = useCallback(async (planId: string) => {
-    try {
-      const response = await fetch(`/api/plans/${planId}/feedback`);
-
-      if (!response.ok) {
-        // Log error but don't fail the whole component
-        console.error("Failed to fetch feedback status");
-        return;
-      }
-
-      const data = (await response.json()) as { hasFeedback: boolean };
-      setHasFeedback(data.hasFeedback);
-    } catch (err) {
-      // Log error but don't fail the whole component
-      console.error("Error fetching feedback status:", err);
-    }
-  }, []);
+  }, [fetchFeedbackStatus]);
 
   // Initialize hook only after planData is loaded
   const shouldInitializeState = planData !== null;
@@ -194,6 +197,47 @@ export function ItineraryView() {
     [transformToSavePlanRequest, handleSetEditing]
   );
 
+  /**
+   * Handle deleting (archiving) the plan
+   */
+  const handleDeletePlan = useCallback(async () => {
+    if (!planData?.plan?.id) {
+      setError("Cannot delete plan: Plan ID is missing");
+      return;
+    }
+
+    // Confirm deletion with user
+    if (!confirm("Are you sure you want to delete this plan? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      await deletePlan(planData.plan.id);
+
+      // Clear session storage and redirect to home
+      sessionStorage.removeItem("generatedPlan");
+      sessionStorage.removeItem("planMetadata");
+      window.location.href = "/";
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Network error while deleting";
+
+      if (errorMessage.includes("not found")) {
+        setError("Plan not found");
+      } else if (errorMessage.includes("Access denied")) {
+        setError("You don't have permission to delete this plan");
+      } else if (errorMessage.includes("Unauthorized")) {
+        setError("You must be logged in to delete plans");
+      } else {
+        setError(`Failed to delete plan: ${errorMessage}`);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [planData?.plan?.id]);
+
   // Render loading state
   if (!planData) {
     return (
@@ -259,6 +303,7 @@ export function ItineraryView() {
           onEdit={() => handleSetEditing(true)}
           onSave={handleSave}
           onCancel={handleCancel}
+          onDelete={handleDeletePlan}
         />
 
         {/* Activities List */}
