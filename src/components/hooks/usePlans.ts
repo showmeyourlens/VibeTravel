@@ -5,7 +5,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchPlans } from "../../lib/api-client";
 import type { PlanDto } from "../../types";
-import type { PlanViewModel, PaginationState } from "./types";
+import type { PlanViewModel, PaginationState } from "../dashboard/types";
 
 /**
  * Transforms PlanDto to PlanViewModel with city name lookup and formatted strings

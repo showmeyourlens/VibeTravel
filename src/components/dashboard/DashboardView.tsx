@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { usePlans } from "./usePlans.ts";
+import { usePlans } from "../hooks/usePlans.ts";
 import PlanList from "./PlanList.tsx";
 import EmptyState from "./EmptyState.tsx";
 import SkeletonLoader from "./SkeletonLoader.tsx";

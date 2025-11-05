@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useFeedback } from "./useFeedback";
+import { useFeedback } from "../hooks/useFeedback";
 
 interface FeedbackWidgetProps {
   planId?: string;

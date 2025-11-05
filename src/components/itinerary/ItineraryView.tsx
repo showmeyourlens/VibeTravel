@@ -11,7 +11,7 @@ import DisclaimerBanner from "./DisclaimerBanner";
 import ActivityList from "./ActivityList";
 import PlanActions from "./PlanActions";
 import FeedbackWidget from "./FeedbackWidget";
-import { useItineraryState } from "./useItineraryState";
+import { useItineraryState } from "../hooks/useItineraryState";
 
 export function ItineraryView() {
   const [planData, setPlanData] = useState<PlanWithActivitiesDto | null>(null);
