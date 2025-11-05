@@ -1,5 +1,11 @@
 import type { SupabaseClient } from "../../../db/supabase.client";
-import type { SavePlanCommand, SavePlanResponseDTO, PlanDto, PlanWithActivitiesDto } from "../../../types";
+import type {
+  SavePlanCommand,
+  SavePlanResponseDTO,
+  PlanDto,
+  PlanWithActivitiesDto,
+  UpdatePlanCommand,
+} from "../../../types";
 import { logAppError, formatErrorMessage, getStackTrace } from "../../../lib/utils/error-logger";
 
 /**
@@ -335,6 +341,114 @@ export class PlanService {
         stackTrace: getStackTrace(error),
       });
 
+      throw error;
+    }
+  }
+
+  /**
+   * Updates a plan's activities (day_number and position)
+   * @param command - Command containing plan ID, user ID, and activities to update
+   * @returns void
+   * @throws Error if update fails or activities don't belong to the plan
+   */
+  async updatePlan(command: UpdatePlanCommand): Promise<void> {
+    try {
+      // Guard: Check that at least one update field is provided
+      if (!command.activities || command.activities.length === 0) {
+        throw new Error("No updates provided. At least one activity must be specified.");
+      }
+
+      // Guard: Validate that all positions within a day are unique
+      const dayPositionMap = new Map<number, Set<number>>();
+      for (const activity of command.activities) {
+        if (!dayPositionMap.has(activity.dayNumber)) {
+          dayPositionMap.set(activity.dayNumber, new Set());
+        }
+        const positions = dayPositionMap.get(activity.dayNumber);
+        if (!positions) {
+          throw new Error("Internal error: positions map entry was deleted");
+        }
+        if (positions.has(activity.position)) {
+          await logAppError(this.supabase, {
+            userId: command.userId,
+            planId: command.planId,
+            message: "Duplicate activity position within a day",
+            severity: "warning",
+            payload: { command },
+          });
+          throw new Error(`Duplicate position ${activity.position} on day ${activity.dayNumber}`);
+        }
+        positions.add(activity.position);
+      }
+
+      // Step 1: Begin transaction - update each activity
+      // Note: Supabase doesn't have native transaction support in JS client,
+      // so we perform updates sequentially and rely on RLS for authorization
+      for (const activity of command.activities) {
+        const { error: updateError } = await this.supabase
+          .from("plan_activities")
+          .update({
+            day_number: activity.dayNumber,
+            position: activity.position,
+            google_maps_url: null,
+          })
+          .eq("id", activity.id)
+          .eq("plan_id", command.planId);
+
+        if (updateError) {
+          // Check if error is due to RLS (unauthorized access)
+          if (updateError.code === "PGRST201" || updateError.message.includes("failed")) {
+            await logAppError(this.supabase, {
+              userId: command.userId,
+              planId: command.planId,
+              message: `Activity not found or unauthorized: ${updateError.message}`,
+              severity: "warning",
+              payload: { command, error: updateError },
+            });
+            throw new Error(`Activity ${activity.id} not found or access denied`);
+          }
+
+          await logAppError(this.supabase, {
+            userId: command.userId,
+            planId: command.planId,
+            message: `Failed to update activity: ${updateError.message}`,
+            severity: "error",
+            stackTrace: updateError.stack,
+            payload: { command, error: updateError },
+          });
+          throw new Error(`Failed to update activity ${activity.id}: ${updateError.message}`);
+        }
+      }
+
+      // Step 2: Update plan's updated_at timestamp
+      const { error: planUpdateError } = await this.supabase
+        .from("plans")
+        .update({ updated_at: new Date().toISOString() })
+        .eq("id", command.planId);
+
+      if (planUpdateError) {
+        await logAppError(this.supabase, {
+          userId: command.userId,
+          planId: command.planId,
+          message: `Failed to update plan timestamp: ${planUpdateError.message}`,
+          severity: "error",
+          stackTrace: planUpdateError.stack,
+          payload: { command, error: planUpdateError },
+        });
+        throw new Error(`Failed to update plan: ${planUpdateError.message}`);
+      }
+    } catch (error) {
+      // Log unexpected errors
+      await logAppError(this.supabase, {
+        userId: command.userId,
+        planId: command.planId,
+        message: `Unexpected error in updatePlan: ${formatErrorMessage(error)}`,
+        severity: "error",
+        stackTrace: getStackTrace(error),
+        payload: { command },
+      });
+
+      // Re-throw for endpoint to handle
       throw error;
     }
   }

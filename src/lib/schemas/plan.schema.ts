@@ -140,3 +140,29 @@ export const submitFeedbackResponseSchema = z.object({
 });
 
 export type SubmitFeedbackResponseDTO = z.infer<typeof submitFeedbackResponseSchema>;
+
+/**
+ * Schema for validating individual activity updates in PATCH requests
+ */
+export const updatePlanActivitySchema = z.object({
+  id: z.string().uuid({ message: "Activity id must be a valid UUID" }),
+  day_number: z
+    .number()
+    .int({ message: "day_number must be an integer" })
+    .min(1, { message: "day_number must be at least 1" })
+    .max(5, { message: "day_number must be at most 5" }),
+  position: z
+    .number()
+    .int({ message: "position must be an integer" })
+    .min(1, { message: "position must be at least 1" }),
+});
+
+/**
+ * Schema for validating PATCH /api/plans/{planId} requests
+ */
+export const updatePlanRequestSchema = z.object({
+  activities: z.array(updatePlanActivitySchema).min(1, { message: "At least one activity is required" }).optional(),
+});
+
+export type UpdatePlanRequestDTO = z.infer<typeof updatePlanRequestSchema>;
+export type UpdatePlanActivityDTO = z.infer<typeof updatePlanActivitySchema>;

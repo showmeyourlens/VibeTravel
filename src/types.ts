@@ -179,3 +179,36 @@ export interface SubmitFeedbackResponseDTO {
   id: string;
   created_at: string;
 }
+
+// ===================================
+// Plan Update Types
+// ===================================
+
+/**
+ * Activity DTO for updating a plan's activities
+ */
+export interface UpdatePlanActivityDTO {
+  id: string;
+  day_number: number;
+  position: number;
+}
+
+/**
+ * Request DTO for updating a plan
+ */
+export interface UpdatePlanRequestDTO {
+  activities?: UpdatePlanActivityDTO[];
+}
+
+/**
+ * Command for updating a plan (internal use)
+ */
+export interface UpdatePlanCommand {
+  userId: string;
+  planId: string;
+  activities?: {
+    id: string;
+    dayNumber: number;
+    position: number;
+  }[];
+}
