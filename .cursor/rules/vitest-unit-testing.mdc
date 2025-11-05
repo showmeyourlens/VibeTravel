@@ -33,4 +33,3 @@ alwaysApply: false
 - Leverage TypeScript type checking in tests - Enable strict typing in your tests to catch type errors early, use `expectTypeOf()` for type-level assertions, and ensure mocks preserve the original type signatures.
 
 - Follow 'Arrange', 'Act', 'Assert' approach to test structure for simplicity and readability.
-

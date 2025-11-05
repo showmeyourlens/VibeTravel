@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { fetchCities } from "@/lib/api-client";
-import type { CityDto, GenerateDraftPlanRequestDTO, PlanWithActivitiesDto } from "@/types";
+import { fetchCities, generatePlan } from "@/lib/api-client";
+import type { CityDto, GenerateDraftPlanRequestDTO } from "@/types";
 
 export interface PlanWizardViewModel {
   cityId: string | null;
@@ -76,7 +76,7 @@ export function usePlanWizard(): UsePlanWizardReturn {
     [currentStep]
   );
 
-  const generatePlan = useCallback(async () => {
+  const handleGeneratePlan = useCallback(async () => {
     // Validate all required fields
     if (!formData.cityId || !formData.durationDays || !formData.tripIntensity) {
       setError("Please complete all required fields");
@@ -94,33 +94,7 @@ export function usePlanWizard(): UsePlanWizardReturn {
         user_notes: formData.userNotes || undefined,
       };
 
-      const response = await fetch("/api/plans/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
-
-      if (!response.ok) {
-        const errorData = (await response.json()) as { error: string };
-        const errorMessage = errorData.error || "Failed to generate plan";
-
-        // Handle specific error scenarios
-        if (response.status === 400) {
-          setError(`Invalid input: ${errorMessage}`);
-        } else if (response.status === 422) {
-          setError("We couldn't generate a plan with these options. Please try adjusting them.");
-        } else if (response.status === 500) {
-          setError("An unexpected error occurred. Please try again later.");
-        } else {
-          setError(errorMessage);
-        }
-        setIsLoading(false);
-        return;
-      }
-
-      const result = (await response.json()) as PlanWithActivitiesDto;
+      const result = await generatePlan(request);
 
       // Store the generated plan in sessionStorage for the next page
       sessionStorage.setItem("generatedPlan", JSON.stringify(result));
@@ -144,6 +118,6 @@ export function usePlanWizard(): UsePlanWizardReturn {
     error,
     handlePrev,
     updateFormData,
-    generatePlan,
+    generatePlan: handleGeneratePlan,
   };
 }

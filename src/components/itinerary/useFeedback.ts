@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import type { SubmitFeedbackRequestDTO, SubmitFeedbackResponseDTO } from "@/types";
+import { submitFeedback as submitFeedbackApi } from "@/lib/api-client";
+import type { SubmitFeedbackRequestDTO } from "@/types";
 
 interface UseFeedbackState {
   isLoading: boolean;
@@ -34,49 +35,16 @@ export function useFeedback(): UseFeedbackReturn {
 
       const payload: SubmitFeedbackRequestDTO = { helpful };
 
-      const response = await fetch(`/api/plans/${planId}/feedback`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = (await response.json()) as { error?: string };
-
-        // Handle specific error cases
-        if (response.status === 401) {
-          setError("You must be logged in to submit feedback");
-          return;
-        }
-
-        if (response.status === 403) {
-          setError("Feedback already submitted for this plan");
-          return;
-        }
-
-        if (response.status === 404) {
-          setError("Plan not found");
-          return;
-        }
-
-        if (response.status === 400) {
-          setError(errorData.error || "Invalid feedback data");
-          return;
-        }
-
-        setError(errorData.error || "Failed to submit feedback");
-        return;
-      }
-
-      // Success case
-      const feedbackData = (await response.json()) as SubmitFeedbackResponseDTO;
+      const feedbackData = await submitFeedbackApi(planId, payload);
       setIsSubmitted(true);
 
       // Log feedback for analytics (optional)
+      // eslint-disable-next-line no-console
       console.log("Feedback submitted successfully:", feedbackData);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Network error while submitting feedback";
       setError(errorMessage);
+      // eslint-disable-next-line no-console
       console.error("Feedback submission error:", err);
     } finally {
       setIsLoading(false);

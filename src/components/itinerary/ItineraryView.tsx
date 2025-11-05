@@ -5,7 +5,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { PlanWithActivitiesDto, SavePlanRequestDTO, SavePlanActivityDTO } from "@/types";
-import { deletePlan } from "@/lib/api-client";
+import { deletePlan, getFeedbackStatus, savePlan } from "@/lib/api-client";
 import PlanMetadata from "./PlanMetadata";
 import DisclaimerBanner from "./DisclaimerBanner";
 import ActivityList from "./ActivityList";
@@ -25,18 +25,9 @@ export function ItineraryView() {
   /**
    * Fetch feedback status for the plan
    */
-  const fetchFeedbackStatus = useCallback(async (planId: string) => {
+  const fetchPlanFeedbackStatus = useCallback(async (planId: string) => {
     try {
-      const response = await fetch(`/api/plans/${planId}/feedback`);
-
-      if (!response.ok) {
-        // Log error but don't fail the whole component
-        // eslint-disable-next-line no-console
-        console.error("Failed to fetch feedback status");
-        return;
-      }
-
-      const data = (await response.json()) as { hasFeedback: boolean };
+      const data = await getFeedbackStatus(planId);
       setHasFeedback(data.hasFeedback);
     } catch (err) {
       // Log error but don't fail the whole component
@@ -77,13 +68,13 @@ export function ItineraryView() {
 
       // Fetch feedback status if plan is not a draft
       if (!isDraftPlan && parsedPlan.plan.id) {
-        fetchFeedbackStatus(parsedPlan.plan.id);
+        fetchPlanFeedbackStatus(parsedPlan.plan.id);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to load plan data";
       setError(`Error loading plan: ${errorMessage}`);
     }
-  }, [fetchFeedbackStatus]);
+  }, [fetchPlanFeedbackStatus]);
 
   // Initialize hook only after planData is loaded
   const shouldInitializeState = planData !== null;
@@ -140,36 +131,7 @@ export function ItineraryView() {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch("/api/plans/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(request),
-        });
-
-        if (!response.ok) {
-          const errorData = (await response.json()) as { error?: string };
-
-          if (response.status === 401) {
-            setError("You must be logged in to save plans");
-            // TODO: Redirect to login
-            return;
-          }
-
-          if (response.status === 400) {
-            setError(`Invalid plan data: ${errorData.error || "Please check your plan and try again"}`);
-            return;
-          }
-
-          if (response.status === 500) {
-            setError("An unexpected error occurred while saving. Please try again.");
-            return;
-          }
-
-          setError(errorData.error || "Failed to save plan");
-          return;
-        }
+        await savePlan(request);
 
         setSaveSuccess(true);
         handleSetEditing(false);

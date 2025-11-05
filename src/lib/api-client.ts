@@ -3,7 +3,16 @@
  * Handles API calls with error handling and type safety
  */
 
-import type { CityDto, ListPlansResponseDto, PlanWithActivitiesDto } from "../types";
+import type {
+  CityDto,
+  ListPlansResponseDto,
+  PlanWithActivitiesDto,
+  GenerateDraftPlanRequestDTO,
+  SavePlanRequestDTO,
+  SavePlanResponseDTO,
+  SubmitFeedbackRequestDTO,
+  SubmitFeedbackResponseDTO,
+} from "../types";
 
 /**
  * Configuration for API calls
@@ -142,6 +151,210 @@ export async function deletePlan(planId: string): Promise<void> {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error deleting plan:", error);
+    throw error;
+  }
+}
+
+/**
+ * Generate a draft plan based on user input
+ * @param request - Plan generation request parameters
+ * @returns Promise<PlanWithActivitiesDto> - Generated plan with activities
+ * @throws Error if the API call fails
+ */
+export async function generatePlan(request: GenerateDraftPlanRequestDTO): Promise<PlanWithActivitiesDto> {
+  if (!request.city_id || !request.duration_days || !request.trip_intensity) {
+    throw new Error("Missing required fields for plan generation");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/generate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+
+      if (response.status === 400) {
+        throw new Error(`Invalid input: ${errorData.error || "Please check your parameters"}`);
+      }
+      if (response.status === 422) {
+        throw new Error("Could not generate a plan with these options. Please try adjusting them.");
+      }
+      if (response.status === 500) {
+        throw new Error("An unexpected error occurred. Please try again later.");
+      }
+      throw new Error(`Failed to generate plan: ${response.status} ${response.statusText}`);
+    }
+
+    const result = (await response.json()) as PlanWithActivitiesDto;
+    return result;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error generating plan:", error);
+    throw error;
+  }
+}
+
+/**
+ * Save a finalized plan
+ * @param request - Plan save request with activities
+ * @returns Promise<SavePlanResponseDTO> - Saved plan response
+ * @throws Error if the API call fails
+ */
+export async function savePlan(request: SavePlanRequestDTO): Promise<SavePlanResponseDTO> {
+  if (!request.city_id || !request.duration_days || !request.trip_intensity) {
+    throw new Error("Missing required fields for plan save");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/save`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+
+      if (response.status === 400) {
+        throw new Error(`Invalid plan data: ${errorData.error || "Please check your plan and try again"}`);
+      }
+      if (response.status === 500) {
+        throw new Error("An unexpected error occurred while saving. Please try again.");
+      }
+      throw new Error(`Failed to save plan: ${response.status} ${response.statusText}`);
+    }
+
+    const result = (await response.json()) as SavePlanResponseDTO;
+    return result;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error saving plan:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get feedback status for a plan
+ * @param planId - The ID of the plan
+ * @returns Promise<{hasFeedback: boolean}> - Feedback status
+ * @throws Error if the API call fails
+ */
+export async function getFeedbackStatus(planId: string): Promise<{ hasFeedback: boolean }> {
+  if (!planId || typeof planId !== "string") {
+    throw new Error("Invalid plan ID");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/${planId}/feedback`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error("Plan not found");
+      }
+      throw new Error(`Failed to fetch feedback status: ${response.status} ${response.statusText}`);
+    }
+
+    const data = (await response.json()) as { hasFeedback: boolean };
+    return data;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error fetching feedback status:", error);
+    throw error;
+  }
+}
+
+/**
+ * Submit feedback for a plan
+ * @param planId - The ID of the plan
+ * @param request - Feedback submission request
+ * @returns Promise<SubmitFeedbackResponseDTO> - Feedback response
+ * @throws Error if the API call fails
+ */
+export async function submitFeedback(
+  planId: string,
+  request: SubmitFeedbackRequestDTO
+): Promise<SubmitFeedbackResponseDTO> {
+  if (!planId || typeof planId !== "string") {
+    throw new Error("Invalid plan ID");
+  }
+
+  if (typeof request.helpful !== "boolean") {
+    throw new Error("Invalid feedback data");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/${planId}/feedback`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+
+      if (response.status === 403) {
+        throw new Error("Feedback already submitted for this plan");
+      }
+      if (response.status === 404) {
+        throw new Error("Plan not found");
+      }
+      if (response.status === 400) {
+        throw new Error(errorData.error || "Invalid feedback data");
+      }
+      throw new Error(`Failed to submit feedback: ${response.status} ${response.statusText}`);
+    }
+
+    const result = (await response.json()) as SubmitFeedbackResponseDTO;
+    return result;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error submitting feedback:", error);
+    throw error;
+  }
+}
+
+/**
+ * Login user with email and password
+ * @param email - User email
+ * @param password - User password
+ * @returns Promise<void> - Redirects on success
+ * @throws Error if the API call fails
+ */
+export async function loginUser(email: string, password: string): Promise<void> {
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+      throw new Error(errorData.error || "An error occurred during login. Please try again.");
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error logging in:", error);
     throw error;
   }
 }
