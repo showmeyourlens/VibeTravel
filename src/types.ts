@@ -108,7 +108,7 @@ export interface SavePlanCommand {
  * Response DTO for saved plan
  */
 export interface SavePlanResponseDTO {
-  id: string;
+  plan: PlanWithActivitiesDto;
   status: "active" | "draft" | "archived";
   created_at: string;
   updated_at: string;

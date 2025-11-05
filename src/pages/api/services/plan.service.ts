@@ -99,8 +99,11 @@ export class PlanService {
       }
 
       // Step 4: Return success response
+
+      const planResponse = await this.getPlanWithActivitiesById(planData.id, command.userId);
+
       return {
-        id: planData.id,
+        plan: planResponse,
         status: planData.status as "active" | "draft" | "archived",
         created_at: planData.created_at,
         updated_at: planData.updated_at,
@@ -347,6 +350,10 @@ export class PlanService {
 
   /**
    * Updates a plan's activities (day_number and position)
+   *
+   * Uses a PostgreSQL stored function to ensure atomicity - either all activities
+   * are updated successfully or none are updated if any error occurs.
+   *
    * @param command - Command containing plan ID, user ID, and activities to update
    * @returns void
    * @throws Error if update fails or activities don't belong to the plan
@@ -381,61 +388,22 @@ export class PlanService {
         positions.add(activity.position);
       }
 
-      // Step 1: Begin transaction - update each activity
-      // Note: Supabase doesn't have native transaction support in JS client,
-      // so we perform updates sequentially and rely on RLS for authorization
-      for (const activity of command.activities) {
-        const { error: updateError } = await this.supabase
-          .from("plan_activities")
-          .update({
-            day_number: activity.dayNumber,
-            position: activity.position,
-            google_maps_url: null,
-          })
-          .eq("id", activity.id)
-          .eq("plan_id", command.planId);
+      // Call the transactional RPC function to update all activities atomically
+      const { error: rpcError } = await this.supabase.rpc("update_plan_activities", {
+        p_plan_id: command.planId,
+        p_activities: command.activities,
+      });
 
-        if (updateError) {
-          // Check if error is due to RLS (unauthorized access)
-          if (updateError.code === "PGRST201" || updateError.message.includes("failed")) {
-            await logAppError(this.supabase, {
-              userId: command.userId,
-              planId: command.planId,
-              message: `Activity not found or unauthorized: ${updateError.message}`,
-              severity: "warning",
-              payload: { command, error: updateError },
-            });
-            throw new Error(`Activity ${activity.id} not found or access denied`);
-          }
-
-          await logAppError(this.supabase, {
-            userId: command.userId,
-            planId: command.planId,
-            message: `Failed to update activity: ${updateError.message}`,
-            severity: "error",
-            stackTrace: updateError.stack,
-            payload: { command, error: updateError },
-          });
-          throw new Error(`Failed to update activity ${activity.id}: ${updateError.message}`);
-        }
-      }
-
-      // Step 2: Update plan's updated_at timestamp
-      const { error: planUpdateError } = await this.supabase
-        .from("plans")
-        .update({ updated_at: new Date().toISOString() })
-        .eq("id", command.planId);
-
-      if (planUpdateError) {
+      if (rpcError) {
         await logAppError(this.supabase, {
           userId: command.userId,
           planId: command.planId,
-          message: `Failed to update plan timestamp: ${planUpdateError.message}`,
+          message: `Failed to update plan activities: ${rpcError.message}`,
           severity: "error",
-          stackTrace: planUpdateError.stack,
-          payload: { command, error: planUpdateError },
+          stackTrace: rpcError.stack,
+          payload: { command, error: rpcError },
         });
-        throw new Error(`Failed to update plan: ${planUpdateError.message}`);
+        throw new Error(`Failed to update plan: ${rpcError.message}`);
       }
     } catch (error) {
       // Log unexpected errors

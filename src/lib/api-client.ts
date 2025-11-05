@@ -12,6 +12,7 @@ import type {
   SavePlanResponseDTO,
   SubmitFeedbackRequestDTO,
   SubmitFeedbackResponseDTO,
+  UpdatePlanRequestDTO,
 } from "../types";
 
 /**
@@ -323,6 +324,52 @@ export async function submitFeedback(
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error submitting feedback:", error);
+    throw error;
+  }
+}
+
+/**
+ * Update a plan by reordering or reassigning activities to different days
+ * @param planId - The ID of the plan to update
+ * @param request - Plan update request with activities
+ * @returns Promise<void>
+ * @throws Error if the API call fails
+ */
+export async function updatePlan(planId: string, request: UpdatePlanRequestDTO): Promise<void> {
+  if (!planId || typeof planId !== "string") {
+    throw new Error("Invalid plan ID");
+  }
+
+  if (!request.activities || request.activities.length === 0) {
+    throw new Error("At least one activity is required");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/plans/${planId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+
+      if (response.status === 400) {
+        throw new Error(`Invalid plan data: ${errorData.error || "Please check your plan and try again"}`);
+      }
+      if (response.status === 404) {
+        throw new Error("Plan not found");
+      }
+      if (response.status === 403) {
+        throw new Error("Access denied");
+      }
+      throw new Error(`Failed to update plan: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error updating plan:", error);
     throw error;
   }
 }

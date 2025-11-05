@@ -4,8 +4,8 @@
  */
 
 import { useEffect, useState, useCallback } from "react";
-import type { PlanWithActivitiesDto, SavePlanRequestDTO, SavePlanActivityDTO } from "@/types";
-import { deletePlan, getFeedbackStatus, savePlan } from "@/lib/api-client";
+import type { PlanWithActivitiesDto, SavePlanRequestDTO, SavePlanActivityDTO, UpdatePlanRequestDTO } from "@/types";
+import { deletePlan, getFeedbackStatus, savePlan, updatePlan } from "@/lib/api-client";
 import PlanMetadata from "./PlanMetadata";
 import DisclaimerBanner from "./DisclaimerBanner";
 import ActivityList from "./ActivityList";
@@ -119,45 +119,34 @@ export function ItineraryView() {
   /**
    * Handle saving the plan
    */
-  const handleSave = useCallback(
-    async (isDraft: boolean) => {
-      const request = transformToSavePlanRequest();
-      if (!request) {
-        setError("Could not prepare plan for saving");
-        return;
-      }
+  const handleSave = useCallback(async () => {
+    const request = transformToSavePlanRequest();
+    if (!request) {
+      setError("Could not prepare plan for saving");
+      return;
+    }
 
-      try {
-        setIsLoading(true);
-        setError(null);
+    try {
+      setIsLoading(true);
+      setError(null);
 
-        await savePlan(request);
+      const response = await savePlan(request);
 
-        setSaveSuccess(true);
-        handleSetEditing(false);
+      setSaveSuccess(true);
+      handleSetEditing(false);
 
-        // Reset success message after 3 seconds
-        setTimeout(() => {
-          setSaveSuccess(false);
-        }, 3000);
+      sessionStorage.removeItem("planMetadata");
 
-        // Clear session storage after successful save
-        if (!isDraft) {
-          sessionStorage.removeItem("generatedPlan");
-          sessionStorage.removeItem("planMetadata");
-          window.location.href = "/";
-        } else {
-          setIsDraft(false);
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Network error while saving";
-        setError(errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [transformToSavePlanRequest, handleSetEditing]
-  );
+      sessionStorage.setItem("generatedPlan", JSON.stringify(response.plan));
+
+      window.location.href = "/plans/view";
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Network error while saving";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [transformToSavePlanRequest, handleSetEditing]);
 
   /**
    * Handle deleting (archiving) the plan
@@ -199,6 +188,54 @@ export function ItineraryView() {
       setIsLoading(false);
     }
   }, [planData?.plan?.id]);
+
+  /**
+   * Handle updating the plan (reorder/reassign activities)
+   */
+  const handleUpdatePlan = useCallback(async () => {
+    if (!planData?.plan?.id) {
+      setError("Cannot update plan: Plan ID is missing");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Transform current activities to UpdatePlanRequestDTO format
+      const updateRequest: UpdatePlanRequestDTO = {
+        activities: currentActivities.map((activity) => ({
+          id: activity.id,
+          day_number: activity.day_number,
+          position: activity.position,
+        })),
+      };
+
+      await updatePlan(planData.plan.id, updateRequest);
+
+      setSaveSuccess(true);
+      handleSetEditing(false);
+
+      // Reset success message after 3 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Network error while updating";
+
+      if (errorMessage.includes("not found")) {
+        setError("Plan not found");
+      } else if (errorMessage.includes("Access denied")) {
+        setError("You don't have permission to update this plan");
+      } else if (errorMessage.includes("Invalid")) {
+        setError(`Invalid plan data: ${errorMessage}`);
+      } else {
+        setError(`Failed to update plan: ${errorMessage}`);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [planData?.plan?.id, currentActivities, handleSetEditing]);
 
   // Render loading state
   if (!planData) {
@@ -263,7 +300,7 @@ export function ItineraryView() {
           isDraft={isDraft}
           isLoading={isLoading}
           onEdit={() => handleSetEditing(true)}
-          onSave={handleSave}
+          onSave={isDraft ? handleSave : handleUpdatePlan}
           onCancel={handleCancel}
           onDelete={handleDeletePlan}
         />
