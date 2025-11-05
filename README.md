@@ -18,6 +18,7 @@ A modern web application that uses AI to transform high-level travel ideas into 
 - **Frontend:** Astro 5, React 19, Tailwind CSS 4, Shadcn/ui
 - **Backend & Database:** Supabase (PostgreSQL, authentication, auto-generated APIs)
 - **AI Itinerary Generation:** Openrouter.ai
+- **Testing:** Vitest, React Testing Library, Playwright, MSW (Mock Service Worker)
 - **CI/CD & Hosting:** GitHub Actions, DigitalOcean
 
 ## Getting Started
@@ -68,6 +69,14 @@ In the project directory, you can run:
   Runs ESLint and automatically fixes problems.
 - `npm run format`  
   Formats code using Prettier.
+- `npm test`  
+  Runs all tests (unit, integration, and component tests) using Vitest.
+- `npm run test:unit`  
+  Runs unit tests only.
+- `npm run test:e2e`  
+  Runs end-to-end tests using Playwright.
+- `npm run test:coverage`  
+  Generates test coverage report.
 
 ## Project Scope
 

@@ -34,3 +34,21 @@ This is the infrastructure that automates the deployment process and makes the a
 - **GitHub Actions:** The automation tool for Continuous Integration and Continuous Deployment (CI/CD). A GitHub Actions workflow will be configured to automatically build the Astro/React application and deploy it to our hosting provider whenever changes are pushed to the main code repository. This ensures a reliable and efficient release process.
 
 - **DigitalOcean:** The cloud infrastructure provider that will host the VibeTravel web application. A DigitalOcean server (Droplet) will be used to run the application, making it accessible to users worldwide. DigitalOcean provides a flexible and scalable environment that can grow with the application's user base.
+
+### Testing
+
+A comprehensive testing strategy ensures the reliability, security, and functionality of the application. The testing infrastructure is built on modern tools optimized for the Astro + React stack.
+
+- **Vitest:** The primary testing framework for unit and integration tests. Vitest is perfectly compatible with Vite (which Astro uses), offers a Jest-compatible API, and provides fast test execution. It will be used to test individual functions, utility modules, Zod schemas, and API endpoints in isolation.
+
+- **React Testing Library:** The standard for testing React components. It encourages testing from a user's perspective rather than focusing on implementation details. This library will be used to test all React components, including forms (`LoginForm`, `SignupForm`), the `PlanWizard`, and the dashboard components.
+
+- **@testing-library/user-event:** A companion library to React Testing Library that provides more realistic user interaction simulation. It will be used to simulate clicks, typing, form submissions, and other user events in component tests, ensuring the application behaves correctly under real-world usage patterns.
+
+- **Playwright:** The end-to-end (E2E) testing framework that simulates complete user journeys through the application. Playwright offers robust cross-browser testing, automatic waiting for elements, excellent debugging tools, and built-in visual regression testing capabilities. It will be used to test critical user flows like authentication, plan creation, and plan management.
+
+- **Mock Service Worker (MSW):** A powerful API mocking library that intercepts network requests at the network level. MSW will be used to mock external API calls (particularly to Openrouter.ai) in both integration and E2E tests, ensuring tests are fast, reliable, and independent of external service availability.
+
+- **Supabase Local Development:** A local instance of Supabase that provides a real PostgreSQL database with authentication for testing purposes. This eliminates the need for a separate cloud test environment and makes tests faster, more reliable, and easier to reset between test runs.
+
+- **Playwright Screenshots:** Built-in visual regression testing using Playwright's screenshot comparison feature. This will automatically detect unintended UI and CSS changes by comparing screenshots across test runs, ensuring the application's appearance remains consistent across updates.
