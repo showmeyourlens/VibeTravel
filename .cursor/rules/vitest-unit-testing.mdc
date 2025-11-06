@@ -33,3 +33,6 @@ alwaysApply: false
 - Leverage TypeScript type checking in tests - Enable strict typing in your tests to catch type errors early, use `expectTypeOf()` for type-level assertions, and ensure mocks preserve the original type signatures.
 
 - Follow 'Arrange', 'Act', 'Assert' approach to test structure for simplicity and readability.
+
+- In order to run tests (for checking if they pass) use command `npm test -- "{path_to_test_file}" --no-coverage --run`, where "path_to_test_file" is test.ts or test.tsx file path. Do not chain with `cd` command, if changing folder is needed, do it first, wait for result, and then run tests.
+
