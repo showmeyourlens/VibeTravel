@@ -27,7 +27,7 @@ export default function DashboardView() {
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-            <Button disabled className="gap-2">
+            <Button disabled className="gap-2" data-testid="btn-create-new-plan">
               <span>✨</span> Create New Plan
             </Button>
           </div>
@@ -44,7 +44,7 @@ export default function DashboardView() {
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-            <Button onClick={handleCreateNewPlan} className="gap-2">
+            <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
               <span>✨</span> Create New Plan
             </Button>
           </div>
@@ -68,7 +68,7 @@ export default function DashboardView() {
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-            <Button onClick={handleCreateNewPlan} className="gap-2">
+            <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
               <span>✨</span> Create New Plan
             </Button>
           </div>
@@ -84,7 +84,12 @@ export default function DashboardView() {
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-          <Button onClick={handleCreateNewPlan} className="gap-2" disabled={navigatingToCreate}>
+          <Button
+            onClick={handleCreateNewPlan}
+            className="gap-2"
+            disabled={navigatingToCreate}
+            data-testid="btn-create-new-plan"
+          >
             <span>✨</span> {navigatingToCreate ? "Loading..." : "Create New Plan"}
           </Button>
         </div>

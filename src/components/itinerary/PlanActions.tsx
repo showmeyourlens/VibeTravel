@@ -51,6 +51,7 @@ export default function PlanActions({
             variant="default"
             disabled={(!isDraft && !isDirty) || isLoading}
             className={isLoading ? "opacity-75" : ""}
+            data-testid="btn-save-plan"
           >
             {isLoading ? "💾 Saving..." : "💾 Save Plan"}
           </Button>

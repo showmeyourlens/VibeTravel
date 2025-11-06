@@ -23,6 +23,7 @@ export default function StepDuration({ selectedDuration, onSelect }: StepDuratio
             variant={selectedDuration === days ? "default" : "outline"}
             size="lg"
             className="min-w-[100px] h-auto py-8 flex flex-col items-center justify-center"
+            data-testid={`btn-select-duration-${days}`}
           >
             <span className="text-2xl font-bold">{days}</span>
             <span className="text-xs mt-1">{days === 1 ? "day" : "days"}</span>

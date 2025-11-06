@@ -1,4 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env.test" });
 
 export default defineConfig({
   testDir: "./e2e",
@@ -7,8 +10,9 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
+  timeout: 30000,
   use: {
-    baseURL: "http://localhost:4321",
+    baseURL: "http://localhost:3000",
     trace: "on-first-retry",
   },
   projects: [
@@ -19,7 +23,7 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run dev",
-    url: "http://localhost:4321",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
 });

@@ -263,7 +263,7 @@ export function ItineraryView() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4" data-testid="itinerary-view">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -275,7 +275,10 @@ export function ItineraryView() {
 
         {/* Success Message */}
         {saveSuccess && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-8 text-green-800">
+          <div
+            className="bg-green-50 border border-green-200 rounded-lg p-4 mb-8 text-green-800"
+            data-testid="plan-saved-success"
+          >
             <p className="font-semibold">✓ Plan saved successfully!</p>
           </div>
         )}

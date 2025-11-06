@@ -48,7 +48,7 @@ export default function PlanWizard() {
     <>
       <LoadingOverlay isVisible={isLoading} />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4" data-testid="plan-wizard">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="mb-12">
@@ -62,7 +62,7 @@ export default function PlanWizard() {
           </div>
 
           {/* Main Content Card */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-8" data-testid="wizard-step-content">
             {/* Error Alert */}
             {error && (
               <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
@@ -108,7 +108,7 @@ export default function PlanWizard() {
           {/* Navigation Buttons */}
           {currentStep > 1 && (
             <div className="flex justify-start">
-              <Button onClick={handlePrev} variant="outline" disabled={isLoading}>
+              <Button onClick={handlePrev} variant="outline" disabled={isLoading} data-testid="btn-back">
                 ← Back
               </Button>
             </div>

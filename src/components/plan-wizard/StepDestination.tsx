@@ -25,6 +25,7 @@ export default function StepDestination({ cities, selectedCityId, onSelect }: St
             onClick={() => onSelect(city.id)}
             variant={selectedCityId === city.id ? "default" : "outline"}
             className="h-auto py-4 px-6 justify-start text-left whitespace-normal"
+            data-testid={`btn-select-city-${city.id}`}
           >
             <span className="block">{city.name}</span>
             {selectedCityId === city.id && <span className="ml-auto">✓</span>}

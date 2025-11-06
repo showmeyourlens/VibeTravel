@@ -29,7 +29,7 @@ export default function EmptyState({ onCreateNewPlan }: EmptyStateProps) {
         </p>
 
         {/* Call to action */}
-        <Button onClick={onCreateNewPlan} className="gap-2 w-full sm:w-auto">
+        <Button onClick={onCreateNewPlan} className="gap-2 w-full sm:w-auto" data-testid="btn-create-first-plan">
           <span>✨</span> Create Your First Plan
         </Button>
       </div>

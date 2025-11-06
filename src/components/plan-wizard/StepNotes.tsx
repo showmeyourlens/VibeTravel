@@ -52,7 +52,7 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
 
       {/* Generate Button */}
       <div className="mt-8 pt-6 border-t border-slate-200">
-        <Button onClick={onGenerate} disabled={isGenerating} size="lg" className="w-full gap-2 py-6 text-lg">
+        <Button onClick={onGenerate} disabled={isGenerating} size="lg" className="w-full gap-2 py-6 text-lg" data-testid="btn-generate-plan">
           <span>✨</span> {isGenerating ? "Generating..." : "Generate My Plan"}
         </Button>
       </div>
