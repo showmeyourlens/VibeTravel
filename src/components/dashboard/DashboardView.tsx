@@ -23,7 +23,7 @@ export default function DashboardView() {
   // Show skeleton loader while initial data is loading
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
@@ -40,7 +40,7 @@ export default function DashboardView() {
   // Show error state
   if (error && plans.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
@@ -64,7 +64,7 @@ export default function DashboardView() {
   // Show empty state if no plans exist
   if (plans.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
@@ -80,7 +80,7 @@ export default function DashboardView() {
 
   // Show plan list
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>

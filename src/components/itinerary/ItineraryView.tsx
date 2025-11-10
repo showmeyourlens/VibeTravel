@@ -240,7 +240,7 @@ export function ItineraryView() {
   // Render loading state
   if (!planData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md">
           {error ? (
             <>
@@ -263,7 +263,7 @@ export function ItineraryView() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4" data-testid="itinerary-view">
+    <div className="min-h-screen py-12 px-4" data-testid="itinerary-view">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8">

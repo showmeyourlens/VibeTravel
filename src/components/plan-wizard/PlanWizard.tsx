@@ -48,7 +48,7 @@ export default function PlanWizard() {
     <>
       <LoadingOverlay isVisible={isLoading} />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4" data-testid="plan-wizard">
+      <div className="min-h-screen py-12 px-4" data-testid="plan-wizard">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="mb-12">
