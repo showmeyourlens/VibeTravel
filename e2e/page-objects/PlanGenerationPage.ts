@@ -1,4 +1,3 @@
-import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 /**
@@ -8,10 +7,6 @@ import { BasePage } from "./BasePage";
 export class PlanGenerationPage extends BasePage {
   // Test IDs for generation elements
   private readonly LOADING_OVERLAY = "loading-overlay";
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   /**
    * Wait for the loading overlay to appear (plan generation started)
@@ -52,4 +47,3 @@ export class PlanGenerationPage extends BasePage {
     await this.waitForGenerationComplete(timeout);
   }
 }
-

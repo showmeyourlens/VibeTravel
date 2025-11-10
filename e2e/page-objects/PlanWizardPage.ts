@@ -1,4 +1,3 @@
-import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 /**
@@ -10,10 +9,6 @@ export class PlanWizardPage extends BasePage {
   private readonly WIZARD_CONTAINER = "plan-wizard";
   private readonly STEP_CONTENT = "wizard-step-content";
   private readonly BACK_BUTTON = "btn-back";
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   /**
    * Navigate to plan wizard page
@@ -61,11 +56,7 @@ export class PlanWizardPage extends BasePage {
   /**
    * Complete the full wizard flow
    */
-  async completeWizardFlow(
-    citySelector: string,
-    durationDays: number,
-    intensity: "half-day" | "full-day"
-  ) {
+  async completeWizardFlow(citySelector: string, durationDays: number, intensity: "half-day" | "full-day") {
     // Step 1: Select destination
     await this.selectCity(citySelector);
 
@@ -124,4 +115,3 @@ export class PlanWizardPage extends BasePage {
     await cityButton.click();
   }
 }
-

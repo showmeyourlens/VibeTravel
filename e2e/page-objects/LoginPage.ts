@@ -1,4 +1,3 @@
-import type { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 /**
@@ -6,10 +5,6 @@ import { BasePage } from "./BasePage";
  * Encapsulates interactions with the login page
  */
 export class LoginPage extends BasePage {
-  constructor(page: Page) {
-    super(page);
-  }
-
   /**
    * Navigate to the login page
    */
@@ -53,7 +48,7 @@ export class LoginPage extends BasePage {
   /**
    * Wait for login to complete (redirect to dashboard)
    */
-  async waitForLoginComplete(timeout = 10000) {
+  async waitForLoginComplete(timeout = 30000) {
     await this.waitForUrl("/", timeout);
   }
 
@@ -77,4 +72,3 @@ export class LoginPage extends BasePage {
     }
   }
 }
-

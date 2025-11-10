@@ -1,4 +1,3 @@
-import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 /**
@@ -8,10 +7,6 @@ import { BasePage } from "./BasePage";
 export class DashboardPage extends BasePage {
   // Test IDs for dashboard elements
   private readonly CREATE_PLAN_BUTTON = "btn-create-new-plan";
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   /**
    * Navigate to dashboard home page
@@ -59,4 +54,3 @@ export class DashboardPage extends BasePage {
     await this.waitForUrl("/plans/new");
   }
 }
-

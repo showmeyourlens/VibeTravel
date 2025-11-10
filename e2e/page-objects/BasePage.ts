@@ -5,11 +5,7 @@ import type { Page } from "@playwright/test";
  * Provides common functionality for all page objects
  */
 export class BasePage {
-  protected page: Page;
-
-  constructor(page: Page) {
-    this.page = page;
-  }
+  constructor(protected page: Page) {}
 
   /**
    * Navigate to a URL
