@@ -89,7 +89,7 @@ export function ItineraryView() {
     handleMoveDown,
     handleDelete,
     handleCancel,
-    handleSave
+    handleSave,
   } = useItineraryState(shouldInitializeState ? planData.activities : []);
 
   /**
@@ -139,14 +139,13 @@ export function ItineraryView() {
 
       handleSave(response.plan.activities);
       sessionStorage.setItem("generatedPlan", JSON.stringify(response.plan));
-
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Network error while saving";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
-  }, [transformToSavePlanRequest, handleSetEditing]);
+  }, [transformToSavePlanRequest, handleSetEditing, handleSave]);
 
   /**
    * Handle deleting (archiving) the plan

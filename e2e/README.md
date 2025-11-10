@@ -14,7 +14,9 @@ e2e/
 │   ├── ItineraryPage.ts   # Itinerary view page object
 │   └── index.ts           # Centralized exports
 ├── utils/
-│   └── test-helpers.ts    # Common test utilities and helpers
+│   ├── test-helpers.ts    # Common test utilities and helpers
+│   └── database-cleanup.ts # Database cleanup utilities for teardown
+├── global-teardown.ts     # Global teardown hook entry point
 ├── plan-creation.spec.ts  # Main E2E test suite
 └── README.md             # This file
 ```
@@ -228,6 +230,48 @@ npx playwright test --debug
 npx playwright test --ui
 ```
 
+## Database Cleanup
+
+After all E2E tests complete, a global teardown hook automatically cleans up test-related data from the database.
+
+### How It Works
+
+1. **Global Teardown Hook**: Runs after all tests complete (`e2e/global-teardown.ts`)
+2. **Authentication**: Uses test user credentials from environment variables
+3. **Data Deletion**: Removes all plans and related activities created during tests
+4. **RLS Security**: Leverages Supabase Row Level Security (RLS) to ensure only test user data is deleted
+5. **No Service Key**: Uses public API key only - no server-side secrets needed
+
+### Setup
+
+Ensure these environment variables are configured in `.env.test`:
+
+```
+SUPABASE_TEST_URL=<your-test-supabase-url>
+SUPABASE_PUBLIC_KEY=<your-public-supabase-key>
+E2E_USERNAME=<test-user-email>
+E2E_PASSWORD=<test-user-password>
+```
+
+### Data Cleanup Details
+
+The cleanup process removes:
+- All `plans` records created by the test user
+- All `plan_activities` associated with deleted plans
+- All `plan_feedback` associated with deleted plans
+
+Cleanup occurs automatically after test run completes using Playwright's `globalTeardown` hook.
+
+### Manual Cleanup
+
+To manually clean up test data:
+
+```typescript
+import { cleanupTestData } from "./e2e/utils/database-cleanup";
+
+await cleanupTestData("test-user@example.com", "password");
+```
+
 ## Configuration
 
 Tests are configured in `playwright.config.ts`:
@@ -238,6 +282,7 @@ Tests are configured in `playwright.config.ts`:
 - Retries: 0 locally, 2 in CI
 - Screenshots: On failure
 - Traces: On first retry
+- Global Teardown: `e2e/global-teardown.ts` - Runs after all tests to cleanup database
 
 ## CI/CD Integration
 

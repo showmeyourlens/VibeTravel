@@ -10,6 +10,7 @@ export class LoginPage extends BasePage {
    */
   async navigateToLogin() {
     await this.goto("/login");
+    await this.waitForPageLoad();
   }
 
   /**
