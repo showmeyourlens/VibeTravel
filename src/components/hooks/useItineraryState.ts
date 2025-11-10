@@ -22,6 +22,7 @@ interface UseItineraryStateReturn {
   handleMoveDown: (activityId: string) => void;
   handleDelete: (activityId: string) => void;
   handleCancel: () => void;
+  handleSave: (initialActivities: PlanActivityDTO[]) => void;
 }
 
 /**
@@ -32,6 +33,7 @@ function groupActivitiesByDay(activities: PlanActivityDTO[]): DayViewModel[] {
 
   // Group activities by day
   activities.forEach((activity) => {
+    activity.id = crypto.randomUUID();
     if (!grouped.has(activity.day_number)) {
       grouped.set(activity.day_number, []);
     }
@@ -85,15 +87,15 @@ function recalculatePositions(activities: PlanActivityDTO[]): PlanActivityDTO[] 
 
 export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItineraryStateReturn {
   const [currentActivities, setCurrentActivities] = useState<PlanActivityDTO[]>(initialActivities);
+  const [originalActivities, setOriginalActivities] = useState<PlanActivityDTO[]>(initialActivities);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Update currentActivities when initialActivities changes
-  useEffect(() => {
+   // Update currentActivities when initialActivities changes
+   useEffect(() => {
     setCurrentActivities(initialActivities);
+    setOriginalActivities(initialActivities);
   }, [initialActivities]);
 
-  // Original activities for comparing changes
-  const originalActivities = useMemo(() => initialActivities, [initialActivities]);
 
   // Check if activities have changed
   const isDirty = useMemo(() => {
@@ -112,7 +114,7 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
   }, [currentActivities, originalActivities]);
 
   // Group activities by day for rendering
-  const days = useMemo(() => groupActivitiesByDay(currentActivities), [currentActivities]);
+  const days = useMemo(() => groupActivitiesByDay(originalActivities), [originalActivities]);
 
   const handleSetEditing = useCallback((editing: boolean) => {
     setIsEditing(editing);
@@ -197,6 +199,11 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
     setIsEditing(false);
   }, [originalActivities]);
 
+  const handleSave = useCallback((initialActivities: PlanActivityDTO[]) => {
+    setOriginalActivities(initialActivities);
+    setCurrentActivities(initialActivities);
+  }, [originalActivities]);
+
   return {
     currentActivities,
     originalActivities,
@@ -208,5 +215,6 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
     handleMoveDown,
     handleDelete,
     handleCancel,
+    handleSave
   };
 }

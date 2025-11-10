@@ -161,101 +161,6 @@ ${userNotesSection}
     } finally {
       clearTimeout(timeoutId);
     }
-
-    //     const content = `[
-    //   {
-    //     "day_number": 1,
-    //     "position": 1,
-    //     "name": "Breakfast at Café am Neuen See",
-    //     "latitude": 52.5200,
-    //     "longitude": 13.3915,
-    //     "description": "Start your day with a traditional Berlin breakfast featuring fresh pastries, local cheeses, and organic coffee in a charming lakeside café in Tiergarten Park.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Café+am+Neuen+See+Berlin/@52.5200,13.3915"
-    //   },
-    //   {
-    //     "day_number": 1,
-    //     "position": 2,
-    //     "name": "Street Art Tour in Kreuzberg",
-    //     "latitude": 52.4979,
-    //     "longitude": 13.4160,
-    //     "description": "Explore vibrant street art and graffiti culture in the edgy Kreuzberg district. Walk through colorful alleyways and discover contemporary urban art scenes.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Kreuzberg+Street+Art+Berlin/@52.4979,13.4160"
-    //   },
-    //   {
-    //     "day_number": 1,
-    //     "position": 3,
-    //     "name": "Lunch at Markthalle Neun Street Food Thursday",
-    //     "latitude": 52.5034,
-    //     "longitude": 13.4430,
-    //     "description": "Taste authentic international street food and local Berlin specialties at this popular food market. Try currywurst, döner, and craft beers from local vendors.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Markthalle+Neun+Berlin/@52.5034,13.4430"
-    //   },
-    //   {
-    //     "day_number": 1,
-    //     "position": 4,
-    //     "name": "Biergarten at Prater Garten",
-    //     "latitude": 52.5385,
-    //     "longitude": 13.4115,
-    //     "description": "Relax at Berlin's oldest beer garden in Prenzlauer Berg. Enjoy cold German beers, hearty traditional food, and a lively atmosphere with locals.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Prater+Garten+Berlin/@52.5385,13.4115"
-    //   },
-    //   {
-    //     "day_number": 1,
-    //     "position": 5,
-    //     "name": "Nightlife in Friedrichshain Club Scene",
-    //     "latitude": 52.5100,
-    //     "longitude": 13.4550,
-    //     "description": "Experience Berlin's legendary electronic music scene. Visit trendy clubs and bars in Friedrichshain for dancing, live music, and the city's vibrant nightlife culture.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Friedrichshain+clubs+Berlin/@52.5100,13.4550"
-    //   },
-    //   {
-    //     "day_number": 2,
-    //     "position": 1,
-    //     "name": "Brunch at Common Ground in Neukölln",
-    //     "latitude": 52.4750,
-    //     "longitude": 13.4380,
-    //     "description": "Enjoy a trendy Berlin brunch with avocado toast, eggs Benedict, and specialty coffee in this hip neighborhood spot popular with locals.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Common+Ground+Neukölln+Berlin/@52.4750,13.4380"
-    //   },
-    //   {
-    //     "day_number": 2,
-    //     "position": 2,
-    //     "name": "Outdoor Cycling Tour along Spree River",
-    //     "latitude": 52.5200,
-    //     "longitude": 13.4050,
-    //     "description": "Rent a bike and cycle along the scenic Spree River, passing through modern neighborhoods, parks, and waterfront areas. Active and fun way to explore the city.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Spree+River+Berlin+cycling/@52.5200,13.4050"
-    //   },
-    //   {
-    //     "day_number": 2,
-    //     "position": 3,
-    //     "name": "Food Tour in Kreuzberg Market",
-    //     "latitude": 52.4980,
-    //     "longitude": 13.4200,
-    //     "description": "Discover multicultural street food and local flavors. Sample Turkish, Vietnamese, and Middle Eastern cuisine from street vendors and small eateries.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Kreuzberg+food+market+Berlin/@52.4980,13.4200"
-    //   },
-    //   {
-    //     "day_number": 2,
-    //     "position": 4,
-    //     "name": "Rooftop Bar at Klunkerkranich",
-    //     "latitude": 52.4850,
-    //     "longitude": 13.4420,
-    //     "description": "Chill at this rooftop bar with panoramic city views, craft cocktails, and a relaxed atmosphere. Perfect for sunset drinks and socializing with other travelers.",
-    //     "google_maps_url": "https://www.google.com/maps/search/Klunkerkranich+Berlin/@52.4850,13.4420"
-    //   },
-    //   {
-    //     "day_number": 2,
-    //     "position": 5,
-    //     "name": "Dinner at RAW-Gelände Open-Air Restaurant",
-    //     "latitude": 52.5450,
-    //     "longitude": 13.4380,
-    //     "description": "End your trip with dinner at this trendy open-air venue in a converted industrial space. Enjoy contemporary cuisine, live music, and Berlin's creative energy.",
-    //     "google_maps_url": "https://www.google.com/maps/search/RAW-Gelände+Berlin/@52.5450,13.4380"
-    //   }
-    // ]`;
-
-    // return content;
   }
 
   /**
@@ -367,6 +272,69 @@ ${userNotesSection}
       throw new Error(`Invalid longitude: ${lng}`);
     }
     return lng;
+  }
+
+  private generateMockResponse(): string {
+    const content = `
+      [
+        {
+          "title": "Visit the iconic Reichstag Building with its glass dome",
+          "day_number": 1,
+          "position": 1,
+          "place_name": "Reichstag Building",
+          "latitude": 52.5186,
+          "longitude": 13.3760,
+          "description": "Start your Berlin adventure at the historic Reichstag, home to the German parliament. Ascend to the glass dome for panoramic views of the city and learn about German history."
+        },
+        {
+          "title": "Explore ancient treasures at the Neues Museum",
+          "day_number": 1,
+          "position": 2,
+          "place_name": "Neues Museum",
+          "latitude": 52.5210,
+          "longitude": 13.3976,
+          "description": "Discover Egyptian artifacts, including the famous Bust of Nefertiti, at this world-class museum on Museum Island. A must-see for art and history enthusiasts."
+        },
+        {
+          "title": "Enjoy traditional Berlin cuisine at Zur Letzten Instanz",
+          "day_number": 1,
+          "position": 3,
+          "place_name": "Zur Letzten Instanz",
+          "latitude": 52.5170,
+          "longitude": 13.4085,
+          "description": "Experience authentic Berlin gastronomy at this historic restaurant dating back to 1621. Try local specialties like Currywurst or Eintopf in an atmospheric old-town setting."
+        },
+        {
+          "title": "Walk along the historic East Side Gallery mural wall",
+          "day_number": 2,
+          "position": 1,
+          "place_name": "East Side Gallery",
+          "latitude": 52.5050,
+          "longitude": 13.4404,
+          "description": "Stroll along the 1.3 km stretch of the Berlin Wall now transformed into an open-air gallery with powerful murals and street art representing freedom and unity."
+        },
+        {
+          "title": "Tour the stunning Charlottenburg Palace and gardens",
+          "day_number": 2,
+          "position": 2,
+          "place_name": "Charlottenburg Palace",
+          "latitude": 52.5241,
+          "longitude": 13.2955,
+          "description": "Explore Berlin's most impressive palace with Baroque architecture, opulent rooms, and beautiful gardens. A glimpse into Prussian royal life and elegance."
+        },
+        {
+          "title": "Experience Berlin's vibrant beer culture at Prater Garten",
+          "day_number": 2,
+          "position": 3,
+          "place_name": "Prater Garten",
+          "latitude": 52.5338,
+          "longitude": 13.4096,
+          "description": "End your trip at Berlin's oldest beer garden, a beloved local spot since 1837. Enjoy traditional beer, hearty Bavarian food, and a lively atmosphere perfect for evening relaxation."
+        }
+      ]
+    `;
+
+    return content;
   }
 }
 

@@ -89,6 +89,7 @@ export function ItineraryView() {
     handleMoveDown,
     handleDelete,
     handleCancel,
+    handleSave
   } = useItineraryState(shouldInitializeState ? planData.activities : []);
 
   /**
@@ -119,7 +120,7 @@ export function ItineraryView() {
   /**
    * Handle saving the plan
    */
-  const handleSave = useCallback(async () => {
+  const handleSavePlan = useCallback(async () => {
     const request = transformToSavePlanRequest();
     if (!request) {
       setError("Could not prepare plan for saving");
@@ -134,12 +135,11 @@ export function ItineraryView() {
 
       setSaveSuccess(true);
       handleSetEditing(false);
+      setIsDraft(false);
 
-      sessionStorage.removeItem("planMetadata");
-
+      handleSave(response.plan.activities);
       sessionStorage.setItem("generatedPlan", JSON.stringify(response.plan));
 
-      window.location.href = "/plans/view";
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Network error while saving";
       setError(errorMessage);
@@ -215,6 +215,7 @@ export function ItineraryView() {
 
       setSaveSuccess(true);
       handleSetEditing(false);
+      handleSave(currentActivities);
 
       // Reset success message after 3 seconds
       setTimeout(() => {
@@ -303,7 +304,7 @@ export function ItineraryView() {
           isDraft={isDraft}
           isLoading={isLoading}
           onEdit={() => handleSetEditing(true)}
-          onSave={isDraft ? handleSave : handleUpdatePlan}
+          onSave={isDraft ? handleSavePlan : handleUpdatePlan}
           onCancel={handleCancel}
           onDelete={handleDeletePlan}
         />
