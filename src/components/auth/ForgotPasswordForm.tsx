@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
+import { forgotPassword } from "../../lib/api-client";
 
 interface FormErrors {
   email?: string;
@@ -36,16 +37,11 @@ export const ForgotPasswordForm: React.FC = () => {
     setErrors({});
 
     try {
-      // API call will be implemented in the next step
-      // const response = await fetch("/api/auth/forgot-password", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email }),
-      // });
-      // Handle response
+      await forgotPassword(email);
       setIsSubmitted(true);
-    } catch {
-      setErrors({ submit: "An error occurred. Please try again." });
+    } catch (err) {
+      const error = err as Error;
+      setErrors({ submit: error.message || "An error occurred. Please try again." });
     } finally {
       setIsLoading(false);
     }

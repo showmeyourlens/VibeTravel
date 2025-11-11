@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { updatePassword } from "../../lib/api-client";
 import { Button } from "../ui/button";
 
 interface FormErrors {
@@ -17,6 +18,7 @@ export const UpdatePasswordForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -48,15 +50,17 @@ export const UpdatePasswordForm: React.FC = () => {
     setErrors({});
 
     try {
-      // API call will be implemented in the next step
-      // const response = await fetch("/api/auth/update-password", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ newPassword }),
-      // });
-      // Handle response and redirect to /login
-    } catch {
-      setErrors({ submit: "An error occurred while updating your password. Please try again." });
+      await updatePassword(newPassword);
+      setIsSuccess(true);
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrors({ submit: error.message });
+      } else {
+        setErrors({ submit: "An error occurred while updating your password. Please try again." });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -71,6 +75,12 @@ export const UpdatePasswordForm: React.FC = () => {
         <p className="text-sm text-muted-foreground">Enter a new password for your account.</p>
       </div>
 
+      {isSuccess && (
+        <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20">
+          <p className="text-sm text-green-500">Your password has been updated successfully. Redirecting to login...</p>
+        </div>
+      )}
+
       <div className="space-y-2">
         <label htmlFor="newPassword" className="block text-sm font-medium text-foreground">
           New Password
@@ -84,7 +94,7 @@ export const UpdatePasswordForm: React.FC = () => {
             errors.newPassword ? "border-destructive focus:ring-destructive/50" : "border-input"
           }`}
           placeholder="••••••••"
-          disabled={isLoading}
+          disabled={isLoading || isSuccess}
           aria-invalid={!!errors.newPassword}
           aria-describedby={errors.newPassword ? "new-password-error" : undefined}
         />
@@ -120,7 +130,7 @@ export const UpdatePasswordForm: React.FC = () => {
             errors.confirmPassword ? "border-destructive focus:ring-destructive/50" : "border-input"
           }`}
           placeholder="••••••••"
-          disabled={isLoading}
+          disabled={isLoading || isSuccess}
           aria-invalid={!!errors.confirmPassword}
           aria-describedby={errors.confirmPassword ? "confirm-password-error" : undefined}
         />
@@ -137,7 +147,7 @@ export const UpdatePasswordForm: React.FC = () => {
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading || isSuccess}>
         {isLoading ? "Updating password..." : "Update Password"}
       </Button>
 

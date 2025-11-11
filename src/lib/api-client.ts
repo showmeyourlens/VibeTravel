@@ -405,3 +405,97 @@ export async function loginUser(email: string, password: string): Promise<void> 
     throw error;
   }
 }
+
+/**
+ * Signup user with email and password
+ * @param email - User email
+ * @param password - User password
+ * @returns Promise<void> - Redirects on success
+ * @throws Error if the API call fails
+ */
+export async function signupUser(email: string, password: string): Promise<void> {
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+      throw new Error(errorData.error || "An error occurred during registration. Please try again.");
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error signing up:", error);
+    throw error;
+  }
+}
+
+/**
+ * Request password recovery for a user
+ * @param email - User email
+ * @returns Promise<void>
+ * @throws Error if the API call fails
+ */
+export async function forgotPassword(email: string): Promise<void> {
+  if (!email) {
+    throw new Error("Email is required");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+      throw new Error(errorData.error || "An error occurred. Please try again.");
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error requesting password recovery:", error);
+    throw error;
+  }
+}
+
+/**
+ * Update user password
+ * @param newPassword - The new password
+ * @returns Promise<void>
+ * @throws Error if the API call fails
+ */
+export async function updatePassword(newPassword: string): Promise<void> {
+  if (!newPassword) {
+    throw new Error("New password is required");
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/auth/update-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newPassword }),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as { error?: string };
+      throw new Error(errorData.error || "An error occurred. Please try again.");
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error updating password:", error);
+    throw error;
+  }
+}

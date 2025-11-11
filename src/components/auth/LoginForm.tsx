@@ -1,61 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { loginUser } from "@/lib/api-client";
 import { Button } from "../ui/button";
+import { loginSchema } from "@/lib/schemas/auth.schema";
+import { navigate } from "astro:transitions/client";
 
-interface FormErrors {
-  email?: string;
-  password?: string;
-  submit?: string;
-}
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
-    setErrors({});
-
+  const onSubmit = async (data: LoginFormValues) => {
     try {
-      await loginUser(email, password);
-
-      // Successful login - redirect to dashboard
-      window.location.href = "/";
+      await loginUser(data.email, data.password);
+      navigate("/");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An error occurred during login. Please try again.";
-      setErrors({ submit: errorMessage });
-    } finally {
-      setIsLoading(false);
+      setError("root.submit", {
+        type: "manual",
+        message: errorMessage,
+      });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div className="space-y-2">
         <label htmlFor="email" className="block text-sm font-medium text-foreground">
           Email Address
@@ -63,19 +41,18 @@ export const LoginForm: React.FC = () => {
         <input
           id="email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          {...register("email")}
           className={`w-full px-4 py-2.5 rounded-md border bg-background text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
             errors.email ? "border-destructive focus:ring-destructive/50" : "border-input"
           }`}
           placeholder="your@email.com"
-          disabled={isLoading}
+          disabled={isSubmitting}
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "email-error" : undefined}
         />
         {errors.email && (
           <p id="email-error" className="text-sm text-destructive">
-            {errors.email}
+            {errors.email.message}
           </p>
         )}
       </div>
@@ -87,31 +64,30 @@ export const LoginForm: React.FC = () => {
         <input
           id="password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...register("password")}
           className={`w-full px-4 py-2.5 rounded-md border bg-background text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 ${
             errors.password ? "border-destructive focus:ring-destructive/50" : "border-input"
           }`}
           placeholder="••••••••"
-          disabled={isLoading}
+          disabled={isSubmitting}
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
         />
         {errors.password && (
           <p id="password-error" className="text-sm text-destructive">
-            {errors.password}
+            {errors.password.message}
           </p>
         )}
       </div>
 
-      {errors.submit && (
+      {errors.root?.submit && (
         <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20">
-          <p className="text-sm text-destructive">{errors.submit}</p>
+          <p className="text-sm text-destructive">{errors.root.submit.message}</p>
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Logging in..." : "Log In"}
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? "Logging in..." : "Log In"}
       </Button>
 
       <div className="text-center">
