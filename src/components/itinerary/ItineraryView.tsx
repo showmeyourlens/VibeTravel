@@ -235,7 +235,7 @@ export function ItineraryView() {
     } finally {
       setIsLoading(false);
     }
-  }, [planData?.plan?.id, currentActivities, handleSetEditing]);
+  }, [planData?.plan?.id, currentActivities, handleSetEditing, handleSave]);
 
   // Render loading state
   if (!planData) {
@@ -266,7 +266,7 @@ export function ItineraryView() {
     <div className="min-h-screen py-12 px-4" data-testid="itinerary-view">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 p-6 bg-white border border-white/10 border-slate-200 rounded-lg shadow-2xl">
           <a href="/" className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-block">
             ← Back to Dashboard
           </a>

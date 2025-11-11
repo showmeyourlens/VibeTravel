@@ -9,6 +9,7 @@ import { usePlans } from "../hooks/usePlans.ts";
 import PlanList from "./PlanList.tsx";
 import EmptyState from "./EmptyState.tsx";
 import SkeletonLoader from "./SkeletonLoader.tsx";
+import { Panel } from "../ui/Panel.tsx";
 
 export default function DashboardView() {
   const { plans, isLoading, error, isFetchingMore, hasMore, loadMore } = usePlans();
@@ -24,7 +25,7 @@ export default function DashboardView() {
   if (isLoading) {
     return (
       <div className="min-h-screen">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-12 max-w-7xl">
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
             <Button disabled className="gap-2" data-testid="btn-create-new-plan">
@@ -42,12 +43,12 @@ export default function DashboardView() {
     return (
       <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-12">
+          <Panel className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
             <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
               <span>✨</span> Create New Plan
             </Button>
-          </div>
+          </Panel>
           <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md mx-auto">
             <div className="text-6xl mb-4">⚠️</div>
             <h2 className="text-2xl font-bold text-slate-900 mb-3">Oops! Something went wrong</h2>
@@ -66,12 +67,12 @@ export default function DashboardView() {
     return (
       <div className="min-h-screen">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-12">
+          <Panel className="flex items-center justify-between mb-12">
             <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
             <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
               <span>✨</span> Create New Plan
             </Button>
-          </div>
+          </Panel>
           <EmptyState onCreateNewPlan={handleCreateNewPlan} />
         </div>
       </div>
@@ -81,8 +82,8 @@ export default function DashboardView() {
   // Show plan list
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-12">
+      <div className="container mx-auto px-4 py-12 ">
+        <Panel className="flex items-center justify-between mb-12">
           <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
           <Button
             onClick={handleCreateNewPlan}
@@ -92,7 +93,7 @@ export default function DashboardView() {
           >
             <span>✨</span> {navigatingToCreate ? "Loading..." : "Create New Plan"}
           </Button>
-        </div>
+        </Panel>
 
         {/* Display error message if one occurs during pagination */}
         {error && (

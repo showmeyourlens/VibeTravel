@@ -62,7 +62,9 @@ export default function PlanList({ plans, onLoadMore, isFetchingMore, hasMore }:
           </div>
         )}
         {!hasMore && plans.length > 0 && (
-          <p className="text-slate-500 text-sm">You&apos;ve reached the end of your plans</p>
+          <div className="bg-white p-6 rounded-lg border border-white/10 border-slate-200">
+            <p className="bg-white text-sm bg-white/10 font-semibold">You&apos;ve reached the end of your plans</p>
+          </div>
         )}
       </div>
     </div>

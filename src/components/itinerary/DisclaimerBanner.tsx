@@ -7,7 +7,7 @@ export default function DisclaimerBanner() {
   const DISCLAIMER = "This is an AI-generated itinerary. Please verify all details before your trip.";
 
   return (
-    <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-8 rounded">
+    <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-8 p-4 rounded-lg shadow-2xl">
       <div className="flex gap-3">
         <div className="text-2xl flex-shrink-0">⚠️</div>
         <div>
