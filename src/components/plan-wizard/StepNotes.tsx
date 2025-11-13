@@ -37,7 +37,7 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
         {notes.length > 0 && (
           <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
             <p className="text-sm text-slate-700">
-              <span className="font-semibold">Your notes:</span> "{notes}"
+              <span className="font-semibold">Your notes:</span> &quot;{notes}&quot;
             </p>
           </div>
         )}
@@ -52,7 +52,13 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
 
       {/* Generate Button */}
       <div className="mt-8 pt-6 border-t border-slate-200">
-        <Button onClick={onGenerate} disabled={isGenerating} size="lg" className="w-full gap-2 py-6 text-lg" data-testid="btn-generate-plan">
+        <Button
+          onClick={onGenerate}
+          disabled={isGenerating}
+          size="lg"
+          className="w-full gap-2 py-6 text-lg"
+          data-testid="btn-generate-plan"
+        >
           <span>✨</span> {isGenerating ? "Generating..." : "Generate My Plan"}
         </Button>
       </div>

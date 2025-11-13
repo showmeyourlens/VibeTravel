@@ -90,12 +90,11 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
   const [originalActivities, setOriginalActivities] = useState<PlanActivityDTO[]>(initialActivities);
   const [isEditing, setIsEditing] = useState(false);
 
-   // Update currentActivities when initialActivities changes
-   useEffect(() => {
+  // Update currentActivities when initialActivities changes
+  useEffect(() => {
     setCurrentActivities(initialActivities);
     setOriginalActivities(initialActivities);
   }, [initialActivities]);
-
 
   // Check if activities have changed
   const isDirty = useMemo(() => {
@@ -202,7 +201,7 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
   const handleSave = useCallback((initialActivities: PlanActivityDTO[]) => {
     setOriginalActivities(initialActivities);
     setCurrentActivities(initialActivities);
-  }, [originalActivities]);
+  }, []);
 
   return {
     currentActivities,
@@ -215,6 +214,6 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
     handleMoveDown,
     handleDelete,
     handleCancel,
-    handleSave
+    handleSave,
   };
 }

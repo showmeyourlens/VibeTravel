@@ -45,9 +45,7 @@ describe("FeedbackWidget", () => {
       });
 
       // Act
-      render(
-        <FeedbackWidget planId="valid-plan-id" isDraft={false} hasFeedback={false} />
-      );
+      render(<FeedbackWidget planId="valid-plan-id" isDraft={false} hasFeedback={false} />);
 
       // Assert
       expect(screen.getByRole("region", { name: /plan feedback form/i })).toBeInTheDocument();
@@ -107,9 +105,7 @@ describe("FeedbackWidget", () => {
       });
 
       // Act
-      const { container } = render(
-        <FeedbackWidget planId="valid-plan-id" isDraft={true} hasFeedback={false} />
-      );
+      const { container } = render(<FeedbackWidget planId="valid-plan-id" isDraft={true} hasFeedback={false} />);
 
       // Assert
       expect(container.firstChild).toBeNull();
@@ -126,9 +122,7 @@ describe("FeedbackWidget", () => {
       });
 
       // Act
-      const { container } = render(
-        <FeedbackWidget planId="valid-plan-id" isDraft={false} hasFeedback={true} />
-      );
+      const { container } = render(<FeedbackWidget planId="valid-plan-id" isDraft={false} hasFeedback={true} />);
 
       // Assert
       expect(container.firstChild).toBeNull();
@@ -145,9 +139,7 @@ describe("FeedbackWidget", () => {
       });
 
       // Act
-      const { container } = render(
-        <FeedbackWidget planId="valid-plan-id" isDraft={false} hasFeedback={false} />
-      );
+      const { container } = render(<FeedbackWidget planId="valid-plan-id" isDraft={false} hasFeedback={false} />);
 
       // Assert
       expect(container.firstChild).toBeNull();
@@ -337,9 +329,7 @@ describe("FeedbackWidget", () => {
       });
 
       // Act
-      render(
-        <FeedbackWidget planId="plan-123" onFeedbackSubmitted={mockOnFeedbackSubmitted} />
-      );
+      render(<FeedbackWidget planId="plan-123" onFeedbackSubmitted={mockOnFeedbackSubmitted} />);
       const yesButton = screen.getByRole("button", { name: /helpful - yes/i });
       fireEvent.click(yesButton);
 
@@ -362,9 +352,7 @@ describe("FeedbackWidget", () => {
       });
 
       // Act
-      render(
-        <FeedbackWidget planId="plan-123" onFeedbackSubmitted={mockOnFeedbackSubmitted} />
-      );
+      render(<FeedbackWidget planId="plan-123" onFeedbackSubmitted={mockOnFeedbackSubmitted} />);
 
       const yesButton = screen.getByRole("button", { name: /helpful - yes/i });
       fireEvent.click(yesButton);
@@ -503,9 +491,7 @@ describe("FeedbackWidget", () => {
       sessionStorage.setItem("generatedPlan", JSON.stringify(generatedPlan));
 
       // Act - pass isDraft as true in props
-      const { container } = render(
-        <FeedbackWidget planId="valid-plan-id" isDraft={true} />
-      );
+      const { container } = render(<FeedbackWidget planId="valid-plan-id" isDraft={true} />);
 
       // Assert - widget should not render because isDraft prop takes priority
       expect(container.firstChild).toBeNull();
@@ -652,4 +638,3 @@ describe("FeedbackWidget", () => {
     });
   });
 });
-

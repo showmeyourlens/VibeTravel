@@ -9,7 +9,7 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">What's your travel pace?</h2>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2">What&apos;s your travel pace?</h2>
         <p className="text-slate-600">Choose how packed you want your itinerary to be</p>
       </div>
 
