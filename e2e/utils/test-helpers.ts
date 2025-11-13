@@ -166,5 +166,6 @@ export async function takeVisualSnapshot(page: Page, name: string) {
  */
 export function logTest(message: string) {
   const timestamp = new Date().toISOString();
+  // eslint-disable-next-line no-console
   console.log(`[${timestamp}] ${message}`);
 }
