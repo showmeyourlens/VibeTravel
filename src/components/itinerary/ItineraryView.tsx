@@ -50,6 +50,7 @@ export function ItineraryView() {
       // Check if it's a newly generated draft
       const isDraftPlan = !parsedPlan.plan.id || parsedPlan.plan.id === "draft";
       setIsDraft(isDraftPlan);
+      handleSetEditing(isDraftPlan);
 
       // Get user notes from session storage if available
       const storedMetadata = sessionStorage.getItem("planMetadata");
@@ -139,6 +140,7 @@ export function ItineraryView() {
 
       handleSave(response.plan.activities);
       sessionStorage.setItem("generatedPlan", JSON.stringify(response.plan));
+      setPlanData(response.plan);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Network error while saving";
       setError(errorMessage);

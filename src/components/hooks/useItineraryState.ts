@@ -33,7 +33,7 @@ function groupActivitiesByDay(activities: PlanActivityDTO[]): DayViewModel[] {
 
   // Group activities by day
   activities.forEach((activity) => {
-    activity.id = crypto.randomUUID();
+    activity.id = activity.id ?? crypto.randomUUID();
     if (!grouped.has(activity.day_number)) {
       grouped.set(activity.day_number, []);
     }
@@ -88,7 +88,7 @@ function recalculatePositions(activities: PlanActivityDTO[]): PlanActivityDTO[] 
 export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItineraryStateReturn {
   const [currentActivities, setCurrentActivities] = useState<PlanActivityDTO[]>(initialActivities);
   const [originalActivities, setOriginalActivities] = useState<PlanActivityDTO[]>(initialActivities);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(initialActivities.some((activity) => activity.id == ""));
 
   // Update currentActivities when initialActivities changes
   useEffect(() => {
@@ -113,7 +113,7 @@ export function useItineraryState(initialActivities: PlanActivityDTO[]): UseItin
   }, [currentActivities, originalActivities]);
 
   // Group activities by day for rendering
-  const days = useMemo(() => groupActivitiesByDay(originalActivities), [originalActivities]);
+  const days = useMemo(() => groupActivitiesByDay(currentActivities), [currentActivities]);
 
   const handleSetEditing = useCallback((editing: boolean) => {
     setIsEditing(editing);
