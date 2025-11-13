@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { submitFeedback as submitFeedbackApi } from "@/lib/api-client";
+import { submitFeedbackApi } from "@/lib/api-client";
 import type { SubmitFeedbackRequestDTO } from "@/types";
 
 interface UseFeedbackState {

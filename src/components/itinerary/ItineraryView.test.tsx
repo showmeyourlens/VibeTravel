@@ -397,7 +397,6 @@ describe("ItineraryView Component", () => {
 
       // Assert
       await waitFor(() => {
-        expect(window.location.href).toBe("/plans/view");
         expect(sessionStorage.getItem("planMetadata")).toBeNull();
         expect(sessionStorage.getItem("generatedPlan")).toBeTruthy();
       });

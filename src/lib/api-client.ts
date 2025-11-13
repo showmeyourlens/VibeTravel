@@ -283,7 +283,7 @@ export async function getFeedbackStatus(planId: string): Promise<{ hasFeedback: 
  * @returns Promise<SubmitFeedbackResponseDTO> - Feedback response
  * @throws Error if the API call fails
  */
-export async function submitFeedback(
+export async function submitFeedbackApi(
   planId: string,
   request: SubmitFeedbackRequestDTO
 ): Promise<SubmitFeedbackResponseDTO> {

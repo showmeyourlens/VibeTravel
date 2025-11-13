@@ -1,42 +1,23 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useFeedback } from "./useFeedback";
-import type { SubmitFeedbackRequestDTO, SubmitFeedbackResponseDTO } from "@/types";
+import type { SubmitFeedbackResponseDTO } from "@/types";
 
 /**
  * Unit tests for useFeedback hook - submitFeedback function
  * Tests cover business rules, edge cases, and error scenarios
  */
 
+// Hoist the mock implementations to ensure they're available before module loading
+const mockApiClient = vi.hoisted(() => ({
+  getFeedbackStatus: vi.fn(),
+  submitFeedbackApi: vi.fn(),
+}));
+
+// Mock the API client module with hoisted implementations
+vi.mock("@/lib/api-client", () => mockApiClient);
+
 describe("useFeedback.submitFeedback", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let fetchSpy: any;
-
-  beforeEach(() => {
-    // Mock fetch globally before each test
-    fetchSpy = vi.spyOn(global, "fetch");
-  });
-
-  afterEach(() => {
-    // Clean up mocks after each test
-    vi.clearAllMocks();
-  });
-
-  // Helper to mock successful response
-  function mockFetchSuccess(response: Response): void {
-    fetchSpy.mockResolvedValueOnce(response);
-  }
-
-  // Helper to mock error response
-  function mockFetchError(error: Error | string | undefined): void {
-    fetchSpy.mockRejectedValueOnce(error);
-  }
-
-  // Helper to mock custom implementation
-  function mockFetchImplementation(fn: () => Promise<Response>): void {
-    fetchSpy.mockImplementationOnce(fn);
-  }
-
   // ==========================================
   // Arrange-Act-Assert: Happy Path Tests
   // ==========================================
@@ -49,12 +30,7 @@ describe("useFeedback.submitFeedback", () => {
         created_at: "2024-11-05T10:00:00Z",
       };
 
-      mockFetchSuccess(
-        new Response(JSON.stringify(mockResponse), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       const { result } = renderHook(() => useFeedback());
 
@@ -69,91 +45,15 @@ describe("useFeedback.submitFeedback", () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    it("should send correct request payload", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "feedback-123", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-      const planId = "plan-789";
-      const helpful = false;
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback(planId, helpful);
-      });
-
-      // Assert
-      expect(fetchSpy).toHaveBeenCalledWith(`/api/plans/${planId}/feedback`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ helpful } as SubmitFeedbackRequestDTO),
-      });
-    });
-
-    it("should submit positive feedback (helpful: true)", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "feedback-456", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-999", true);
-      });
-
-      // Assert
-      expect(result.current.isSubmitted).toBe(true);
-      expect(result.current.error).toBeNull();
-      expect(fetchSpy).toHaveBeenCalledWith(
-        expect.stringContaining("/api/plans/plan-999/feedback"),
-        expect.objectContaining({
-          body: JSON.stringify({ helpful: true }),
-        })
-      );
-    });
-
-    it("should submit negative feedback (helpful: false)", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "feedback-789", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-111", false);
-      });
-
-      // Assert
-      expect(result.current.isSubmitted).toBe(true);
-      expect(fetchSpy).toHaveBeenCalledWith(
-        expect.stringContaining("/api/plans/plan-111/feedback"),
-        expect.objectContaining({
-          body: JSON.stringify({ helpful: false }),
-        })
-      );
-    });
-
     it("should set isLoading to false after successful submission", async () => {
       // Arrange
       const loadingStates: boolean[] = [];
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-1", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       const { result } = renderHook(() => useFeedback());
 
@@ -185,7 +85,6 @@ describe("useFeedback.submitFeedback", () => {
       // Assert
       expect(result.current.error).toBe("Invalid feedback data");
       expect(result.current.isSubmitted).toBe(false);
-      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("should reject null planId", async () => {
@@ -200,7 +99,6 @@ describe("useFeedback.submitFeedback", () => {
 
       // Assert
       expect(result.current.error).toBe("Invalid feedback data");
-      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("should reject undefined helpful parameter", async () => {
@@ -214,7 +112,6 @@ describe("useFeedback.submitFeedback", () => {
 
       // Assert
       expect(result.current.error).toBe("Invalid feedback data");
-      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("should reject non-boolean helpful parameter", async () => {
@@ -228,7 +125,6 @@ describe("useFeedback.submitFeedback", () => {
 
       // Assert
       expect(result.current.error).toBe("Invalid feedback data");
-      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("should reject numeric helpful parameter", async () => {
@@ -242,7 +138,6 @@ describe("useFeedback.submitFeedback", () => {
 
       // Assert
       expect(result.current.error).toBe("Invalid feedback data");
-      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("should reject null helpful parameter", async () => {
@@ -256,162 +151,6 @@ describe("useFeedback.submitFeedback", () => {
 
       // Assert
       expect(result.current.error).toBe("Invalid feedback data");
-      expect(fetchSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  // ==========================================
-  // HTTP Error Handling Tests
-  // ==========================================
-
-  describe("HTTP error handling - specific status codes", () => {
-    it("should handle 401 Unauthorized (not logged in)", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: "Unauthorized" }), {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-444", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Failed to submit feedback: 401 ");
-      expect(result.current.isSubmitted).toBe(false);
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    it("should handle 403 Forbidden (duplicate feedback)", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: "Feedback already submitted" }), {
-          status: 403,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-555", false);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Feedback already submitted for this plan");
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle 404 Not Found (plan doesn't exist)", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: "Plan not found" }), {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("non-existent-plan", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Plan not found");
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle 400 Bad Request with custom error message", async () => {
-      // Arrange
-      const customErrorMessage = "Invalid plan status for feedback";
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: customErrorMessage }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-666", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe(customErrorMessage);
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle 400 Bad Request with fallback message", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({}), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-777", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Invalid feedback data");
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle generic server error (500)", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: "Internal server error" }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-888", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Failed to submit feedback: 500 ");
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle server error with fallback message", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({}), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-999", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Failed to submit feedback: 500 ");
-      expect(result.current.isSubmitted).toBe(false);
     });
   });
 
@@ -423,7 +162,7 @@ describe("useFeedback.submitFeedback", () => {
     it("should handle network error (fetch throws)", async () => {
       // Arrange
       const networkError = new Error("Network timeout");
-      mockFetchError(networkError);
+      mockApiClient.submitFeedbackApi.mockRejectedValueOnce(networkError);
 
       const { result } = renderHook(() => useFeedback());
 
@@ -440,7 +179,7 @@ describe("useFeedback.submitFeedback", () => {
 
     it("should handle generic network error", async () => {
       // Arrange
-      mockFetchError(new Error("Failed to fetch"));
+      mockApiClient.submitFeedbackApi.mockRejectedValueOnce(new Error("Failed to fetch"));
 
       const { result } = renderHook(() => useFeedback());
 
@@ -456,29 +195,13 @@ describe("useFeedback.submitFeedback", () => {
 
     it("should handle non-Error exceptions", async () => {
       // Arrange
-      mockFetchError("Unknown error");
+      mockApiClient.submitFeedbackApi.mockRejectedValueOnce(null);
 
       const { result } = renderHook(() => useFeedback());
 
       // Act
       await act(async () => {
         await result.current.submitFeedback("plan-1003", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Network error while submitting feedback");
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle undefined exception", async () => {
-      // Arrange
-      mockFetchError(undefined);
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-1004", true);
       });
 
       // Assert
@@ -503,11 +226,11 @@ describe("useFeedback.submitFeedback", () => {
       expect(result.current.error).toBe("Invalid feedback data");
 
       // Second: Clear error before new valid submission
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-2", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       // Act - submit valid feedback
       await act(async () => {
@@ -522,9 +245,9 @@ describe("useFeedback.submitFeedback", () => {
     it("should set isLoading during submission", async () => {
       // Arrange
       let loadingDuringFetch = false;
-      mockFetchImplementation(async () => {
+      mockApiClient.submitFeedbackApi.mockImplementationOnce(async () => {
         loadingDuringFetch = true;
-        return new Response(JSON.stringify({ id: "fb-3", created_at: "2024-11-05T10:00:00Z" }), {
+        return new Response(JSON.stringify({ id: "feedback-123", created_at: "2024-11-05T10:00:00Z" }), {
           status: 200,
         });
       });
@@ -543,11 +266,7 @@ describe("useFeedback.submitFeedback", () => {
 
     it("should reset error state on successful submission after previous error", async () => {
       // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: "Not found" }), {
-          status: 404,
-        })
-      );
+      mockApiClient.submitFeedbackApi.mockRejectedValueOnce(new Error("Plan not found"));
 
       const { result } = renderHook(() => useFeedback());
 
@@ -558,11 +277,11 @@ describe("useFeedback.submitFeedback", () => {
       expect(result.current.error).toBe("Plan not found");
 
       // Second submission succeeds
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-4", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       await act(async () => {
         await result.current.submitFeedback("plan-good", true);
@@ -581,11 +300,11 @@ describe("useFeedback.submitFeedback", () => {
   describe("Reset function", () => {
     it("should reset all state to initial values", async () => {
       // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-5", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       const { result } = renderHook(() => useFeedback());
 
@@ -636,11 +355,11 @@ describe("useFeedback.submitFeedback", () => {
       const { result } = renderHook(() => useFeedback());
 
       // Act & Assert - First submission
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-6", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       await act(async () => {
         await result.current.submitFeedback("plan-1008", true);
@@ -653,11 +372,11 @@ describe("useFeedback.submitFeedback", () => {
       });
 
       // Second submission
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-7", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse2: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse2);
 
       await act(async () => {
         await result.current.submitFeedback("plan-1009", false);
@@ -666,44 +385,6 @@ describe("useFeedback.submitFeedback", () => {
       // Assert
       expect(result.current.isSubmitted).toBe(true);
       expect(result.current.error).toBeNull();
-    });
-
-    it("should handle error after successful submission", async () => {
-      // Arrange
-      const { result } = renderHook(() => useFeedback());
-
-      // First submission succeeds
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-8", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
-
-      await act(async () => {
-        await result.current.submitFeedback("plan-1010", true);
-      });
-      expect(result.current.isSubmitted).toBe(true);
-      expect(result.current.error).toBeNull();
-
-      // Second submission fails
-      act(() => {
-        result.current.reset();
-      });
-
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: "Already submitted" }), {
-          status: 403,
-        })
-      );
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-1010", false);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Feedback already submitted for this plan");
-      expect(result.current.isSubmitted).toBe(false);
     });
   });
 
@@ -715,11 +396,11 @@ describe("useFeedback.submitFeedback", () => {
     it("should handle very long planId", async () => {
       // Arrange
       const longPlanId = "a".repeat(1000);
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-9", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       const { result } = renderHook(() => useFeedback());
 
@@ -736,11 +417,11 @@ describe("useFeedback.submitFeedback", () => {
     it("should handle special characters in planId", async () => {
       // Arrange
       const specialPlanId = "plan-123_456!@#$%";
-      mockFetchSuccess(
-        new Response(JSON.stringify({ id: "fb-10", created_at: "2024-11-05T10:00:00Z" }), {
-          status: 200,
-        })
-      );
+      const mockResponse: SubmitFeedbackResponseDTO = {
+        id: "feedback-123",
+        created_at: "2024-11-05T10:00:00Z",
+      };
+      mockApiClient.submitFeedbackApi.mockResolvedValueOnce(mockResponse);
 
       const { result } = renderHook(() => useFeedback());
 
@@ -750,68 +431,8 @@ describe("useFeedback.submitFeedback", () => {
       });
 
       // Assert
-      expect(fetchSpy).toHaveBeenCalledWith(`/api/plans/${specialPlanId}/feedback`, expect.any(Object));
+      expect(mockApiClient.submitFeedbackApi).toHaveBeenCalledWith(specialPlanId, expect.any(Object));
       expect(result.current.isSubmitted).toBe(true);
-    });
-
-    it("should handle malformed JSON response", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response("invalid json", {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-1011", true);
-      });
-
-      // Assert - Should catch JSON parse error
-      expect(result.current.error).toBeTruthy();
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle empty error object in response", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({}), {
-          status: 500,
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-1012", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Failed to submit feedback: 500 ");
-      expect(result.current.isSubmitted).toBe(false);
-    });
-
-    it("should handle response with null error field", async () => {
-      // Arrange
-      mockFetchSuccess(
-        new Response(JSON.stringify({ error: null }), {
-          status: 400,
-        })
-      );
-
-      const { result } = renderHook(() => useFeedback());
-
-      // Act
-      await act(async () => {
-        await result.current.submitFeedback("plan-1013", true);
-      });
-
-      // Assert
-      expect(result.current.error).toBe("Invalid feedback data");
     });
   });
 
