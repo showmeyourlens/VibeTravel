@@ -1,11 +1,12 @@
 import { Button } from "../ui/button";
 import { logoutUser } from "../../lib/api-client";
+import { navigate } from "astro:transitions/client";
 
 export default function TopBar() {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      window.location.href = "/login";
+      navigate("/login");
     } catch (error) {
       console.error("Logout failed", error);
     }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchCities, generatePlan } from "@/lib/api-client";
 import type { CityDto, GenerateDraftPlanRequestDTO } from "@/types";
+import { navigate } from "astro:transitions/client";
 
 export interface PlanWizardViewModel {
   cityId: string | null;
@@ -101,7 +102,7 @@ export function usePlanWizard(): UsePlanWizardReturn {
       sessionStorage.setItem("planMetadata", JSON.stringify(formData));
 
       // Redirect to plan view
-      window.location.href = `/plans/view`;
+      navigate(`/plans/view`);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
       setError(errorMessage);

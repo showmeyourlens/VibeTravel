@@ -3,6 +3,7 @@ import "../styles/global.css";
 import SlideshowBackground from "../components/layout/SlideshowBackground.tsx";
 import type { ImageMetadata } from "astro";
 import TopBar from "../components/layout/TopBar.tsx";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -26,6 +27,7 @@ const imagePaths = Object.values(imageModules).map((image) => image.default.src)
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     {imagePaths.map((src) => <link rel="preload" as="image" href={src} />)}
+    <ClientRouter />
   </head>
   <body>
     {user && <TopBar client:load />}

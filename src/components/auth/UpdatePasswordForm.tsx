@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { updatePassword } from "../../lib/api-client";
 import { Button } from "../ui/button";
+import { navigate } from "astro:transitions/client";
 
 interface FormErrors {
   newPassword?: string;
@@ -53,7 +54,7 @@ export const UpdatePasswordForm: React.FC = () => {
       await updatePassword(newPassword);
       setIsSuccess(true);
       setTimeout(() => {
-        window.location.href = "/login";
+        navigate("/login");
       }, 2000);
     } catch (error) {
       if (error instanceof Error) {

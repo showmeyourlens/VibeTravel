@@ -12,6 +12,7 @@ import ActivityList from "./ActivityList";
 import PlanActions from "./PlanActions";
 import FeedbackWidget from "./FeedbackWidget";
 import { useItineraryState } from "../hooks/useItineraryState";
+import { navigate } from "astro:transitions/client";
 
 export function ItineraryView() {
   const [planData, setPlanData] = useState<PlanWithActivitiesDto | null>(null);
@@ -171,7 +172,7 @@ export function ItineraryView() {
       // Clear session storage and redirect to home
       sessionStorage.removeItem("generatedPlan");
       sessionStorage.removeItem("planMetadata");
-      window.location.href = "/";
+      navigate("/dashboard");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Network error while deleting";
 
@@ -268,7 +269,7 @@ export function ItineraryView() {
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8 p-6 bg-white border border-white/10 border-slate-200 rounded-lg shadow-2xl">
-          <a href="/" className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-block">
+          <a href="/dashboard" className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-block">
             ← Back to Dashboard
           </a>
           <h1 className="text-4xl font-bold text-slate-900">Your Trip Itinerary</h1>

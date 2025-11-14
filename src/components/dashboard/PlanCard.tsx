@@ -6,6 +6,7 @@
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchPlanById } from "@/lib/api-client";
 import type { PlanViewModel } from "./types";
+import { navigate } from "astro:transitions/client";
 
 interface PlanCardProps {
   plan: PlanViewModel;
@@ -14,7 +15,7 @@ interface PlanCardProps {
 const planClicked = async (plan: PlanViewModel) => {
   const planWithActivities = await fetchPlanById(plan.id);
   sessionStorage.setItem("generatedPlan", JSON.stringify(planWithActivities));
-  window.location.href = `/plans/view`;
+  navigate(`/plans/view?`);
 };
 
 export default function PlanCard({ plan }: PlanCardProps) {

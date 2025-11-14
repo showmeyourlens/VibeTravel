@@ -688,7 +688,7 @@ describe("ItineraryView Component", () => {
       await waitFor(() => {
         expect(sessionStorage.getItem("generatedPlan")).toBeNull();
         expect(sessionStorage.getItem("planMetadata")).toBeNull();
-        expect(window.location.href).toBe("/");
+        expect(window.location.href).toBe("/dashboard");
       });
     });
 
@@ -936,7 +936,7 @@ describe("ItineraryView Component", () => {
 
       // Assert
       expect(screen.getByText(/Back to Dashboard/i)).toBeInTheDocument();
-      expect(screen.getByText(/Back to Dashboard/i).closest("a")).toHaveAttribute("href", "/");
+      expect(screen.getByText(/Back to Dashboard/i).closest("a")).toHaveAttribute("href", "/dashboard");
     });
 
     it("should display correct page title", () => {

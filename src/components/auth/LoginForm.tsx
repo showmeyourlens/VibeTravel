@@ -22,7 +22,7 @@ export const LoginForm: React.FC = () => {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await loginUser(data.email, data.password);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An error occurred during login. Please try again.";
       setError("root.submit", {

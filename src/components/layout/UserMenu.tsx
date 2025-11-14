@@ -24,7 +24,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ isAuthenticated = false, onL
 
   return (
     <nav className="flex items-center gap-2" aria-label="User navigation">
-      <a href="/">
+      <a href="/dashboard">
         <Button variant="ghost" size="sm">
           My Plans
         </Button>

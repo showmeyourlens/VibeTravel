@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 
 // Public paths - Auth pages and auth API endpoints
 const PUBLIC_PATHS = [
+  "/",
   "/login",
   "/signup",
   "/forgot-password",

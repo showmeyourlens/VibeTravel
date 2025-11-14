@@ -50,7 +50,7 @@ export class LoginPage extends BasePage {
    * Wait for login to complete (redirect to dashboard)
    */
   async waitForLoginComplete(timeout = 30000) {
-    await this.waitForUrl("/", timeout);
+    await this.waitForUrl("/dashboard", timeout);
   }
 
   /**

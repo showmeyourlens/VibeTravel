@@ -10,6 +10,7 @@ import PlanList from "./PlanList.tsx";
 import EmptyState from "./EmptyState.tsx";
 import SkeletonLoader from "./SkeletonLoader.tsx";
 import { Panel } from "../ui/Panel.tsx";
+import { navigate } from "astro:transitions/client";
 
 export default function DashboardView() {
   const { plans, isLoading, error, isFetchingMore, hasMore, loadMore } = usePlans();
@@ -18,7 +19,7 @@ export default function DashboardView() {
   const handleCreateNewPlan = () => {
     setNavigatingToCreate(true);
     // Navigate to plan creation wizard
-    window.location.href = "/plans/new";
+    navigate("/plans/new");
   };
 
   // Show skeleton loader while initial data is loading
