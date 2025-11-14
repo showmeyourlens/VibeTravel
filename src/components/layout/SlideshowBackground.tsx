@@ -1,12 +1,52 @@
 import React, { useState, useEffect, useMemo } from "react";
 
 const SlideshowBackground: React.FC<{ images: string[] }> = ({ images }) => {
+  const [imageBlobs, setImageBlobs] = useState<string[]>([]);
+
+  useEffect(() => {
+    let isCancelled = false;
+    let createdBlobUrls: string[] = [];
+
+    const loadImages = async () => {
+      setImageBlobs([]);
+
+      const blobPromises = images.map(async (src) => {
+        try {
+          const response = await fetch(src);
+          if (!response.ok) return null;
+          const blob = await response.blob();
+          return URL.createObjectURL(blob);
+        } catch {
+          return null;
+        }
+      });
+
+      const urls = (await Promise.all(blobPromises)).filter(Boolean) as string[];
+      createdBlobUrls = urls;
+
+      if (!isCancelled) {
+        setImageBlobs(urls);
+      } else {
+        urls.forEach(URL.revokeObjectURL);
+      }
+    };
+
+    if (images.length > 0) {
+      loadImages();
+    }
+
+    return () => {
+      isCancelled = true;
+      createdBlobUrls.forEach(URL.revokeObjectURL);
+    };
+  }, [images]);
+
   const shuffledImages = useMemo(() => {
-    if (images && images.length > 0) {
-      return [...images].sort(() => Math.random() - 0.5);
+    if (imageBlobs && imageBlobs.length > 0) {
+      return [...imageBlobs].sort(() => Math.random() - 0.5);
     }
     return [];
-  }, [images]);
+  }, [imageBlobs]);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);

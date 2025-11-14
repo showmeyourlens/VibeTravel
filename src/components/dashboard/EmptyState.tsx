@@ -4,6 +4,7 @@
  */
 
 import { Button } from "@/components/ui/button";
+import { Panel } from "../ui/Panel";
 
 interface EmptyStateProps {
   onCreateNewPlan: () => void;
@@ -12,7 +13,7 @@ interface EmptyStateProps {
 export default function EmptyState({ onCreateNewPlan }: EmptyStateProps) {
   return (
     <div className="flex items-center justify-center">
-      <div className="text-center max-w-md mx-auto py-12">
+      <Panel className="text-center max-w-md mx-auto p-8">
         {/* Icon/Graphic */}
         <div className="mb-6">
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-blue-50 border-2 border-blue-200">
@@ -32,7 +33,7 @@ export default function EmptyState({ onCreateNewPlan }: EmptyStateProps) {
         <Button onClick={onCreateNewPlan} className="gap-2 w-full sm:w-auto" data-testid="btn-create-first-plan">
           <span>✨</span> Create Your First Plan
         </Button>
-      </div>
+      </Panel>
     </div>
   );
 }

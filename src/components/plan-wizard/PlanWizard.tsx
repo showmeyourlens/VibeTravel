@@ -6,6 +6,7 @@ import StepDuration from "./StepDuration.tsx";
 import StepIntensity from "./StepIntensity.tsx";
 import StepNotes from "./StepNotes.tsx";
 import LoadingOverlay from "./LoadingOverlay.tsx";
+import { Panel } from "../ui/Panel.tsx";
 
 const TOTAL_STEPS = 4;
 
@@ -17,13 +18,13 @@ export default function PlanWizard() {
   if (isFetching) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+        <Panel>
           <div className="inline-block">
             <div className="animate-spin">⏳</div>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mt-4">Loading wizard...</h2>
           <p className="text-slate-600 mt-2">Preparing your travel planning experience</p>
-        </div>
+        </Panel>
       </div>
     );
   }
@@ -32,14 +33,14 @@ export default function PlanWizard() {
   if (error && cities.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md">
+        <Panel>
           <div className="text-6xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-slate-900 mb-3">Unable to Load Wizard</h2>
           <p className="text-slate-600 mb-6">{error}</p>
           <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
             Try Again
           </Button>
-        </div>
+        </Panel>
       </div>
     );
   }
@@ -51,18 +52,18 @@ export default function PlanWizard() {
       <div className="min-h-screen py-12 px-4" data-testid="plan-wizard">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
-          <div className="mb-12">
+          <Panel className="mb-8">
             <h1 className="text-4xl font-bold text-slate-900 mb-3">Create Your Perfect Trip</h1>
             <p className="text-lg text-slate-600">Answer a few questions and let AI craft your ideal itinerary</p>
-          </div>
+          </Panel>
 
           {/* Step Indicator */}
-          <div className="mb-8">
+          <Panel className="mb-8">
             <StepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
-          </div>
+          </Panel>
 
           {/* Main Content Card */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8" data-testid="wizard-step-content">
+          <Panel className="mb-8" data-testid="wizard-step-content">
             {/* Error Alert */}
             {error && (
               <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
@@ -103,7 +104,7 @@ export default function PlanWizard() {
                 />
               )}
             </div>
-          </div>
+          </Panel>
 
           {/* Navigation Buttons */}
           {currentStep > 1 && (

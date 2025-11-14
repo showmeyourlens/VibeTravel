@@ -25,7 +25,7 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
           value={notes}
           onChange={(e) => onChange(e.target.value)}
           placeholder="e.g., I love museums and historic sites... I'm vegetarian... I prefer walkable areas..."
-          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          className="bg-white w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           rows={5}
         />
 
