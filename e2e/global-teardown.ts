@@ -13,6 +13,11 @@ import { createClient } from "@supabase/supabase-js";
  * This function is called after all tests have completed
  */
 export default async function globalTeardown(): Promise<void> {
+  if (process.env.SUPABASE_URL) {
+    console.warn("temporary disabled database cleanup");
+    return;
+  }
+
   const email = process.env.E2E_USERNAME;
   const password = process.env.E2E_PASSWORD;
 
