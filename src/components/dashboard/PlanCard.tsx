@@ -22,7 +22,7 @@ export default function PlanCard({ plan }: PlanCardProps) {
     <div className="group block h-full cursor-pointer">
       <Card
         onClick={() => planClicked(plan)}
-        className="transition-all group-hover:shadow-md group-hover:border-blue-300 h-full"
+        className="bg-white/90 transition-all group-hover:shadow-md group-hover:border-blue-300 h-full"
       >
         <CardHeader>
           <CardTitle className="transition-colors group-hover:text-blue-600">{plan.cityName}</CardTitle>
