@@ -73,6 +73,7 @@ This document summarizes the technical decisions made for implementing the user 
 ## Security Implementation
 
 ✅ All security best practices implemented:
+
 - Secure, httpOnly, sameSite cookies for JWT storage
 - Server-side session verification in middleware
 - Zod validation for all API inputs
@@ -83,6 +84,7 @@ This document summarizes the technical decisions made for implementing the user 
 ## File Structure
 
 New/Modified files:
+
 ```
 src/
 ├── db/

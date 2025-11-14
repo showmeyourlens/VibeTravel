@@ -27,7 +27,7 @@ export default function DashboardView() {
     return (
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="flex items-center justify-between mb-12">
-          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+          <h1 className="text-primary text-4xl font-bold">My Plans</h1>
           <Button disabled className="gap-2" data-testid="btn-create-new-plan">
             <span>✨</span> Create New Plan
           </Button>
@@ -42,7 +42,7 @@ export default function DashboardView() {
     return (
       <div className="container mx-auto px-4 py-12">
         <Panel className="flex items-center justify-between mb-12 p-8">
-          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+          <h1 className="text-primary text-4xl font-bold">My Plans</h1>
           <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
             <span>✨</span> Create New Plan
           </Button>
@@ -64,7 +64,7 @@ export default function DashboardView() {
     return (
       <div className="container mx-auto px-4 py-12">
         <Panel className="flex items-center justify-between mb-12 p-8">
-          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+          <h1 className="text-primary text-4xl font-bold">My Plans</h1>
           <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
             <span>✨</span> Create New Plan
           </Button>
@@ -78,7 +78,7 @@ export default function DashboardView() {
   return (
     <div className="container mx-auto px-4 py-12 ">
       <Panel className="flex items-center justify-between mb-12 p-8">
-        <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+        <h1 className="text-primary text-4xl font-bold">My Plans</h1>
         <Button
           onClick={handleCreateNewPlan}
           className="gap-2"

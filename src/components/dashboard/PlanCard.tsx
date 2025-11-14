@@ -23,10 +23,12 @@ export default function PlanCard({ plan }: PlanCardProps) {
     <div className="group block h-full cursor-pointer">
       <Card
         onClick={() => planClicked(plan)}
-        className="bg-white/90 transition-all group-hover:shadow-md group-hover:border-blue-300 h-full"
+        className="bg-card/90 border-2 transition-all group-hover:bg-card group-hover:shadow-lg group-hover:border-primary h-full"
       >
         <CardHeader>
-          <CardTitle className="transition-colors group-hover:text-blue-600">{plan.cityName}</CardTitle>
+          <CardTitle className="text-lg transition-colors text-secondary-foreground group-hover:text-primary">
+            {plan.cityName}
+          </CardTitle>
           <CardAction>
             <span
               className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
@@ -42,8 +44,8 @@ export default function PlanCard({ plan }: PlanCardProps) {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <p className="text-sm font-medium text-slate-600">{plan.displayDuration}</p>
-          <p className="text-xs text-slate-500 capitalize">{plan.tripIntensity} intensity</p>
+          <p className="text-sm font-medium text-slate-600 group-hover:text-primary">{plan.displayDuration}</p>
+          <p className="text-xs text-slate-500 capitalize group-hover:text-primary">{plan.tripIntensity} intensity</p>
         </CardContent>
         <CardFooter className="border-t pt-4">
           <p className="text-xs text-slate-500">{plan.displayCreatedAt}</p>

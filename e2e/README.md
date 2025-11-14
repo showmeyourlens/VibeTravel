@@ -24,7 +24,9 @@ e2e/
 ## Page Objects Overview
 
 ### BasePage
+
 Base class providing common functionality for all page objects:
+
 - Navigation methods (`goto()`, `getCurrentUrl()`)
 - Element interaction helpers (`clickByTestId()`, `fillByTestId()`, `getByTestId()`)
 - Wait helpers (`waitForTestId()`, `waitForTestIdHidden()`, `isTestIdVisible()`)
@@ -32,17 +34,22 @@ Base class providing common functionality for all page objects:
 - URL waiting (`waitForUrl()`)
 
 ### DashboardPage
+
 Handles dashboard/home page interactions:
+
 - Navigate to dashboard
 - Click "Create New Plan" button
 - Verify button visibility and enabled state
 - Start plan creation workflow
 
 **Key Elements:**
+
 - `btn-create-new-plan` - Create plan button
 
 ### PlanWizardPage
+
 Manages the multi-step plan creation wizard:
+
 - Navigate to wizard
 - Verify wizard is loaded
 - Navigate between steps (back button)
@@ -53,6 +60,7 @@ Manages the multi-step plan creation wizard:
 - Complete full wizard flow
 
 **Key Elements:**
+
 - `plan-wizard` - Main wizard container
 - `wizard-step-content` - Current step content
 - `btn-back` - Back navigation button
@@ -62,17 +70,22 @@ Manages the multi-step plan creation wizard:
 - `btn-generate-plan` - Generate plan button
 
 ### PlanGenerationPage
+
 Handles the AI plan generation process:
+
 - Wait for generation to start (loading overlay appears)
 - Check generation status
 - Wait for generation to complete (loading overlay disappears)
 - Full generation flow (start + complete)
 
 **Key Elements:**
+
 - `loading-overlay` - Loading overlay element
 
 ### ItineraryPage
+
 Manages the itinerary view after plan generation:
+
 - Navigate to itinerary page
 - Verify itinerary is loaded
 - Save plan
@@ -81,6 +94,7 @@ Manages the itinerary view after plan generation:
 - Complete save workflow
 
 **Key Elements:**
+
 - `itinerary-view` - Main itinerary container
 - `btn-save-plan` - Save plan button
 - `plan-saved-success` - Success message
@@ -88,31 +102,37 @@ Manages the itinerary view after plan generation:
 ## Running Tests
 
 ### Run all tests
+
 ```bash
 npm run test:e2e
 ```
 
 ### Run specific test file
+
 ```bash
 npm run test:e2e -- plan-creation.spec.ts
 ```
 
 ### Run tests in headed mode (see browser)
+
 ```bash
 npm run test:e2e -- --headed
 ```
 
 ### Run tests with debug mode
+
 ```bash
 npm run test:e2e -- --debug
 ```
 
 ### Run tests in UI mode (interactive)
+
 ```bash
 npm run test:e2e -- --ui
 ```
 
 ### Generate test code (codegen)
+
 ```bash
 npx playwright codegen http://localhost:4321
 ```
@@ -120,6 +140,7 @@ npx playwright codegen http://localhost:4321
 ## Test Examples
 
 ### Basic Plan Creation Test
+
 ```typescript
 test("should complete full plan creation and save workflow", async () => {
   // ARRANGE
@@ -133,7 +154,7 @@ test("should complete full plan creation and save workflow", async () => {
   await wizardPage.selectIntensity("half-day");
   await wizardPage.generatePlan();
   await generationPage.waitForFullGeneration();
-  
+
   // ASSERT
   await expect(itineraryPage.getByTestId("itinerary-view")).toBeVisible();
   await itineraryPage.savePlan();
@@ -162,14 +183,10 @@ Common utility functions available in `utils/test-helpers.ts`:
 ## Writing New Tests
 
 ### Template
+
 ```typescript
 import { test, expect } from "@playwright/test";
-import {
-  DashboardPage,
-  PlanWizardPage,
-  PlanGenerationPage,
-  ItineraryPage,
-} from "./page-objects";
+import { DashboardPage, PlanWizardPage, PlanGenerationPage, ItineraryPage } from "./page-objects";
 
 test.describe("Feature Name", () => {
   let dashboardPage: DashboardPage;
@@ -211,21 +228,25 @@ test.describe("Feature Name", () => {
 ## Debugging Tests
 
 ### View test report
+
 ```bash
 npx playwright show-report
 ```
 
 ### View trace of failed test
+
 ```bash
 npx playwright show-trace trace.zip
 ```
 
 ### Step through test in debugger
+
 ```bash
 npx playwright test --debug
 ```
 
 ### Use UI mode for interactive debugging
+
 ```bash
 npx playwright test --ui
 ```
@@ -256,6 +277,7 @@ E2E_PASSWORD=<test-user-password>
 ### Data Cleanup Details
 
 The cleanup process removes:
+
 - All `plans` records created by the test user
 - All `plan_activities` associated with deleted plans
 - All `plan_feedback` associated with deleted plans
@@ -275,6 +297,7 @@ await cleanupTestData("test-user@example.com", "password");
 ## Configuration
 
 Tests are configured in `playwright.config.ts`:
+
 - Base URL: `http://localhost:4321`
 - Browser: Chromium (Desktop Chrome)
 - Test directory: `./e2e`
@@ -287,6 +310,7 @@ Tests are configured in `playwright.config.ts`:
 ## CI/CD Integration
 
 Tests run automatically in CI with:
+
 - Single worker for consistency
 - 2 retries on failure
 - Trace collection for debugging
@@ -297,28 +321,36 @@ Local development uses parallel execution for speed.
 ## Test IDs Reference
 
 Full reference of all test IDs used in the application is available in:
+
 - `E2E_TEST_IDS_GUIDE.md` - Comprehensive guide with examples
 - `E2E_TEST_IDS_QUICK_REFERENCE.md` - Quick lookup table
 
 ## Troubleshooting
 
 ### Test times out during generation
+
 Increase timeout in `generationPage.waitForGenerationComplete(timeout)`:
+
 ```typescript
 await generationPage.waitForGenerationComplete(90000); // 90 seconds
 ```
 
 ### Element not found
+
 Verify the `data-testid` attribute exists on the component and matches the selector used in the test.
 
 ### Flaky tests
+
 Use `waitForElementStable()` helper to ensure elements are ready:
+
 ```typescript
 await waitForElementStable(page, "btn-save-plan");
 ```
 
 ### Visual differences
+
 Use `--update-snapshots` flag to update baseline screenshots:
+
 ```bash
 npx playwright test --update-snapshots
 ```
@@ -326,9 +358,9 @@ npx playwright test --update-snapshots
 ## Contributing
 
 When adding new features:
+
 1. Add `data-testid` attributes to components
 2. Create or update page object methods
 3. Add test cases covering the new feature
 4. Update this README with new test IDs
 5. Run tests locally before pushing: `npm run test:e2e`
-

@@ -17,7 +17,7 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
         {/* Half Day Option */}
         <Button
           onClick={() => onSelect("half day")}
-          variant={selectedIntensity === "half day" ? "default" : "outline"}
+          variant="outline"
           className="h-auto py-6 px-4 flex flex-col items-center justify-center space-y-2"
           data-testid="btn-select-intensity-half-day"
         >
@@ -29,7 +29,7 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
         {/* Full Day Option */}
         <Button
           onClick={() => onSelect("full day")}
-          variant={selectedIntensity === "full day" ? "default" : "outline"}
+          variant="outline"
           className="h-auto py-6 px-4 flex flex-col items-center justify-center space-y-2"
           data-testid="btn-select-intensity-full-day"
         >
@@ -40,7 +40,7 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
       </div>
 
       {selectedIntensity !== null && (
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mt-6 p-4 bg-primary/50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-900">
             <span className="font-semibold capitalize">{selectedIntensity}</span> intensity selected -{" "}
             {selectedIntensity === "half day"

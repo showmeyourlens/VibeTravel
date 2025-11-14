@@ -96,7 +96,6 @@ In the project directory, you can run:
 ### Out of Scope for MVP
 
 - Monetization & payment processing
-- Password recovery (“Forgot Password”)
 - Advanced editing (drag-and-drop UI)
 - Social login providers (e.g., Google, Facebook)
 - Real-time data (traffic, live schedules)

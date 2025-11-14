@@ -59,6 +59,8 @@ export function usePlanWizard(): UsePlanWizardReturn {
   const handlePrev = useCallback(() => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+    } else {
+      navigate("/dashboard");
     }
   }, [currentStep]);
 

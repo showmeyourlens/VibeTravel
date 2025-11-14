@@ -4,6 +4,7 @@
  */
 
 import type { PlanDto } from "@/types";
+import { Panel } from "../ui/Panel";
 
 interface PlanMetadataProps {
   plan: PlanDto;
@@ -12,7 +13,7 @@ interface PlanMetadataProps {
 
 export default function PlanMetadata({ plan, userNotes }: PlanMetadataProps) {
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200 mb-8">
+    <Panel className="mb-8 text-left">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Destination - use city_id as fallback */}
         <div>
@@ -42,6 +43,6 @@ export default function PlanMetadata({ plan, userNotes }: PlanMetadataProps) {
           <p className="text-slate-700 mt-2">{userNotes}</p>
         </div>
       )}
-    </div>
+    </Panel>
   );
 }

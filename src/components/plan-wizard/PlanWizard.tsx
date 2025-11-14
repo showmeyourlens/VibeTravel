@@ -107,13 +107,12 @@ export default function PlanWizard() {
           </Panel>
 
           {/* Navigation Buttons */}
-          {currentStep > 1 && (
-            <div className="flex justify-start">
-              <Button onClick={handlePrev} variant="outline" disabled={isLoading} data-testid="btn-back">
-                ← Back
-              </Button>
-            </div>
-          )}
+
+          <div className="flex justify-start">
+            <Button onClick={handlePrev} variant="outline" disabled={isLoading} data-testid="btn-back">
+              ← Back
+            </Button>
+          </div>
         </div>
       </div>
     </>

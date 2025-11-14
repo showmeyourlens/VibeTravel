@@ -11,16 +11,16 @@ export default function StepDuration({ selectedDuration, onSelect }: StepDuratio
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">How long is your trip?</h2>
+        <h2 className="text-2xl font-bold mb-2">How long is your trip?</h2>
         <p className="text-slate-600">Select the duration of your stay</p>
       </div>
 
-      <div className="flex flex-wrap gap-3 mt-6 justify-center sm:justify-start">
+      <div className="flex flex-wrap gap-3 mt-6 justify-center">
         {DURATION_OPTIONS.map((days) => (
           <Button
             key={days}
             onClick={() => onSelect(days)}
-            variant={selectedDuration === days ? "default" : "outline"}
+            variant="outline"
             size="lg"
             className="min-w-[100px] h-auto py-8 flex flex-col items-center justify-center"
             data-testid={`btn-select-duration-${days}`}
@@ -32,8 +32,8 @@ export default function StepDuration({ selectedDuration, onSelect }: StepDuratio
       </div>
 
       {selectedDuration !== null && (
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-900">
+        <div className="mt-6 p-4 bg-primary/50 border rounded-lg">
+          <p className="text-sm">
             <span className="font-semibold">
               {selectedDuration} {selectedDuration === 1 ? "day" : "days"}
             </span>{" "}

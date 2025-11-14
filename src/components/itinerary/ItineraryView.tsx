@@ -13,6 +13,7 @@ import PlanActions from "./PlanActions";
 import FeedbackWidget from "./FeedbackWidget";
 import { useItineraryState } from "../hooks/useItineraryState";
 import { navigate } from "astro:transitions/client";
+import { Panel } from "../ui/Panel";
 
 export function ItineraryView() {
   const [planData, setPlanData] = useState<PlanWithActivitiesDto | null>(null);
@@ -249,7 +250,7 @@ export function ItineraryView() {
               <div className="text-6xl mb-4">⚠️</div>
               <h2 className="text-2xl font-bold text-slate-900 mb-3">Unable to Load Plan</h2>
               <p className="text-slate-600 mb-6">{error}</p>
-              <a href="/plans/new" className="text-blue-600 hover:text-blue-800 underline">
+              <a href="/plans/new" className="text-primary hover:text-blue-800 underline">
                 Create a new plan
               </a>
             </>
@@ -268,12 +269,12 @@ export function ItineraryView() {
     <div className="min-h-screen py-12 px-4" data-testid="itinerary-view">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-8 p-6 bg-white border border-white/10 border-slate-200 rounded-lg shadow-2xl">
-          <a href="/dashboard" className="text-blue-600 hover:text-blue-800 text-sm mb-4 inline-block">
+        <Panel className="mb-8 text-left">
+          <a href="/dashboard" className="text-primary hover:text-secondary text-sm mb-4 inline-block">
             ← Back to Dashboard
           </a>
-          <h1 className="text-4xl font-bold text-slate-900">Your Trip Itinerary</h1>
-        </div>
+          <h1 className="text-4xl font-bold">Your Trip Itinerary</h1>
+        </Panel>
 
         {/* Success Message */}
         {saveSuccess && (
@@ -311,8 +312,8 @@ export function ItineraryView() {
         />
 
         {/* Activities List */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Activities</h2>
+        <Panel className="mb-8 text-left">
+          <h2 className="text-2xl font-bold mb-6">Activities</h2>
           <ActivityList
             days={days}
             isEditing={isEditing || isDraft}
@@ -320,7 +321,7 @@ export function ItineraryView() {
             onMoveDown={handleMoveDown}
             onDelete={handleDelete}
           />
-        </div>
+        </Panel>
 
         {/* Feedback Widget */}
         <FeedbackWidget hasFeedback={hasFeedback} />

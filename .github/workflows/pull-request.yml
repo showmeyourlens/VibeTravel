@@ -1,7 +1,7 @@
 name: Pull Request CI
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -20,8 +20,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -40,8 +40,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -74,8 +74,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -116,11 +116,11 @@ jobs:
           LINT_STATUS="${{ needs.lint.result }}"
           UNIT_STATUS="${{ needs.unit-test.result }}"
           E2E_STATUS="${{ needs.e2e-test.result }}"
-          
+
           echo "lint_status=$LINT_STATUS" >> $GITHUB_OUTPUT
           echo "unit_status=$UNIT_STATUS" >> $GITHUB_OUTPUT
           echo "e2e_status=$E2E_STATUS" >> $GITHUB_OUTPUT
-          
+
           if [ "$LINT_STATUS" == "success" ] && [ "$UNIT_STATUS" == "success" ] && [ "$E2E_STATUS" == "success" ]; then
             echo "overall_status=success" >> $GITHUB_OUTPUT
             echo "status_emoji=✅" >> $GITHUB_OUTPUT
@@ -138,33 +138,32 @@ jobs:
             const e2eStatus = '${{ steps.check-status.outputs.e2e_status }}';
             const overallStatus = '${{ steps.check-status.outputs.overall_status }}';
             const statusEmoji = '${{ steps.check-status.outputs.status_emoji }}';
-            
+
             const getStatusEmoji = (status) => {
               if (status === 'success') return '✅';
               if (status === 'failure') return '❌';
               if (status === 'cancelled') return '⚠️';
               return '⏭️';
             };
-            
+
             const comment = `## ${statusEmoji} Pull Request CI Results
-            
+
             | Job | Status |
             |-----|--------|
             | Lint | ${getStatusEmoji(lintStatus)} ${lintStatus} |
             | Unit Tests | ${getStatusEmoji(unitStatus)} ${unitStatus} |
             | E2E Tests | ${getStatusEmoji(e2eStatus)} ${e2eStatus} |
-            
+
             **Overall Status:** ${statusEmoji} ${overallStatus.toUpperCase()}
-            
+
             ${overallStatus === 'success' ? '🎉 All checks passed! This PR is ready for review.' : '⚠️ Some checks failed. Please review the logs above.'}
-            
+
             ---
             *Workflow run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: comment
             });
-

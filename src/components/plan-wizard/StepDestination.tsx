@@ -34,7 +34,7 @@ export default function StepDestination({ cities, selectedCityId, onSelect }: St
       </div>
 
       {sortedCities.length === 0 && (
-        <div className="text-center py-8 text-slate-600">
+        <div className="text-center py-8">
           <p>No destinations available at the moment.</p>
         </div>
       )}

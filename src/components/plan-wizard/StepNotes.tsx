@@ -43,8 +43,8 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
         )}
       </div>
 
-      <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-        <p className="text-sm text-amber-900">
+      <div className="mt-6 p-4 bg-secondary-foreground/50 border rounded-lg">
+        <p className="text-sm text-secondary">
           💡 <span className="font-semibold">Pro tip:</span> The more details you provide, the better we can personalize
           your itinerary!
         </p>

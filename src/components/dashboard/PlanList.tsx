@@ -6,6 +6,7 @@
 import { useEffect, useRef } from "react";
 import type { PlanViewModel } from "./types";
 import PlanCard from "./PlanCard.tsx";
+import { Panel } from "../ui/Panel.tsx";
 
 interface PlanListProps {
   plans: PlanViewModel[];
@@ -62,9 +63,9 @@ export default function PlanList({ plans, onLoadMore, isFetchingMore, hasMore }:
           </div>
         )}
         {!hasMore && plans.length > 0 && (
-          <div className="bg-white p-6 rounded-lg border border-white/10 border-slate-200">
-            <p className="bg-white text-sm bg-white/10 font-semibold">You&apos;ve reached the end of your plans</p>
-          </div>
+          <Panel>
+            <p className="text-sm font-semibold">You&apos;ve reached the end of your plans</p>
+          </Panel>
         )}
       </div>
     </div>

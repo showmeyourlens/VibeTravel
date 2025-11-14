@@ -16,7 +16,7 @@ export default function EmptyState({ onCreateNewPlan }: EmptyStateProps) {
       <Panel className="text-center max-w-md mx-auto p-8">
         {/* Icon/Graphic */}
         <div className="mb-6">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-blue-50 border-2 border-blue-200">
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-secondary border-2">
             <span className="text-5xl">🗺️</span>
           </div>
         </div>
