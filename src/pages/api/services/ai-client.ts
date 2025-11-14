@@ -274,7 +274,8 @@ ${userNotesSection}
     return lng;
   }
 
-  private generateMockResponse(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private generateMockResponse(prompt: string): string {
     const content = `
       [
         {

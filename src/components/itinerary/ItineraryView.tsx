@@ -314,7 +314,7 @@ export function ItineraryView() {
           <h2 className="text-2xl font-bold text-slate-900 mb-6">Activities</h2>
           <ActivityList
             days={days}
-            isEditing={isEditing}
+            isEditing={isEditing || isDraft}
             onMoveUp={handleMoveUp}
             onMoveDown={handleMoveDown}
             onDelete={handleDelete}

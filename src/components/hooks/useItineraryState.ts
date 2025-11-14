@@ -33,7 +33,7 @@ function groupActivitiesByDay(activities: PlanActivityDTO[]): DayViewModel[] {
 
   // Group activities by day
   activities.forEach((activity) => {
-    activity.id = activity.id ?? crypto.randomUUID();
+    activity.id = activity.id == "" ? crypto.randomUUID() : activity.id;
     if (!grouped.has(activity.day_number)) {
       grouped.set(activity.day_number, []);
     }
