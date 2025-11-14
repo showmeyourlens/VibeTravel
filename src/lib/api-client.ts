@@ -499,3 +499,24 @@ export async function updatePassword(newPassword: string): Promise<void> {
     throw error;
   }
 }
+
+/**
+ * Logout user
+ * @returns Promise<void> - Redirects on success
+ * @throws Error if the API call fails
+ */
+export async function logoutUser(): Promise<void> {
+  try {
+    const response = await fetch(`${API_BASE}/api/auth/logout`, {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error("Logout failed");
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Error logging out:", error);
+    throw error;
+  }
+}

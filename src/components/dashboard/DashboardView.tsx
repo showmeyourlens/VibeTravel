@@ -24,16 +24,14 @@ export default function DashboardView() {
   // Show skeleton loader while initial data is loading
   if (isLoading) {
     return (
-      <div className="min-h-screen">
-        <div className="container mx-auto px-4 py-12 max-w-7xl">
-          <div className="flex items-center justify-between mb-12">
-            <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-            <Button disabled className="gap-2" data-testid="btn-create-new-plan">
-              <span>✨</span> Create New Plan
-            </Button>
-          </div>
-          <SkeletonLoader />
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
+        <div className="flex items-center justify-between mb-12">
+          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+          <Button disabled className="gap-2" data-testid="btn-create-new-plan">
+            <span>✨</span> Create New Plan
+          </Button>
         </div>
+        <SkeletonLoader />
       </div>
     );
   }
@@ -41,22 +39,20 @@ export default function DashboardView() {
   // Show error state
   if (error && plans.length === 0) {
     return (
-      <div className="min-h-screen">
-        <div className="container mx-auto px-4 py-12">
-          <Panel className="flex items-center justify-between mb-12 p-8">
-            <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-            <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
-              <span>✨</span> Create New Plan
-            </Button>
-          </Panel>
-          <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md mx-auto">
-            <div className="text-6xl mb-4">⚠️</div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-3">Oops! Something went wrong</h2>
-            <p className="text-slate-600 mb-6">{error}</p>
-            <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
-              Try Again
-            </Button>
-          </div>
+      <div className="container mx-auto px-4 py-12">
+        <Panel className="flex items-center justify-between mb-12 p-8">
+          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+          <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
+            <span>✨</span> Create New Plan
+          </Button>
+        </Panel>
+        <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md mx-auto">
+          <div className="text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-3">Oops! Something went wrong</h2>
+          <p className="text-slate-600 mb-6">{error}</p>
+          <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
+            Try Again
+          </Button>
         </div>
       </div>
     );
@@ -65,45 +61,41 @@ export default function DashboardView() {
   // Show empty state if no plans exist
   if (plans.length === 0) {
     return (
-      <div className="min-h-screen">
-        <div className="container mx-auto px-4 py-12">
-          <Panel className="flex items-center justify-between mb-12 p-8">
-            <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-            <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
-              <span>✨</span> Create New Plan
-            </Button>
-          </Panel>
-          <EmptyState onCreateNewPlan={handleCreateNewPlan} />
-        </div>
+      <div className="container mx-auto px-4 py-12">
+        <Panel className="flex items-center justify-between mb-12 p-8">
+          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+          <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
+            <span>✨</span> Create New Plan
+          </Button>
+        </Panel>
+        <EmptyState onCreateNewPlan={handleCreateNewPlan} />
       </div>
     );
   }
 
   // Show plan list
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-12 ">
-        <Panel className="flex items-center justify-between mb-12 p-8">
-          <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
-          <Button
-            onClick={handleCreateNewPlan}
-            className="gap-2"
-            disabled={navigatingToCreate}
-            data-testid="btn-create-new-plan"
-          >
-            <span>✨</span> {navigatingToCreate ? "Loading..." : "Create New Plan"}
-          </Button>
-        </Panel>
+    <div className="container mx-auto px-4 py-12 ">
+      <Panel className="flex items-center justify-between mb-12 p-8">
+        <h1 className="text-4xl font-bold text-slate-900">My Plans</h1>
+        <Button
+          onClick={handleCreateNewPlan}
+          className="gap-2"
+          disabled={navigatingToCreate}
+          data-testid="btn-create-new-plan"
+        >
+          <span>✨</span> {navigatingToCreate ? "Loading..." : "Create New Plan"}
+        </Button>
+      </Panel>
 
-        {/* Display error message if one occurs during pagination */}
-        {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-            <p className="font-semibold">⚠️ Error loading more plans: {error}</p>
-          </div>
-        )}
+      {/* Display error message if one occurs during pagination */}
+      {error && (
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+          <p className="font-semibold">⚠️ Error loading more plans: {error}</p>
+        </div>
+      )}
 
-        <PlanList plans={plans} onLoadMore={loadMore} isFetchingMore={isFetchingMore} hasMore={hasMore} />
-      </div>
+      <PlanList plans={plans} onLoadMore={loadMore} isFetchingMore={isFetchingMore} hasMore={hasMore} />
     </div>
   );
 }
