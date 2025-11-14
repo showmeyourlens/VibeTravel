@@ -84,7 +84,7 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
         message: error instanceof Error ? error.message : "Unknown error during plan generation",
         severity: "error",
         stackTrace: error instanceof Error ? error.stack : undefined,
-        payload: { command },
+        payload: command,
       });
 
       return new Response(JSON.stringify({ error: "Internal server error" } as ErrorResponseDTO), {

@@ -84,7 +84,6 @@ create table llm_error_logs (
   id uuid primary key default gen_random_uuid(),
   occurred_at timestamptz not null default now(),
   user_id uuid references auth.users(id),
-  plan_id uuid references plans(id),
   message text not null,
   request_payload jsonb,
   response_payload jsonb
@@ -275,27 +274,6 @@ create policy delete_own_feedback on plan_feedback
   for delete
   to authenticated
   using (auth.uid() = user_id);
-
--- llm_error_logs: Restricted to service role for writes, admins for reads
-alter table llm_error_logs enable row level security;
-
--- Allow service role to insert error logs (backend logging only)
-create policy insert_llm_errors on llm_error_logs
-  for insert
-  to service_role
-  with check (true);
-
--- Note: Admin access requires custom Supabase role configuration
--- This policy will need adjustment based on your admin role implementation
-
--- app_error_logs: Restricted to service role for writes, admins for reads
-alter table app_error_logs enable row level security;
-
--- Allow service role to insert error logs (backend logging only)
-create policy insert_app_errors on app_error_logs
-  for insert
-  to service_role
-  with check (true);
 
 -- Note: Admin access requires custom Supabase role configuration
 -- This policy will need adjustment based on your admin role implementation

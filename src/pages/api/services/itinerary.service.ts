@@ -76,19 +76,14 @@ export class ItineraryService {
     requestPayload: Record<string, unknown>,
     responsePayload?: Record<string, unknown>
   ): Promise<void> {
-    // Simulate async DB logging with a delay
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
     // Mock: log error details to the server console
     // In production, replace with Supabase 'llm_error_logs' insert
     // and error handling.
     // Use error instanceof Error to provide a message and stack, otherwise stringified
-    const errorInfo =
-      error instanceof Error ? { message: error.message, stack: error.stack } : { message: String(error) };
 
     await this.supabase.from("llm_error_logs").insert({
-      message: errorInfo.message,
-      plan_id: null,
+      message: error instanceof Error ? error.message : String(error),
+      occurred_at: new Date().toISOString(),
       request_payload: JSON.stringify(requestPayload), //todo: check if this works
       response_payload: JSON.stringify(responsePayload), //todo: check if this works
       user_id: userId,

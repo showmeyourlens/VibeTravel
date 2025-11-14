@@ -9,7 +9,7 @@ export interface LogAppErrorParams {
   message: string;
   severity: Database["public"]["Enums"]["log_severity_enum"];
   stackTrace?: string;
-  payload?: Record<string, unknown>;
+  payload?: object;
   planId?: string;
 }
 
@@ -23,30 +23,15 @@ export async function logAppError(supabase: SupabaseClient, params: LogAppErrorP
     // Simulate async DB logging with a delay
     await new Promise((resolve) => setTimeout(resolve, 50));
 
-    // Mock: log error details to the server console
-    // In production, replace with Supabase 'app_error_logs' insert
-    // eslint-disable-next-line no-console
-    console.error("Mock App Error Log:", {
-      occurrence: new Date().toISOString(),
-      userId: params.userId || null,
-      planId: params.planId || null,
-      severity: params.severity,
-      message: params.message,
-      stackTrace: params.stackTrace || null,
-      payload: params.payload || null,
-    });
-
-    // Production implementation (commented out for now):
-    /*
-    await supabase.from('app_error_logs').insert({
+    await supabase.from("app_error_logs").insert({
       user_id: params.userId || null,
       plan_id: params.planId || null,
       severity: params.severity,
       message: params.message,
       stack_trace: params.stackTrace || null,
-      payload: params.payload || null,
+      payload: JSON.stringify(params.payload) || null,
+      occurred_at: new Date().toISOString(),
     });
-    */
   } catch (logError) {
     // Failed to log error - log to console as fallback
     // eslint-disable-next-line no-console
