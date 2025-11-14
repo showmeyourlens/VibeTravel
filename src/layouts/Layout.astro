@@ -9,9 +9,10 @@ interface Props {
 
 const { title = "VibeTravel" } = Astro.props;
 
-//TODO: import meta glob
-const images = await Astro.glob<{ default: ImageMetadata }>("../../public/assets/backgrounds/*.webp");
-const imagePaths = images.map((image) => image.default.src);
+const imageModules = import.meta.glob<{ default: ImageMetadata }>("../../public/assets/backgrounds/*.webp", {
+  eager: true,
+});
+const imagePaths = Object.values(imageModules).map((image) => image.default.src);
 ---
 
 <!doctype html>
