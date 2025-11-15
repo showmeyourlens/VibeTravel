@@ -26,7 +26,7 @@ export default function PlanCard({ plan }: PlanCardProps) {
         className="bg-card/90 border-2 transition-all group-hover:bg-card group-hover:shadow-lg group-hover:border-primary h-full"
       >
         <CardHeader>
-          <CardTitle className="text-lg transition-colors text-secondary-foreground group-hover:text-primary">
+          <CardTitle className="text-secondary-foreground text-lg transition-colors group-hover:text-primary">
             {plan.cityName}
           </CardTitle>
           <CardAction>
@@ -36,7 +36,7 @@ export default function PlanCard({ plan }: PlanCardProps) {
                   ? "bg-green-100 text-green-800"
                   : plan.status === "draft"
                     ? "bg-amber-100 text-amber-800"
-                    : "bg-slate-100 text-slate-800"
+                    : "bg-slate-100 "
               }`}
             >
               {plan.status.charAt(0).toUpperCase() + plan.status.slice(1)}
@@ -44,11 +44,15 @@ export default function PlanCard({ plan }: PlanCardProps) {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <p className="text-sm font-medium text-slate-600 group-hover:text-primary">{plan.displayDuration}</p>
-          <p className="text-xs text-slate-500 capitalize group-hover:text-primary">{plan.tripIntensity} intensity</p>
+          <p className="text-secondary-foreground text-sm font-medium group-hover:text-primary">
+            {plan.displayDuration}
+          </p>
+          <p className="text-secondary-foreground text-xs capitalize group-hover:text-primary">
+            {plan.tripIntensity} intensity
+          </p>
         </CardContent>
         <CardFooter className="border-t pt-4">
-          <p className="text-xs text-slate-500">{plan.displayCreatedAt}</p>
+          <p className="text-secondary-foreground text-xs group-hover:text-primary">{plan.displayCreatedAt}</p>
         </CardFooter>
       </Card>
     </div>

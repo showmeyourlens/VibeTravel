@@ -248,16 +248,16 @@ export function ItineraryView() {
           {error ? (
             <>
               <div className="text-6xl mb-4">⚠️</div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-3">Unable to Load Plan</h2>
-              <p className="text-slate-600 mb-6">{error}</p>
-              <a href="/plans/new" className="text-primary hover:text-blue-800 underline">
+              <h2 className="text-2xl font-bold mb-3">Unable to Load Plan</h2>
+              <p className="mb-6">{error}</p>
+              <a href="/plans/new" className="text-primary underline">
                 Create a new plan
               </a>
             </>
           ) : (
             <>
               <div className="animate-spin text-4xl mb-4">⏳</div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-3">Loading your plan...</h2>
+              <h2 className="text-2xl font-bold mb-3">Loading your plan...</h2>
             </>
           )}
         </div>
@@ -270,7 +270,7 @@ export function ItineraryView() {
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <Panel className="mb-8 text-left">
-          <a href="/dashboard" className="text-primary hover:text-secondary text-sm mb-4 inline-block">
+          <a href="/dashboard" className="text-primary hover:text-accent text-sm mb-4 inline-block">
             ← Back to Dashboard
           </a>
           <h1 className="text-4xl font-bold">Your Trip Itinerary</h1>

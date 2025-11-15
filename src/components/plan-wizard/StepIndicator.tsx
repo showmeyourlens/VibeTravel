@@ -10,10 +10,10 @@ export default function StepIndicator({ currentStep, totalSteps }: StepIndicator
     <div className="space-y-3">
       {/* Progress Text */}
       <div className="flex justify-between items-center">
-        <p className="text-sm font-semibold text-slate-700">
+        <p className="text-sm font-semibold">
           Step {currentStep} of {totalSteps}
         </p>
-        <p className="text-sm text-slate-600">{progress.toFixed(0)}%</p>
+        <p className="text-sm">{progress.toFixed(0)}%</p>
       </div>
 
       {/* Progress Bar */}

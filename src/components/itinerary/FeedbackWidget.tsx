@@ -64,7 +64,7 @@ export default function FeedbackWidget({
         <div className="space-y-4">
           {/* Feedback Question */}
           <div>
-            <h3 className="text-slate-900 font-semibold text-sm leading-tight mb-4">Was this plan helpful?</h3>
+            <h3 className="font-semibold text-sm leading-tight mb-4">Was this plan helpful?</h3>
           </div>
 
           {/* Error Message */}
@@ -99,7 +99,7 @@ export default function FeedbackWidget({
           </div>
 
           {/* Helper Text */}
-          <p className="text-slate-500 text-xs text-center">Your feedback helps us improve</p>
+          <p className=" text-xs text-center">Your feedback helps us improve</p>
         </div>
       </div>
     </div>

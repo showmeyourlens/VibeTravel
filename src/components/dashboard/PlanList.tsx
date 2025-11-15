@@ -57,8 +57,8 @@ export default function PlanList({ plans, onLoadMore, isFetchingMore, hasMore }:
       {/* Sentinel element for infinite scroll trigger */}
       <div ref={sentinelRef} className="flex justify-center py-8">
         {isFetchingMore && (
-          <div className="flex items-center gap-2 text-slate-600">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-300 border-t-blue-600"></div>
+          <div className="flex items-center gap-2">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary"></div>
             <span>Loading more plans...</span>
           </div>
         )}

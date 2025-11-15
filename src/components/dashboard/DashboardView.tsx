@@ -27,7 +27,7 @@ export default function DashboardView() {
     return (
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="flex items-center justify-between mb-12">
-          <h1 className="text-primary text-4xl font-bold">My Plans</h1>
+          <h1 className="text-secondary-foreground text-4xl font-bold">My Plans</h1>
           <Button disabled className="gap-2" data-testid="btn-create-new-plan">
             <span>✨</span> Create New Plan
           </Button>
@@ -42,15 +42,15 @@ export default function DashboardView() {
     return (
       <div className="container mx-auto px-4 py-12">
         <Panel className="flex items-center justify-between mb-12 p-8">
-          <h1 className="text-primary text-4xl font-bold">My Plans</h1>
+          <h1 className="text-secondary-foreground text-4xl font-bold">My Plans</h1>
           <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
             <span>✨</span> Create New Plan
           </Button>
         </Panel>
         <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-md mx-auto">
           <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-3">Oops! Something went wrong</h2>
-          <p className="text-slate-600 mb-6">{error}</p>
+          <h2 className="text-2xl font-bold  mb-3">Oops! Something went wrong</h2>
+          <p className=" mb-6">{error}</p>
           <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
             Try Again
           </Button>
@@ -64,7 +64,7 @@ export default function DashboardView() {
     return (
       <div className="container mx-auto px-4 py-12">
         <Panel className="flex items-center justify-between mb-12 p-8">
-          <h1 className="text-primary text-4xl font-bold">My Plans</h1>
+          <h1 className="text-secondary-foreground text-4xl font-bold">My Plans</h1>
           <Button onClick={handleCreateNewPlan} className="gap-2" data-testid="btn-create-new-plan">
             <span>✨</span> Create New Plan
           </Button>
@@ -78,7 +78,7 @@ export default function DashboardView() {
   return (
     <div className="container mx-auto px-4 py-12 ">
       <Panel className="flex items-center justify-between mb-12 p-8">
-        <h1 className="text-primary text-4xl font-bold">My Plans</h1>
+        <h1 className="text-secondary-foreground text-4xl font-bold">My Plans</h1>
         <Button
           onClick={handleCreateNewPlan}
           className="gap-2"

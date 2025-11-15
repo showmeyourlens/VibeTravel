@@ -13,7 +13,7 @@ export default function TopBar() {
   };
 
   return (
-    <header className="sticky bg-white/90 top-0 left-0 right-0 bg-transparent p-2 flex justify-end z-50">
+    <header className="sticky bg-primary border-color-secondary shadow-lg border-b-2 top-0 left-0 right-0 p-4 flex justify-end z-50">
       <Button variant="outline" onClick={handleLogout}>
         Logout
       </Button>

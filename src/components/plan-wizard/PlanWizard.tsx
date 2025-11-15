@@ -22,8 +22,8 @@ export default function PlanWizard() {
           <div className="inline-block">
             <div className="animate-spin">⏳</div>
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mt-4">Loading wizard...</h2>
-          <p className="text-slate-600 mt-2">Preparing your travel planning experience</p>
+          <h2 className="text-2xl font-bold mt-4">Loading wizard...</h2>
+          <p className="mt-2">Preparing your travel planning experience</p>
         </Panel>
       </div>
     );
@@ -35,8 +35,8 @@ export default function PlanWizard() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <Panel>
           <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-3">Unable to Load Wizard</h2>
-          <p className="text-slate-600 mb-6">{error}</p>
+          <h2 className="text-2xl font-bold mb-3">Unable to Load Wizard</h2>
+          <p className="mb-6">{error}</p>
           <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
             Try Again
           </Button>
@@ -53,8 +53,8 @@ export default function PlanWizard() {
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <Panel className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900 mb-3">Create Your Perfect Trip</h1>
-            <p className="text-lg text-slate-600">Answer a few questions and let AI craft your ideal itinerary</p>
+            <h1 className="text-4xl font-bold  mb-3">Create Your Perfect Trip</h1>
+            <p className="text-lg ">Answer a few questions and let AI craft your ideal itinerary</p>
           </Panel>
 
           {/* Step Indicator */}

@@ -11,12 +11,12 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Any special preferences?</h2>
-        <p className="text-slate-600">Tell us anything we should know about your trip (optional)</p>
+        <h2 className="text-2xl font-bold  mb-2">Any special preferences?</h2>
+        <p>Tell us anything we should know about your trip (optional)</p>
       </div>
 
       <div className="mt-6 space-y-3">
-        <label htmlFor="user-notes" className="block text-sm font-semibold text-slate-700">
+        <label htmlFor="user-notes" className="block text-sm font-semibold">
           Additional Notes
         </label>
 
@@ -25,18 +25,18 @@ export default function StepNotes({ notes, onChange, onGenerate, isGenerating }:
           value={notes}
           onChange={(e) => onChange(e.target.value)}
           placeholder="e.g., I love museums and historic sites... I'm vegetarian... I prefer walkable areas..."
-          className="bg-white w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          className="bg-white w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
           rows={5}
         />
 
         <div className="flex items-center justify-between">
-          <p className="text-xs text-slate-600">{notes.length} characters</p>
-          <p className="text-xs text-slate-600">Max 500 characters</p>
+          <p className="text-xs">{notes.length} characters</p>
+          <p className="text-xs">Max 500 characters</p>
         </div>
 
         {notes.length > 0 && (
           <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-            <p className="text-sm text-slate-700">
+            <p className="text-sm">
               <span className="font-semibold">Your notes:</span> &quot;{notes}&quot;
             </p>
           </div>

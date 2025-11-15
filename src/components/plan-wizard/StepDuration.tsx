@@ -12,7 +12,7 @@ export default function StepDuration({ selectedDuration, onSelect }: StepDuratio
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold mb-2">How long is your trip?</h2>
-        <p className="text-slate-600">Select the duration of your stay</p>
+        <p>Select the duration of your stay</p>
       </div>
 
       <div className="flex flex-wrap gap-3 mt-6 justify-center">

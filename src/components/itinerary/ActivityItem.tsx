@@ -30,10 +30,8 @@ export default function ActivityItem({
       {/* Activity Content */}
       <div className="flex-1">
         <div className="flex items-baseline gap-3">
-          <span className="text-sm font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded">
-            #{activity.position}
-          </span>
-          <h4 className="text-base font-medium text-slate-900">{activity.name}</h4>
+          <span className="text-sm font-semibold bg-slate-100 px-2 py-1 rounded">#{activity.position}</span>
+          <h4 className="text-base font-medium">{activity.name}</h4>
         </div>
 
         {/* Google Maps Link */}
@@ -42,7 +40,7 @@ export default function ActivityItem({
             href={activity.google_maps_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-primary hover:text-blue-800 hover:underline mt-1 inline-block"
+            className="text-sm text-primary hover:text-accent hover:underline mt-1 inline-block"
           >
             📍 View on Google Maps
           </a>

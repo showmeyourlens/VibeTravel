@@ -9,8 +9,8 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">What&apos;s your travel pace?</h2>
-        <p className="text-slate-600">Choose how packed you want your itinerary to be</p>
+        <h2 className="text-2xl font-bold mb-2">What&apos;s your travel pace?</h2>
+        <p>Choose how packed you want your itinerary to be</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
@@ -40,8 +40,8 @@ export default function StepIntensity({ selectedIntensity, onSelect }: StepInten
       </div>
 
       {selectedIntensity !== null && (
-        <div className="mt-6 p-4 bg-primary/50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-900">
+        <div className="mt-6 p-4 bg-primary/50 border rounded-lg">
+          <p className="text-sm">
             <span className="font-semibold capitalize">{selectedIntensity}</span> intensity selected -{" "}
             {selectedIntensity === "half day"
               ? "You'll have time to explore at your own pace"

@@ -22,10 +22,10 @@ export default function EmptyState({ onCreateNewPlan }: EmptyStateProps) {
         </div>
 
         {/* Heading */}
-        <h2 className="text-3xl font-bold text-slate-900 mb-3">No plans yet</h2>
+        <h2 className="text-3xl font-bold mb-3">No plans yet</h2>
 
         {/* Description */}
-        <p className="text-slate-600 mb-8 leading-relaxed">
+        <p className="mb-8 leading-relaxed">
           Start planning your next adventure! Create a new travel plan to explore amazing destinations and activities.
         </p>
 
