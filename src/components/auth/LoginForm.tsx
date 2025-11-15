@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,15 @@ import { navigate } from "astro:transitions/client";
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const LoginForm: React.FC = () => {
+  const [showSuccessBanner, setShowSuccessBanner] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("registered") === "true") {
+      setShowSuccessBanner(true);
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -34,6 +43,11 @@ export const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6" autoComplete="on">
+      {showSuccessBanner && (
+        <div className="p-3 rounded-md bg-green-500/10 border border-green-500/20">
+          <p className="text-sm text-green-500">Registration successful! You can now log in.</p>
+        </div>
+      )}
       <div className="space-y-2">
         <label htmlFor="email" className="block text-sm font-medium text-foreground">
           Email Address

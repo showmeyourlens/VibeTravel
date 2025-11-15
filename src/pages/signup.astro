@@ -1,22 +1,21 @@
 ---
 import { SignupForm } from "../components/auth/SignupForm";
 import Layout from "../layouts/Layout.astro";
+import { Panel } from "../components/ui/Panel";
 ---
 
 <Layout title="Sign Up - VibeTravel">
   <div class="relative w-full mx-auto min-h-screen bg-gradient-to-br p-4 sm:p-8 flex items-center justify-center">
-    <div
-      class="relative w-full max-w-md backdrop-blur-xl bg-gradient-to-b from-white/10 to-white/5 rounded-2xl shadow-2xl p-8 border border-white/10"
-    >
+    <Panel className="relative w-full max-w-md">
       <div class="space-y-8">
         <div class="text-center space-y-2">
-          <h1 class="text-4xl font-bold bg-gradient-to-r bg-clip-text">Join VibeTravel</h1>
-          <p class="text-blue-100/70">Create your account to get started</p>
+          <h1 class="text-secondary-foreground text-4xl font-bold bg-gradient-to-r bg-clip-text">Join VibeTravel</h1>
+          <p class="text-muted-foreground">Create your account to get started</p>
         </div>
-        <div class="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur rounded-xl p-6 border border-white/10">
+        <div class="p-6 text-left">
           <SignupForm client:load />
         </div>
       </div>
-    </div>
+    </Panel>
   </div>
 </Layout>

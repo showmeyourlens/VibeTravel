@@ -2,10 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
+import { navigate } from "astro:transitions/client";
 import { signupUser } from "@/lib/api-client";
 import { Button } from "../ui/button";
 import { signupSchema } from "@/lib/schemas/auth.schema";
-import { navigate } from "astro:transitions/client";
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
@@ -21,9 +21,8 @@ export const SignupForm: React.FC = () => {
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
-      console.log("data", data);
       await signupUser(data.email, data.password);
-      navigate("/login");
+      navigate("/login?registered=true");
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An error occurred during registration. Please try again.";
