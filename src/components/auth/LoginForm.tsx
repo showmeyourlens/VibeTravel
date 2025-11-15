@@ -33,7 +33,7 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6" autoComplete="on">
       <div className="space-y-2">
         <label htmlFor="email" className="block text-sm font-medium text-foreground">
           Email Address
@@ -49,6 +49,7 @@ export const LoginForm: React.FC = () => {
           disabled={isSubmitting}
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "email-error" : undefined}
+          autoComplete="email"
         />
         {errors.email && (
           <p id="email-error" className="text-sm text-destructive">
@@ -72,6 +73,7 @@ export const LoginForm: React.FC = () => {
           disabled={isSubmitting}
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
+          autoComplete="current-password"
         />
         {errors.password && (
           <p id="password-error" className="text-sm text-destructive">

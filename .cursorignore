@@ -2,3 +2,5 @@
 .env.production
 .env.test
 !.env.example
+node_modules/
+dist/

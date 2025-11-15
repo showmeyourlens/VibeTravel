@@ -5,6 +5,7 @@ import type { z } from "zod";
 import { signupUser } from "@/lib/api-client";
 import { Button } from "../ui/button";
 import { signupSchema } from "@/lib/schemas/auth.schema";
+import { navigate } from "astro:transitions/client";
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
@@ -20,7 +21,9 @@ export const SignupForm: React.FC = () => {
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
+      console.log("data", data);
       await signupUser(data.email, data.password);
+      navigate("/login");
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An error occurred during registration. Please try again.";
@@ -32,7 +35,7 @@ export const SignupForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6" autoComplete="on">
       <div className="space-y-2">
         <label htmlFor="email" className="block text-sm font-medium text-foreground">
           Email Address
@@ -48,6 +51,7 @@ export const SignupForm: React.FC = () => {
           disabled={isSubmitting}
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "email-error" : undefined}
+          autoComplete="email"
         />
         {errors.email && (
           <p id="email-error" className="text-sm text-destructive">
@@ -71,6 +75,7 @@ export const SignupForm: React.FC = () => {
           disabled={isSubmitting}
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
+          autoComplete="new-password"
         />
         {errors.password && (
           <p id="password-error" className="text-sm text-destructive">
@@ -94,6 +99,7 @@ export const SignupForm: React.FC = () => {
           disabled={isSubmitting}
           aria-invalid={!!errors.confirmPassword}
           aria-describedby={errors.confirmPassword ? "confirm-password-error" : undefined}
+          autoComplete="new-password"
         />
         {errors.confirmPassword && (
           <p id="confirm-password-error" className="text-sm text-destructive">

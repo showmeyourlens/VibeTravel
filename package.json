@@ -73,7 +73,8 @@
     "supabase": "^2.54.11",
     "typescript-eslint": "8.28.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.6"
+    "vitest": "^4.0.6",
+    "wrangler": "^4.47.0"
   },
   "lint-staged": {
     "*.{ts,tsx,astro}": [

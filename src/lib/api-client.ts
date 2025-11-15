@@ -458,6 +458,8 @@ export async function forgotPassword(email: string): Promise<void> {
       body: JSON.stringify({ email }),
     });
 
+    console.log("api", response);
+
     if (!response.ok) {
       const errorData = (await response.json()) as { error?: string };
       throw new Error(errorData.error || "An error occurred. Please try again.");
