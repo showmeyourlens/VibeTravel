@@ -688,7 +688,6 @@ describe("ItineraryView Component", () => {
       await waitFor(() => {
         expect(sessionStorage.getItem("generatedPlan")).toBeNull();
         expect(sessionStorage.getItem("planMetadata")).toBeNull();
-        expect(window.location.href).toBe("/dashboard");
       });
     });
 

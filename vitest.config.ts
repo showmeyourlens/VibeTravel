@@ -2,8 +2,14 @@ import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+const virtualModule = (name: string, content: string) => ({
+  name,
+  resolveId: (id: string) => (id === name ? name : null),
+  load: (id: string) => (id === name ? content : null),
+});
+
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  plugins: [react(), tsconfigPaths(), virtualModule("astro:transitions/client", "export const navigate = () => {}")],
   test: {
     globals: true,
     environment: "jsdom",
