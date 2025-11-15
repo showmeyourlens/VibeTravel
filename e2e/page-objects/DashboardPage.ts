@@ -12,7 +12,7 @@ export class DashboardPage extends BasePage {
    * Navigate to dashboard home page
    */
   async goto() {
-    await super.goto("/");
+    await super.goto("/dashboard");
   }
 
   /**

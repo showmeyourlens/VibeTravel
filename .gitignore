@@ -21,6 +21,7 @@ playwright-report/
 .env
 .env.production
 .env.test
+.env.e2e
 
 # macOS-specific files
 .DS_Store

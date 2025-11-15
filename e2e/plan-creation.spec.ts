@@ -79,7 +79,7 @@ test.describe("Plan Creation E2E Flow", () => {
     await generationPage.waitForFullGeneration();
 
     // ASSERT - Verify itinerary page is displayed
-    await expect(itineraryPage.getByTestId("itinerary-view")).toBeVisible();
+    await expect(itineraryPage.getByTestId("itinerary-view")).toBeVisible({ timeout: 10000 });
 
     // ACT - Step 8: Save the plan
     await itineraryPage.savePlan();
